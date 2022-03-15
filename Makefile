@@ -6,7 +6,7 @@
 #    By: gshim <gshim@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/02/22 17:48:50 by gshim             #+#    #+#              #
-#    Updated: 2022/03/15 15:24:42 by gshim            ###   ########.fr        #
+#    Updated: 2022/03/15 18:04:38 by gshim            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,7 +17,7 @@ CFLAGS = -Wall -Wextra -Werror -g -fsanitize=address
 NAME = minishell
 
 SRCS_DIR = ./src
-SRCS = src/main.c
+SRCS = src/readline.c
 OBJS = $(SRCS:.c=.o)
 
 #======================= 외부라이브러리 모음 ==========================
@@ -29,7 +29,7 @@ LIB = $(addprefix $(LIB_DIR)/, libft.a)
 
 $(NAME) : $(OBJS)
 	$(MAKE) -C $(LIB_DIR) bonus
-	$(CC) $(CFLAGS) -L$(LIB_DIR) -l$(LIB_NAME) \
+	$(CC) $(CFLAGS) -L$(LIB_DIR) -l$(LIB_NAME) -lreadline \
 					$^ -o $@
 
 $(SRCS_DIR)/%.o : $(SRCS_DIR)/%.c
