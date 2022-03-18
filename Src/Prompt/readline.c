@@ -11,6 +11,6 @@ void read_line(t_list *env_list, char *line)
         exit(0);
     printf("%s\n", line);
     add_history(line);
-    free(line);
+    // free(line);
     line = NULL;
 }
