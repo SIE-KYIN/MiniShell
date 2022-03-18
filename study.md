@@ -5,9 +5,12 @@
 # 프로세스 관련 함수
 - fork
 - wait, waitpid, wait3, wait4
+- execve
+
 자식 프로세를 생성했을 때, 부모와 자식 중 먼저 실행이 끝난 프로세스는 종료되고, 이 때 상태를 회수해주지 않으면 좀비 프로세스가 된다. 이를 방지하기 위해 wait계열 함수를 통해 부모와 자식 프로세스를 동기화시켜야 한다.
 
 pid_t wait3(int *statloc, int options, struct rusage *rusage);
+int execve(const char *filename, char *const argv[], char *const envp[]);
 
 # 시그널 관련 함수
 - signal
@@ -80,8 +83,6 @@ fstat함수의 첫 인자는 fd를 넣어준다.
 int unlink( const char *path)
 https://badayak.com/entry/C%EC%96%B8%EC%96%B4-%EB%A7%81%ED%81%AC-%EC%82%AD%EC%A0%9C-%ED%95%A8%EC%88%98-unlink
 
-execve
-int execve(const char *filename, char *const argv[], char *const envp[]);
 
 
 

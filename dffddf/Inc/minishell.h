@@ -1,11 +1,15 @@
 #include <signal.h>
 #include <sys/types.h>
+#include <sys/wait.h>
 #include <stdio.h>
 #include <readline/readline.h>
 #include <readline/history.h>
 #include <unistd.h>
 #include <stdlib.h>
-#include <string.h> 
+#include <string.h>
+// 지심의 수정사항!
+// ft_strjoin 헤더에 추가함.
+// read_line에 envv 파라미터 추가함(exec할때 매개변수로 넘겨주기위해)
 
 typedef struct s_list_node
 {
@@ -39,7 +43,7 @@ void delete_list(t_list *list);
 
 
 /*
-** utils1.c 
+** utils1.c
 */
 char	*ft_strndup(const char *src, int from, int to);
 void ft_error(int flag);
@@ -51,7 +55,7 @@ void print_intro();
 ** utils2.c  ++++++++3
 */
 char *ft_colorstr(char *str);
-
+char	*ft_strjoin(char const *s1, char const *s2);
 
 /*
 ** parse_envv.c
@@ -69,4 +73,4 @@ void sigHandler();
 /*
 ** readline.c
 */
-void read_line(t_list *env_list, char *line);
+void read_line(t_list *env_list, char *line, char **envv);
