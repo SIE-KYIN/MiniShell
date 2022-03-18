@@ -21,13 +21,27 @@ typedef struct s_list
 	struct s_list_node	top;
 } t_list;
 
+
+typedef struct s_tree_node
+{
+	char data;
+	struct s_tree_node* left_child;
+	struct s_tree_node* right_child;
+} t_tree_node;
+
+typedef struct s_tree
+{
+	struct s_tree_node* root_node;
+} t_tree;
+
+
 /*
 ** DataStucture-LinkedList1
 */
 void add_node(t_list* list, int position, char *var, char *data);
 t_list_node* get_node(t_list* list, int position);
 void remove_node(t_list* list, int position);
-void displayDoublyList(t_list* pList);
+void displayDoublyList(t_list* pList); // 삭제예정
 int get_position(t_list *list, char *str);
 
 
@@ -42,7 +56,7 @@ void delete_list(t_list *list);
 ** utils1.c 
 */
 char	*ft_strndup(const char *src, int from, int to);
-void ft_error(int flag);
+void ft_error(int flag)
 int is_same(char *str1, char *str2);
 void print_intro();
 
@@ -70,3 +84,26 @@ void sigHandler();
 ** readline.c
 */
 void read_line(t_list *env_list, char *line);
+
+
+/*
+** check_syntax.c
+*/
+int check_syntax(char *line);
+
+/*
+** tokenize.c
+*/
+
+
+
+/*
+** b_tree.c
+*/
+t_tree* create_tree(t_tree_node root);		
+t_tree_node*	insert_root(t_tree_node* root, t_tree_node element);
+t_tree_node* insert_left(t_tree_node* parent, t_tree_node element);		
+t_tree_node* insert_right(t_tree_node* parent, t_tree_node element);		
+void	delete_tree(t_tree* tree);
+
+void	traverseDLR(t_tree *tree); // 삭제예정
