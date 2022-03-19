@@ -8,7 +8,6 @@ typedef struct minishell{
 }minishell;
 
 int main(){
-	//minishell m;
 	char dir[1024];
 
 	// 현재 디렉토리 출력
@@ -32,6 +31,8 @@ int main(){
 		}
 		closedir(a);
 	}
+
+
 }
 // 부모프로세스 shell > pwd
 

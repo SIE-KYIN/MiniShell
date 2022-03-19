@@ -161,6 +161,9 @@ term.c_cc[VTIME] = 0;	// how long to wait
 tcsetattr(STDIN_FILENO, TCSANOW, &term); // 설정값 업뎃 🤗
 ```
 
-- tgetent, tgoto, tputs, getenv,
+- tgetent, tgoto, tputs
+
+- getenv
+char *getenv(const char *name);
 
 tgetflag, tgetnum, tgetstr,

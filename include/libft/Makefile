@@ -27,7 +27,8 @@ $(NAME) : $(OBJS)
 clean : $(OBJS)
 	rm -f $(OBJS)
 
-fclean : $(OBJS) $(FULLOBJS) $(NAME)
+#fclean : $(OBJS) $(FULLOBJS) $(NAME)  <- bonus mode
+fclean : $(OBJS) $(NAME)
 	rm -f $^
 
 re : fclean

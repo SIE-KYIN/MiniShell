@@ -1,6 +1,0 @@
-.
-..
-Makefile
-a.txt
-include
-src
