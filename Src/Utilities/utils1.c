@@ -3,8 +3,15 @@
 void ft_error(int flag)
 {
     if (flag == 1)
-        printf ("Put correct nums of paramater");
-    printf("Error");
+        printf ("Paramater ERROR : Put correct nums of paramater\n");
+    else if (flag == 2)
+        printf ("Syntax ERROR : Invalid Special Character\n");
+    else if (flag == 3)
+        printf ("Syntax ERROR : Invalid Location\n");
+    else if (flag == 4)
+        printf ("Syntax ERROR : Opened Quote\n");
+    
+
 }
 
 char	*ft_strndup(const char *src, int from, int to)
@@ -16,7 +23,7 @@ char	*ft_strndup(const char *src, int from, int to)
 	if (!str)
 		return (0);
 	i = 0;
-	while (i <= to)
+	while (from <= to)
     {
 		str[i] = src[from];
         i++;

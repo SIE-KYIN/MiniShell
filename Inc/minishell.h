@@ -21,10 +21,18 @@ typedef struct s_list
 	struct s_list_node	top;
 } t_list;
 
+enum e_node_flag
+{
+	DELIMITER = 0, // 구분문자(> , < , | , >> , <<)
+	COMMON_BUILTIN, // echo, cd, pwd, export, unset, env, exit
+	FILE_NAME, // 리디렉션 대상
+};
 
 typedef struct s_tree_node
 {
-	char data;
+	int flag;//무슨 노드인지
+	char *command; //명령어, 구분문자 여기들어갈듯
+	char *argument; //실행인자, 파일명 여기들어갈듯
 	struct s_tree_node* left_child;
 	struct s_tree_node* right_child;
 } t_tree_node;
@@ -56,7 +64,7 @@ void delete_list(t_list *list);
 ** utils1.c 
 */
 char	*ft_strndup(const char *src, int from, int to);
-void ft_error(int flag)
+void ft_error(int flag);
 int is_same(char *str1, char *str2);
 void print_intro();
 
@@ -64,7 +72,14 @@ void print_intro();
 /*
 ** utils2.c  ++++++++3
 */
+size_t	ft_strlen(const char *s);
 char *ft_colorstr(char *str);
+char	*ft_strdup(const char *s1);
+
+/*
+** utils3.c  ++++++++3
+*/
+char			**ft_split(char const *s, char c);
 
 
 /*
@@ -83,7 +98,7 @@ void sigHandler();
 /*
 ** readline.c
 */
-void read_line(t_list *env_list, char *line);
+void read_line(t_list *env_list, char **line);
 
 
 /*
@@ -100,10 +115,10 @@ int check_syntax(char *line);
 /*
 ** b_tree.c
 */
-t_tree* create_tree(t_tree_node root);		
-t_tree_node*	insert_root(t_tree_node* root, t_tree_node element);
-t_tree_node* insert_left(t_tree_node* parent, t_tree_node element);		
-t_tree_node* insert_right(t_tree_node* parent, t_tree_node element);		
+t_tree*		create_tree();
+t_tree_node*	insert_root(t_tree* tree, char *command, char *argument, int flag);
+t_tree_node*	insert_left(t_tree_node* parent,  char *command, char *argument, int flag);
+t_tree_node*	insert_right(t_tree_node* parent, char *command, char *argument, int flag);
 void	delete_tree(t_tree* tree);
 
 void	traverseDLR(t_tree *tree); // 삭제예정

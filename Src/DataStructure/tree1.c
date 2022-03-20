@@ -1,33 +1,43 @@
 #include "../../Inc/minishell.h"
 
-t_tree_node	*create_node(t_tree_node *left, t_tree_node *right, char data)
+t_tree_node	*create_node(t_tree_node *left, t_tree_node *right, char *command, char *argument)
 {
 	t_tree_node *new = malloc(sizeof(t_tree_node));
 	if (!new)
 		return (NULL);
-
-	new->data = data;
+	if (command)
+		new->command = ft_strdup(command);
+	else
+		new->command = NULL;
+	if (argument)
+		new->argument = ft_strdup(argument);
+	else
+		new->argument = NULL;
 	new->left_child = left;
 	new->right_child = right;
 	return (new);
 }
 
-t_tree_node*	insert_root(t_tree_node* root, t_tree_node element)
+t_tree_node*	insert_root(t_tree* tree, char *command, char *argument, int flag)
 {
-	t_tree_node *new = create_node(root, NULL, element.data);
+	t_tree_node *new = create_node(NULL, NULL,  command, argument);
+	new->flag = flag;
+	tree->root_node = new;
 	return (new);
 }
 
-t_tree_node*	insert_left(t_tree_node* parent, t_tree_node element)
+t_tree_node*	insert_left(t_tree_node* parent,  char *command, char *argument, int flag)
 {
-	t_tree_node *new = create_node(NULL, NULL, element.data);
+	t_tree_node *new = create_node(NULL, NULL, command, argument);
+	new->flag = flag;
 	parent->left_child = new;
 	return (new);
 }
 
-t_tree_node*	insert_right(t_tree_node* parent, t_tree_node element)
+t_tree_node*	insert_right(t_tree_node* parent, char *command, char *argument, int flag)
 {
-	t_tree_node *new = create_node(NULL, NULL, element.data);
+	t_tree_node *new = create_node(NULL, NULL,  command, argument);
+	new->flag = flag;
 	parent->right_child= new;
 	return (new);
 }
@@ -37,7 +47,9 @@ static void		_pre_traverse(t_tree_node *root)
 {
 	if (!root)
 		return ;
-	printf("%c ", root->data);
+	printf("%s   |", root->command);
+	printf("%s   |", root->argument);
+	printf("%d \n", root->flag);
 	_pre_traverse(root->left_child);
 	_pre_traverse(root->right_child);
 	return ;
@@ -53,71 +65,122 @@ void	pre_traverse(t_tree *tree)
 	_pre_traverse(root);
 }
 
+static void		_in_traverse(t_tree_node *root)
+{
+	if (!root)
+		return ;
+	
+	_in_traverse(root->left_child);
+	printf("%s   |", root->command);
+	printf("%s   |", root->argument);
+	printf("%d \n", root->flag);
+	_in_traverse(root->right_child);
+	return ;
+}
 
-// t_tree *createExampleBinTree() {
-//     t_tree *pReturn = NULL;
-//     t_tree_node *pNodeA = NULL, *pNodeB = NULL, *pNodeC = NULL;
-//     t_tree_node *pNodeD = NULL, *pNodeE = NULL, *pNodeF = NULL;
-//     t_tree_node *pNodeG = NULL, *pNodeH = NULL, *pNodeI = NULL;
-//     t_tree_node *pNodeJ = NULL, *pNodeK = NULL, *pNodeL = NULL;
-//     t_tree_node *pNodeM = NULL;
-//     t_tree_node node = {0,};
+void	in_traverse(t_tree *tree)
+{
+	t_tree_node *root;
 
-//     node.data = 'A';
-//     pReturn = create_tree(node);
-//     if (pReturn != NULL) {
-//         pNodeA = pReturn->root_node;
-//         node.data = 'B';
-//         pNodeB = insert_left(pNodeA, node);
-//         node.data = 'C';
-//         pNodeC = insert_right(pNodeA, node);
-//         if (pNodeB != NULL) {
-//             node.data = 'D';
-//             pNodeD = insert_left(pNodeB, node);
-//             node.data = 'E';
-//             pNodeE = insert_right(pNodeB, node);
-//         }
-//         if (pNodeC != NULL) {
-//             node.data = 'F';
-//             pNodeF = insert_left(pNodeC, node);
-//             node.data = 'G';
-//             pNodeG = insert_right(pNodeC, node);
-//         }
-//         if (pNodeD != NULL) {
-//             node.data = 'H';
-//             pNodeH = insert_left(pNodeD, node);
-//             node.data = 'I';
-//             pNodeI = insert_right(pNodeD, node);
-//         }
-//         if (pNodeE != NULL) {
-//             node.data = 'J';
-//             pNodeJ = insert_left(pNodeE, node);
-//         }
-//         if (pNodeF != NULL) {
-//             node.data = 'K';
-//             pNodeK = insert_right(pNodeF, node);
-//         }
-//         if (pNodeG != NULL) {
-//             node.data = 'L';
-//             pNodeL = insert_left(pNodeG, node);
-//             node.data = 'M';
-//             pNodeM = insert_right(pNodeG, node);
-//         }
-//     }
-
-//     return pReturn;
-// }
+	if (!tree)
+		return ;
+	root = tree->root_node;
+	_in_traverse(root);
+}
 
 
-// int main() {
-//     t_tree *pBinTree = NULL;
-//     pBinTree = createExampleBinTree();
-//     if (pBinTree != NULL) {
-//         printf("Preorder Iterative Traversal\n");
-//         pre_traverse(pBinTree);
+static void		_post_traverse(t_tree_node *root)
+{
+	if (!root)
+		return ;
+	
+	_in_traverse(root->left_child);
+	_in_traverse(root->right_child);
+	printf("%s   |", root->command);
+	printf("%s   |", root->argument);
+	printf("%d \n", root->flag);
+	return ;
+}
 
-//         delete_tree(pBinTree);
-//     }
+void	post_traverse(t_tree *tree)
+{
+	t_tree_node *root;
 
-//     return 0;
-// }
+	if (!tree)
+		return ;
+	root = tree->root_node;
+	_post_traverse(root);
+}
+
+t_tree *createExampleBinTree() {
+    t_tree *pReturn = NULL;
+    t_tree_node *pNodeA = NULL, *pNodeB = NULL, *pNodeC = NULL;
+    t_tree_node *pNodeD = NULL, *pNodeE = NULL, *pNodeF = NULL;
+    t_tree_node *pNodeG = NULL, *pNodeH = NULL, *pNodeI = NULL;
+    t_tree_node *pNodeJ = NULL, *pNodeK = NULL, *pNodeL = NULL;
+    t_tree_node *pNodeM = NULL;
+    t_tree_node node = {0,};
+
+    
+    pReturn = create_tree();
+    if (pReturn != NULL) {
+        pNodeA = insert_root(pReturn, "A", "ㅂ", 0);
+        
+        pNodeB = insert_left(pNodeA, "B", "ㅈ", 1);
+        
+        pNodeC = insert_right(pNodeA,"C", "ㄷ", 2);
+        if (pNodeB != NULL) {
+            
+            pNodeD = insert_left(pNodeB, "D", "ㄱ", 3);
+            
+            pNodeE = insert_right(pNodeB,"E", "ㅅ", 4);
+        }
+        if (pNodeC != NULL) {
+            
+            pNodeF = insert_left(pNodeC, "F", "ㅛ", 5);
+            
+            pNodeG = insert_right(pNodeC, "G", "ㅕ",6);
+        }
+        if (pNodeD != NULL) {
+            
+            pNodeH = insert_left(pNodeD, "H", "ㅑ", 7);
+            
+            pNodeI = insert_right(pNodeD, "I", "ㅐ", 8);
+        }
+        if (pNodeE != NULL) {
+            
+            pNodeJ = insert_left(pNodeE, "J", "ㅔ", 9);
+        }
+        if (pNodeF != NULL) {
+            
+            pNodeK = insert_right(pNodeF, "K", "ㅁ", 10);
+        }
+        if (pNodeG != NULL) {
+            
+            pNodeL = insert_left(pNodeG, "L", "ㄴ", 11);
+            
+            pNodeM = insert_right(pNodeG, "M", "ㅇ", 12);
+        }
+    }
+
+    return pReturn;
+}
+
+
+int main() {
+    t_tree *pBinTree = NULL;
+    pBinTree = createExampleBinTree();
+    if (pBinTree != NULL) {
+        printf("Preorder Iterative Traversal\n");
+		printf ("------------------------------------\n");
+		printf ("cmd | arg | fg\n");
+		printf ("전위순회\n");
+        pre_traverse(pBinTree);
+		printf ("중위순회\n");
+		in_traverse(pBinTree);
+		printf ("후위순회\n");
+		post_traverse(pBinTree);
+        delete_tree(pBinTree);
+    }
+    return 0;
+}
