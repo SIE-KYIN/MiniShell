@@ -1,80 +1,60 @@
 #include "../../Inc/minishell.h"
 
-static size_t	cnt_word(char const *s, char c)
+int is_delimiter(char c, char next)
 {
-	size_t	i;
-	size_t	cnt;
+    if (c == '>')
+    {
+        if (next == '>')
+            return (2);
+		return(1);
+    }
+	if (c == '<')
+    {
+        if (next == '<')
+            return (2);
+		return(1);
+    }
+    if (c == '|')
+        return (1);
+	return (0);
+}
 
-	i = 0;
+int cnt_word(char *line)
+{
+	int i;
+	int cnt;
+	int tmp;
+
 	cnt = 0;
-	while (*(s + i))
+	while (*line)
 	{
-		if (*(s + i) == c)
-			i++;
-		else
+		tmp = is_delimiter(*line,  *(line + 1));
+		if (tmp)
 		{
 			cnt++;
-			while (*(s + i) != c && *(s + i))
-				i++;
+			line += tmp;
+			continue;
 		}
+		cnt++;
+		while (!is_delimiter(*line, *(line + 1)) && *line)
+			line++;
 	}
 	return (cnt);
 }
-
-static void		free_malloc(char **ret, size_t word)
-{
-	size_t	i;
-
-	i = 0;
-	while (i < word)
-	{
-		free(*(ret + i));
-		i++;
-	}
-	free(ret);
+int main(){
+	printf ("%d", cnt_word("cd .. | ls | cat minishell.c > a.txt | df"));
 }
 
-static int		cut_str(char const *s, char c, char **ret, size_t word)
-{
-	size_t	idx1;
-	size_t	idx2;
+// char **ft_ms_split(char *line)
+// {
+// 	char **ret;
+// 	int cnt;
 
-	idx1 = 0;
-	while (*(s + idx1))
-	{
-		if (*(s + idx1) == c)
-			idx1++;
-		else
-		{
-			idx2 = 0;
-			while (*(s + idx1 + idx2) != c && *(s + idx1 + idx2))
-				idx2++;
-			if ((*(ret + word) = (char *)malloc(idx2 + 1)) == 0)
-			{
-				free_malloc(ret, word);
-				return (0);
-			}
-			ft_memcpy(*(ret + word), s + idx1, idx2);
-			*(*(ret + word) + idx2) = 0;
-			idx1 += idx2;
-			word++;
-		}
-	}
-	return (1);
-}
-
-char			**ft_split(char const *s, char c)
-{
-	size_t	cnt;
-	char	**ret;
-
-	if (!s)
-		return ((void *)0);
-	cnt = cnt_word(s, c);
-	if ((ret = (char **)malloc(sizeof(char *) * (cnt + 1))) == 0)
-		return (0);
-	*(ret + cnt) = 0;
-	if (!cut_str(s, c, ret, 0))
-		return (0);
-	return (ret);
-}
+// 	cnt = cnt_word(line);
+// 	if (cnt == 1)
+// 		return (NULL);
+// 	ret = (char **)malloc(sizeof(char *) * (cnt + 1));
+// 	ret[cnt] = '\0';
+// 	cut_str(line, ret)
+// 	return (ret);
+// }

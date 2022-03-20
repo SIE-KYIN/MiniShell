@@ -28,6 +28,15 @@ enum e_node_flag
 	FILE_NAME, // 리디렉션 대상
 };
 
+enum e_delimiter_flag
+{
+	SINGLE_REDIR_INPUT = 0,
+	DOUBLE_REDIR_INPUT,
+	SINGLE_REDIR_OUPUT,
+	DOUBLE_REDIR_OUTPUT,
+	PIPE,
+};
+
 typedef struct s_tree_node
 {
 	int flag;//무슨 노드인지
@@ -73,13 +82,13 @@ void print_intro();
 ** utils2.c  ++++++++3
 */
 size_t	ft_strlen(const char *s);
+void	*ft_memcpy(void *dst, const void *src, size_t n);
 char *ft_colorstr(char *str);
 char	*ft_strdup(const char *s1);
 
 /*
 ** utils3.c  ++++++++3
 */
-char			**ft_split(char const *s, char c);
 
 
 /*
@@ -109,6 +118,7 @@ int check_syntax(char *line);
 /*
 ** tokenize.c
 */
+t_tree *tokenize(char *line);
 
 
 

@@ -112,75 +112,75 @@ void	post_traverse(t_tree *tree)
 	_post_traverse(root);
 }
 
-t_tree *createExampleBinTree() {
-    t_tree *pReturn = NULL;
-    t_tree_node *pNodeA = NULL, *pNodeB = NULL, *pNodeC = NULL;
-    t_tree_node *pNodeD = NULL, *pNodeE = NULL, *pNodeF = NULL;
-    t_tree_node *pNodeG = NULL, *pNodeH = NULL, *pNodeI = NULL;
-    t_tree_node *pNodeJ = NULL, *pNodeK = NULL, *pNodeL = NULL;
-    t_tree_node *pNodeM = NULL;
-    t_tree_node node = {0,};
+// t_tree *createExampleBinTree() {
+//     t_tree *pReturn = NULL;
+//     t_tree_node *pNodeA = NULL, *pNodeB = NULL, *pNodeC = NULL;
+//     t_tree_node *pNodeD = NULL, *pNodeE = NULL, *pNodeF = NULL;
+//     t_tree_node *pNodeG = NULL, *pNodeH = NULL, *pNodeI = NULL;
+//     t_tree_node *pNodeJ = NULL, *pNodeK = NULL, *pNodeL = NULL;
+//     t_tree_node *pNodeM = NULL;
+//     t_tree_node node = {0,};
 
     
-    pReturn = create_tree();
-    if (pReturn != NULL) {
-        pNodeA = insert_root(pReturn, "A", "ㅂ", 0);
+//     pReturn = create_tree();
+//     if (pReturn != NULL) {
+//         pNodeA = insert_root(pReturn, "A", "ㅂ", 0);
         
-        pNodeB = insert_left(pNodeA, "B", "ㅈ", 1);
+//         pNodeB = insert_left(pNodeA, "B", "ㅈ", 1);
         
-        pNodeC = insert_right(pNodeA,"C", "ㄷ", 2);
-        if (pNodeB != NULL) {
+//         pNodeC = insert_right(pNodeA,"C", "ㄷ", 2);
+//         if (pNodeB != NULL) {
             
-            pNodeD = insert_left(pNodeB, "D", "ㄱ", 3);
+//             pNodeD = insert_left(pNodeB, "D", "ㄱ", 3);
             
-            pNodeE = insert_right(pNodeB,"E", "ㅅ", 4);
-        }
-        if (pNodeC != NULL) {
+//             pNodeE = insert_right(pNodeB,"E", "ㅅ", 4);
+//         }
+//         if (pNodeC != NULL) {
             
-            pNodeF = insert_left(pNodeC, "F", "ㅛ", 5);
+//             pNodeF = insert_left(pNodeC, "F", "ㅛ", 5);
             
-            pNodeG = insert_right(pNodeC, "G", "ㅕ",6);
-        }
-        if (pNodeD != NULL) {
+//             pNodeG = insert_right(pNodeC, "G", "ㅕ",6);
+//         }
+//         if (pNodeD != NULL) {
             
-            pNodeH = insert_left(pNodeD, "H", "ㅑ", 7);
+//             pNodeH = insert_left(pNodeD, "H", "ㅑ", 7);
             
-            pNodeI = insert_right(pNodeD, "I", "ㅐ", 8);
-        }
-        if (pNodeE != NULL) {
+//             pNodeI = insert_right(pNodeD, "I", "ㅐ", 8);
+//         }
+//         if (pNodeE != NULL) {
             
-            pNodeJ = insert_left(pNodeE, "J", "ㅔ", 9);
-        }
-        if (pNodeF != NULL) {
+//             pNodeJ = insert_left(pNodeE, "J", "ㅔ", 9);
+//         }
+//         if (pNodeF != NULL) {
             
-            pNodeK = insert_right(pNodeF, "K", "ㅁ", 10);
-        }
-        if (pNodeG != NULL) {
+//             pNodeK = insert_right(pNodeF, "K", "ㅁ", 10);
+//         }
+//         if (pNodeG != NULL) {
             
-            pNodeL = insert_left(pNodeG, "L", "ㄴ", 11);
+//             pNodeL = insert_left(pNodeG, "L", "ㄴ", 11);
             
-            pNodeM = insert_right(pNodeG, "M", "ㅇ", 12);
-        }
-    }
+//             pNodeM = insert_right(pNodeG, "M", "ㅇ", 12);
+//         }
+//     }
 
-    return pReturn;
-}
+//     return pReturn;
+// }
 
 
-int main() {
-    t_tree *pBinTree = NULL;
-    pBinTree = createExampleBinTree();
-    if (pBinTree != NULL) {
-        printf("Preorder Iterative Traversal\n");
-		printf ("------------------------------------\n");
-		printf ("cmd | arg | fg\n");
-		printf ("전위순회\n");
-        pre_traverse(pBinTree);
-		printf ("중위순회\n");
-		in_traverse(pBinTree);
-		printf ("후위순회\n");
-		post_traverse(pBinTree);
-        delete_tree(pBinTree);
-    }
-    return 0;
-}
+// int main() {
+//     t_tree *pBinTree = NULL;
+//     pBinTree = createExampleBinTree();
+//     if (pBinTree != NULL) {
+//         printf("Preorder Iterative Traversal\n");
+// 		printf ("------------------------------------\n");
+// 		printf ("cmd | arg | fg\n");
+// 		printf ("전위순회\n");
+//         pre_traverse(pBinTree);
+// 		printf ("중위순회\n");
+// 		in_traverse(pBinTree);
+// 		printf ("후위순회\n");
+// 		post_traverse(pBinTree);
+//         delete_tree(pBinTree);
+//     }
+//     return 0;
+// }

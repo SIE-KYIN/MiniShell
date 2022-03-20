@@ -59,7 +59,7 @@ int is_valid_s_c(char c)
                 if (c != '|' && c != '<' 
                     && c != '>' && c != '$'
                     && c != '"' && c != '\''
-                    && c != '?')
+                    && c != '?' && c != '.')
                          return (0);
     return (1);
 }
@@ -77,12 +77,12 @@ int is_valid_special_character(char *line)
                 return (0);
         if (is_valid_s_c(line[i]) && (line[i] != '\'' && line[i] != '"'))
         {
-            if (line[i] == '<' || line[i] == '>')
+            if (line[i] == '<' || line[i] == '>' || line[i] == '.')
             {
                 if (line[i + 2] == line[i])
                     return (0);
             }
-            else
+            else if (line[i] == '$' || line[i] == '|' || line[i] == '$')
                 if (line[i + 1] == line[i])
                     return (0);
         }
