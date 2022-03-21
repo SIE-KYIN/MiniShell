@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gshim <gshim@student.42seoul.kr>           +#+  +:+       +#+        */
+/*   By: gshim <gshim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/16 17:21:43 by gshim             #+#    #+#             */
-/*   Updated: 2022/03/21 10:27:00 by gshim            ###   ########.fr       */
+/*   Updated: 2022/03/21 18:59:28 by gshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,5 +101,9 @@ void sigHandler();
 ** readline.c
 */
 void read_line(t_list *env_list, char *line, char **envv);
+
+int execute_builtin(char *command, char **arg, char **env);
+int execute(char *command, char **arg, char **env);
+
 
 #endif
