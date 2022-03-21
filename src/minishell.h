@@ -6,7 +6,7 @@
 /*   By: gshim <gshim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/16 17:21:43 by gshim             #+#    #+#             */
-/*   Updated: 2022/03/19 02:37:10 by gshim            ###   ########.fr       */
+/*   Updated: 2022/03/21 10:27:00 by gshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@
 # include <sys/wait.h>
 # include <unistd.h>
 # include <string.h>
+# include <fcntl.h> // 파일모드를위해추가
 
 // gshim
 int execute(char *command, char **arg, char **env);

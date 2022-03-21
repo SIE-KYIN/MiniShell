@@ -1,0 +1,17 @@
+total 176
+drwxr-xr-x  15 simgeon-u  staff    480  3 21 10:50 .
+drwx------@ 36 simgeon-u  staff   1152  3 21 10:13 ..
+drwxr-xr-x  12 simgeon-u  staff    384  3 21 10:14 .git
+drwxr-xr-x   5 simgeon-u  staff    160  3 21 10:14 .vscode
+-rw-r--r--   1 simgeon-u  staff   2185  3 21 10:40 Makefile
+-rw-r--r--   1 simgeon-u  staff   1251  3 21 10:41 a.txt
+-rw-r--r--   1 simgeon-u  staff      0  3 21 10:50 b.txt
+-rw-r--r--   1 simgeon-u  staff    523  3 21 10:14 builtIn.md
+drwxr-xr-x   3 simgeon-u  staff     96  3 21 10:14 include
+-rwxr-xr-x   1 simgeon-u  staff  56214  3 21 10:41 minishell
+-rw-r--r--   1 simgeon-u  staff   2861  3 21 10:14 mylog.md
+-rw-r--r--   1 simgeon-u  staff    940  3 21 10:14 readline.md
+drwxr-xr-x  15 simgeon-u  staff    480  3 21 10:41 src
+-rw-r--r--   1 simgeon-u  staff    199  3 21 10:14 study.c
+-rw-r--r--   1 simgeon-u  staff   5947  3 21 10:14 study.md
+[?2004h[0;32m/Users/simgeon-u/Desktop/mini[0m ▶️  asdfasdfasdfasfd^Z[?2004l

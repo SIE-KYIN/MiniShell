@@ -1,13 +1,46 @@
-#include <stdio.h>
-#include <unistd.h>	//getcwd
-#include <dirent.h>
-#include "libft.h"
+#include "minishell.h"
 
 typedef struct minishell{
 	char dir[1024];
 }minishell;
 
-int main(){
+int redir_out(char **cmdvector){
+	int i;
+	int fd;
+
+	// 리다이렉션 존재여부 판단
+	for(i=0;cmdvector[i]!=NULL;i++){
+		if(!strcmp(cmdvector[i], ">")) break;
+	}
+
+	if(cmdvector[i]){
+		if(!cmdvector[i+1]) return -1;
+		else{
+			if((fd = open(cmdvector[i+1], O_RDWR|O_CREAT, 0644)) == -1){
+				perror(cmdvector[i+1]);
+				return -1;
+			}
+		}
+		dup2(fd, 1);
+		close(fd);
+		for(;cmdvector[i+2]!=NULL;i++){
+			cmdvector[i] = cmdvector[i+2];
+		}
+		cmdvector[i] = NULL;
+	}
+	return 0;
+}
+
+int main(int argc, char **argv, char **envv){
+	char *cmd;
+
+	(void)envv;
+	(void)argc;
+	(void)argv;
+	cmd = ft_strdup("ls -al > a.txt");
+	redir_out(ft_split(cmd, ' '));
+}
+/*
 	char dir[1024];
 
 	// 현재 디렉토리 출력
@@ -32,8 +65,4 @@ int main(){
 		closedir(a);
 	}
 
-
-}
-// 부모프로세스 shell > pwd
-
-// 자식프로세스 cd ..
+*/

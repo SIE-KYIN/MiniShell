@@ -6,13 +6,13 @@
 #    By: gshim <gshim@student.42seoul.kr>           +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/02/22 17:48:50 by gshim             #+#    #+#              #
-#    Updated: 2022/03/19 13:01:43 by gshim            ###   ########.fr        #
+#    Updated: 2022/03/21 10:40:55 by gshim            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CC = gcc
-#CFLAGS = -Wall -Wextra -Werror -g
-CFLAGS = -Wall -Wextra -Werror -g -fsanitize=address
+CFLAGS = -Wall -Wextra -Werror -g
+#CFLAGS = -Wall -Wextra -Werror -g -fsanitize=address
 
 NAME = minishell
 
