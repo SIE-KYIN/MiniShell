@@ -13,7 +13,7 @@ int main(int argc, char **argv, char **envv)
     {
         print_intro();
         env_list = parse_envv(envv);
-        displayDoublyList(env_list);
+        //displayDoublyList(env_list);
         sigHandler();
         while (1)
         {

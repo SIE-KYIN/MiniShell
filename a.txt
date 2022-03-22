@@ -1,0 +1,38 @@
+[0]ls
+[1]-al
+[2](null)
+[3]a.txt
+total 176
+drwxr-xr-x  14 gshim  2021_seoul    476 Mar 21 18:16 .
+drwxr-xr-x  17 gshim  2021_seoul    578 Mar 21 17:54 ..
+drwxr-xr-x  12 gshim  2021_seoul    408 Mar 21 17:54 .git
+drwxr-xr-x   5 gshim  2021_seoul    170 Mar 21 17:54 .vscode
+-rw-r--r--   1 gshim  2021_seoul   2195 Mar 21 17:55 Makefile
+-rw-r--r--   1 gshim  2021_seoul     32 Mar 21 18:16 a.txt
+-rw-r--r--   1 gshim  2021_seoul    523 Mar 21 17:54 builtIn.md
+drwxr-xr-x   3 gshim  2021_seoul    102 Mar 21 17:54 include
+-rwxr-xr-x   1 gshim  2021_seoul  55680 Mar 21 18:16 minishell
+-rw-r--r--   1 gshim  2021_seoul   3134 Mar 21 18:09 mylog.md
+-rw-r--r--   1 gshim  2021_seoul    940 Mar 21 17:54 readline.md
+drwxr-xr-x  15 gshim  2021_seoul    510 Mar 21 18:09 src
+-rw-r--r--   1 gshim  2021_seoul    199 Mar 21 17:54 study.c
+-rw-r--r--   1 gshim  2021_seoul   5947 Mar 21 17:54 study.md
+[0]ls
+[1]-al
+[2](null)
+[3]a.txt
+total 176
+drwxr-xr-x  14 gshim  2021_seoul    476 Mar 21 18:16 .
+drwxr-xr-x  17 gshim  2021_seoul    578 Mar 21 17:54 ..
+drwxr-xr-x  12 gshim  2021_seoul    408 Mar 21 17:54 .git
+drwxr-xr-x   5 gshim  2021_seoul    170 Mar 21 17:54 .vscode
+-rw-r--r--   1 gshim  2021_seoul   2195 Mar 21 17:55 Makefile
+-rw-r--r--   1 gshim  2021_seoul    920 Mar 21 18:16 a.txt
+-rw-r--r--   1 gshim  2021_seoul    523 Mar 21 17:54 builtIn.md
+drwxr-xr-x   3 gshim  2021_seoul    102 Mar 21 17:54 include
+-rwxr-xr-x   1 gshim  2021_seoul  55680 Mar 21 18:16 minishell
+-rw-r--r--   1 gshim  2021_seoul   3134 Mar 21 18:09 mylog.md
+-rw-r--r--   1 gshim  2021_seoul    940 Mar 21 17:54 readline.md
+drwxr-xr-x  15 gshim  2021_seoul    510 Mar 21 18:09 src
+-rw-r--r--   1 gshim  2021_seoul    199 Mar 21 17:54 study.c
+-rw-r--r--   1 gshim  2021_seoul   5947 Mar 21 17:54 study.md
