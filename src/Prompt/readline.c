@@ -12,12 +12,12 @@ int redir_out(char **cmdvector){
 	if(cmdvector[i]){
 		if(!cmdvector[i+1]) return -1;
 		else{
-			if((fd = open(cmdvector[i+1], O_RDWR|O_CREAT, 0644)) == -1){
+			if((fd = open(cmdvector[i+1], O_RDWR|O_CREAT, 0644)) == -1){    // >이면 >>이면 O_APPEND
 				perror(cmdvector[i+1]);
 				return -1;
 			}
 		}
-		dup2(fd, 1);
+		dup2(fd, 1);    // 표준출력의 방향은 1 -> fd
 		close(fd);
 		for(;cmdvector[i+2]!=NULL;i++){
 			cmdvector[i] = cmdvector[i+2];  // 리다이렉션기호, 파일명 토큰제거
@@ -38,6 +38,7 @@ void parse_line(char *line, char **envv)
     int pid;
     //int stdin_fd = dup(0); // 표준입력
     int stdout_fd = dup(1); // 표준출력
+    //int temp_fd = 1;    // 표준출력 임시fd값저장.
 
     // argv = 0;
     // str = strtok_r(line, tok, &save);
@@ -55,6 +56,7 @@ void parse_line(char *line, char **envv)
         printf("[%d]%s\n", i, arg[i]);
     }
     redir_out(arg);
+    // [DEBUG]리다이렉트 처리 후 실행인자
     for(int i=0;i<4;i++){
         printf("[%d]%s\n", i, arg[i]);
     }
