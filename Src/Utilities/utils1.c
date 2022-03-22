@@ -33,6 +33,7 @@ char	*ft_strndup(const char *src, int from, int to)
 	return (str);
 }
 
+
 int is_same(char *str1, char *str2)
 {
     int i;

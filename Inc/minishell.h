@@ -40,8 +40,8 @@ enum e_delimiter_flag
 typedef struct s_tree_node
 {
 	int flag;//무슨 노드인지
-	char *command; //명령어, 구분문자 여기들어갈듯
-	char *argument; //실행인자, 파일명 여기들어갈듯
+	char *command; //명령어, 구분문자 , 파일명 여기들어갈듯
+	char *argument; //실행인자 여기들어갈듯
 	struct s_tree_node* left_child;
 	struct s_tree_node* right_child;
 } t_tree_node;
@@ -85,11 +85,15 @@ size_t	ft_strlen(const char *s);
 void	*ft_memcpy(void *dst, const void *src, size_t n);
 char *ft_colorstr(char *str);
 char	*ft_strdup(const char *s1);
+char	*ft_strjoin(char const *s1, char const *s2);
 
 /*
 ** utils3.c  ++++++++3
 */
-
+int is_delimiter(char c, char next);
+char			**ft_split(char const *s, char c);
+char **ft_ms_split(char *line);
+int cnt_delimiter(char *line);
 
 /*
 ** parse_envv.c
@@ -131,4 +135,6 @@ t_tree_node*	insert_left(t_tree_node* parent,  char *command, char *argument, in
 t_tree_node*	insert_right(t_tree_node* parent, char *command, char *argument, int flag);
 void	delete_tree(t_tree* tree);
 
-void	traverseDLR(t_tree *tree); // 삭제예정
+void	post_traverse(t_tree *tree);
+void	in_traverse(t_tree *tree);
+void	pre_traverse(t_tree *tree);
