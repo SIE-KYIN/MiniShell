@@ -6,7 +6,7 @@
 /*   By: gshim <gshim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/16 17:21:43 by gshim             #+#    #+#             */
-/*   Updated: 2022/03/21 18:59:28 by gshim            ###   ########.fr       */
+/*   Updated: 2022/03/23 18:50:17 by gshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,7 @@ void sigHandler();
 */
 void read_line(t_list *env_list, char *line, char **envv);
 
-int execute_builtin(char *command, char **arg, char **env);
+int execute_builtin(char *command, char **arg, t_list *env);
 int execute(char *command, char **arg, char **env);
 
 

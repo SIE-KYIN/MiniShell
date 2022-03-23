@@ -5,6 +5,8 @@
 #define STDIN_SIMPLE O_RDONLY
 #define STDIN_DOUBLE O_RDONLY
 
+// dup(a, b) -> a
+
 int redir_out(char **cmdvector){
 	int i;
 	int fd;
@@ -23,7 +25,6 @@ int redir_out(char **cmdvector){
 			break;
 		}
 	}
-
 	if(cmdvector[i]){
 		if(!cmdvector[i+1]) return -1;
 		else{
@@ -94,15 +95,11 @@ void parse_line(char *line, char **env)
     char **arg;
     int pid;
     int backup_std[2];
-    //int std[2];
-    //int temp_fd = 1;    // 표준출력 임시fd값저장.
 
     backup_std[0] = dup(0);
     backup_std[1] = dup(1);
     arg = ft_split(line, ' ');
 
-    // redir기호를 찾는다. -> 존재한다면 적절한 플래그와 함께 redir를 처리한다.
-    //check_redir();
     redir_out(arg);
     redir_in(arg);
 

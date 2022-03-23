@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-int execute_builtin(char *command, char **arg, char **env)
+int execute_builtin(char *command, char **arg, t_list *env)
 {
 	if (ft_strncmp("echo", command, 4) == 0)
 		ft_echo(arg, env);
@@ -21,6 +21,8 @@ int execute_builtin(char *command, char **arg, char **env)
 	return (0);
 }
 
+// "cat", void, env
+// 모든 PATH를 조회하도록
 int execute(char *command, char **arg, char **env)
 {
 	(void)command;
