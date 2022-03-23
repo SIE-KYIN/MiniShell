@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gshim <gshim@student.42seoul.kr>           +#+  +:+       +#+        */
+/*   By: gshim <gshim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/16 17:21:43 by gshim             #+#    #+#             */
-/*   Updated: 2022/03/19 02:37:10 by gshim            ###   ########.fr       */
+/*   Updated: 2022/03/23 18:50:17 by gshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@
 # include <sys/wait.h>
 # include <unistd.h>
 # include <string.h>
+# include <fcntl.h> // 파일모드를위해추가
 
 // gshim
 int execute(char *command, char **arg, char **env);
@@ -100,5 +101,9 @@ void sigHandler();
 ** readline.c
 */
 void read_line(t_list *env_list, char *line, char **envv);
+
+int execute_builtin(char *command, char **arg, t_list *env);
+int execute(char *command, char **arg, char **env);
+
 
 #endif

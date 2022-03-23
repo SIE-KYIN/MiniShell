@@ -16,13 +16,24 @@ BONUSSRCS = ft_lstnew.c ft_lstadd_front.c ft_lstsize.c ft_lstlast.c \
 OBJS = $(SRCS:.c=.o)
 FULLOBJS = $(SRCS:.c=.o) $(BONUSSRCS:.c=.o)
 
+SHELL	= /bin/bash
+sp		= /-\|/
+idx		= 0
+
 all : $(NAME)
 
 $(NAME) : $(OBJS)
 	ar rc $@ $^
 
 %.o : %.c
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(eval idx = $(shell expr $(idx) + 1))
+	$(eval t_idx = $(shell expr $(idx) % 4 + 1))
+	$(eval chr = $(shell echo $(sp) | cut -c $(t_idx)))
+	@if [ $(idx) = 1 ]; then\
+		echo -n "☕️ ☕️ LIBFT Loading ...\n";\
+	fi
+	@printf "\b$(chr)"
+	@$(CC) $(CFLAGS) -c $< -o $@
 
 clean : $(OBJS)
 	rm -f $(OBJS)
