@@ -2,6 +2,8 @@
 
 #define STDOUT_SIMPLE O_RDWR|O_CREAT|O_TRUNC
 #define STDOUT_DOUBLE O_RDWR|O_CREAT|O_APPEND
+#define STDIN_SIMPLE O_RDONLY
+#define STDIN_DOUBLE O_RDONLY
 
 int redir_out(char **cmdvector){
 	int i;
@@ -45,42 +47,70 @@ int redir_out(char **cmdvector){
 	return 0;
 }
 
+int redir_in(char **cmdvector){
+	int i;
+	int fd;
+	int flag;	// <발견시 1, <<발견시 2값을 저장한다.
+
+	// 리다이렉션 존재여부 판단
+	for(i=0;cmdvector[i]!=NULL;i++){
+		if(!strcmp(cmdvector[i], "<"))
+		{
+			flag = 1;
+			break;
+		}
+		if(!strcmp(cmdvector[i], "<<"))
+		{
+			flag = 2;
+			break;
+		}
+	}
+
+	if(cmdvector[i]){
+		if(!cmdvector[i+1]) return -1;
+		else{
+			if(flag == 1)
+				fd = open(cmdvector[i+1], STDIN_SIMPLE, 0644);
+			else
+				fd = open(cmdvector[i+1], STDOUT_DOUBLE, 0644);
+			if (fd == -1)
+			{
+				perror(cmdvector[i+1]);
+				return -1;
+			}
+		}
+		dup2(fd, 0);    // fd를 표준입력으로!
+		close(fd);
+		for(;cmdvector[i+2]!=NULL;i++){
+			cmdvector[i] = cmdvector[i+2];  // 리다이렉션기호, 파일명 토큰제거
+		}
+		cmdvector[i] = NULL;
+	}
+	return 0;
+}
+
 void parse_line(char *line, char **env)
 {
-    //static const char tok[] = " \t\n";
-    //char *arg[100]; // MAXARG 명시필요.
     char **arg;
-    //char *str;
-    //char *save;
-    //int argv;
     int pid;
-    //int stdin_fd = dup(0); // 표준입력
-    int stdout_fd = dup(1); // 표준출력
+    int backup_std[2];
+    //int std[2];
     //int temp_fd = 1;    // 표준출력 임시fd값저장.
 
-    // argv = 0;
-    // str = strtok_r(line, tok, &save);
-    // while (str != NULL)
-    // {
-    //     arg[argv++] = str;
-    //     str = strtok_r(NULL, tok, &save);
-    // }
-    // arg[argv] = (char *)0;
+    backup_std[0] = dup(0);
+    backup_std[1] = dup(1);
     arg = ft_split(line, ' ');
 
+    // redir기호를 찾는다. -> 존재한다면 적절한 플래그와 함께 redir를 처리한다.
+    //check_redir();
     redir_out(arg);
-<<<<<<< HEAD
-    // [DEBUG]리다이렉트 처리 후 실행인자
-    for(int i=0;i<4;i++){
-        printf("[%d]%s\n", i, arg[i]);
-    }
-=======
->>>>>>> 64a8fd66ef0fb3be415aaf4188597369acaea3b5
+    redir_in(arg);
 
 	// check_builtIn : 빌트인명령이라면 부모프로세스에서 수행됩니다.
 	if (execute_builtin(arg[0], arg, env) == 0)
 	{
-		dup2(stdout_fd, 1);
+		dup2(backup_std[0], 0);
+		dup2(backup_std[1], 1);
 		return ;
 	}
 
@@ -99,8 +129,9 @@ void parse_line(char *line, char **env)
         printf("AFTER execute\n");
     }
 
-    // 표준출력을 원래대로 되돌린다.
-    dup2(stdout_fd, 1);
+    // 표준입출력을 원래대로 되돌린다.
+    dup2(backup_std[0], 0);
+	dup2(backup_std[1], 1);
 }
 
 void read_line(t_list *env_list, char *line, char **envv)
