@@ -1,7 +1,6 @@
 #include "../minishell.h"
 
 void add_node(t_list* list, int position, char *var, char *data){
-    //int i = -1;
     t_list_node* pre_node = NULL;
     t_list_node* new_node = NULL;
     t_list_node* next_node = NULL;
@@ -60,15 +59,10 @@ void remove_node(t_list* list, int position)
 
 void displayDoublyList(t_list* pList){
   int i = 0;
-    // printf("\x1b[0m현재 원소 개수 : %d\n", pList->cnt);
-    // for (i = 0; i < pList->cnt; i++)
-    //   printf("[%d]: %s=%s\n", i, get_node(pList, i + 1)->var,get_node(pList, i + 1)->data);
+    printf("\x1b[0m현재 원소 개수 : %d\n", pList->cnt);
+    for (i = 0; i < pList->cnt; i++)
+      printf("[%d]: %s=%s\n", i, get_node(pList, i + 1)->var,get_node(pList, i + 1)->data);
 
-	while(i < pList->cnt)
-	{
-		printf("%s=%s\n", get_node(pList, i + 1)->var, get_node(pList, i + 1)->data);
-		i++;
-	}
 }
 
 int get_position(t_list *list, char *str)

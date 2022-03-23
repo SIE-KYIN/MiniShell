@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-int execute_builtin(char *command, char **arg, t_list *env)
+int execute_builtin(char *command, char **arg, char **env)
 {
 	if (ft_strncmp("echo", command, 4) == 0)
 		ft_echo(arg, env);

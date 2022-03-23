@@ -6,7 +6,7 @@
 #    By: gshim <gshim@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/02/22 17:48:50 by gshim             #+#    #+#              #
-#    Updated: 2022/03/23 17:14:45 by gshim            ###   ########.fr        #
+#    Updated: 2022/03/23 19:38:59 by gshim            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,8 +18,11 @@ NAME = minishell
 
 SRCS_DIR = ./src
 SRCS =  src/DataStructure/linkedlist1.c src/DataStructure/linkedlist2.c \
-	src/Parsing/parse_envv.c \
+	src/DataStructure/tree1.c src/DataStructure/tree2.c \
+	src/Parsing/parse_envv.c src/Parsing/check_syntax.c \
+	src/Parsing/tokenize.c \
 	src/Utilities/utils1.c src/Utilities/utils2.c \
+	src/Utilities/utils3.c\
 	src/minishell.c src/builtIn.c \
 	src/Prompt/readline.c src/Prompt/sighandle.c
 OBJS = $(SRCS:.c=.o)

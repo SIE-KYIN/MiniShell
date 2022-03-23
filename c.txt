@@ -1,0 +1,4 @@
+[PWD]
+/Users/gshim/Study/minishell
+[PWD]
+/Users/gshim/Study/minishell
