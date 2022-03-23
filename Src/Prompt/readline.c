@@ -14,3 +14,5 @@ void read_line(t_list *env_list, char **line)
 
     // *line = NULL;
 }
+
+

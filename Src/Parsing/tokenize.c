@@ -69,30 +69,33 @@ int get_latest_token_loc(char **token)
     int i;
     
     i = 0;
-    while (token[i])
+    while (token[i + 1])
         i++;
     return (i);
 }
 
-void _token_to_tree(t_tree_node *parent, char **token, int deli_loc, int token_loc)
+void _token_to_tree(t_tree_node *parent, char **token, int token_loc)
 {
     char **tmp;
+    int deli_loc;
     t_tree_node *r_parent;
 
-    // deli_loc = is_there_delimiter(token);
+    deli_loc = is_there_delimiter(token);
     // token_loc = get_latest_token_loc(token);
-    tmp = find_cmd(token[deli_loc + 1]);
+    tmp = find_cmd(token[token_loc]);
     if (!deli_loc)
     {
         tmp = find_cmd(token[0]);
         insert_left(parent, tmp[0], tmp[1], COMMON_BUILTIN);
+        tmp = find_cmd(token[2]);
+        insert_right(parent, tmp[0], tmp[1], COMMON_BUILTIN);
         return ;
     }
     insert_right(parent, tmp[0], tmp[1], -1);
     insert_left(parent, token[deli_loc], NULL, DELIMITER);
     free(token[deli_loc]);
     token[deli_loc] = NULL;
-    _token_to_tree(parent->left_child, token, deli_loc - 2, token_loc - 2);
+    _token_to_tree(parent->left_child, token, token_loc - 2);
 }
 
 void token_to_tree(t_tree *token_tree, char **token)
@@ -108,7 +111,7 @@ void token_to_tree(t_tree *token_tree, char **token)
         insert_root(token_tree, token[deli_loc], NULL, DELIMITER);
         free(token[deli_loc]);
         token[deli_loc] = NULL;
-        _token_to_tree(token_tree->root_node, token, deli_loc - 2, token_loc);
+        _token_to_tree(token_tree->root_node, token, token_loc);
     }
     else
     {
@@ -130,21 +133,22 @@ t_tree *tokenize(char *line)
 }
 
 
-int main() {
-    t_tree *pBinTree = NULL;
-    pBinTree = tokenize("cd .. | ls | cat minishell.c > a.txt | echo ho");
-    if (pBinTree != NULL) {
-        printf("Preorder Iterative Traversal\n");
-		printf ("------------------------------------\n");
-		printf ("cmd | arg | fg\n");
-		printf ("전위순회\n");
-        pre_traverse(pBinTree);
-		printf ("중위순회\n");
-		in_traverse(pBinTree);
-		printf ("후위순회\n");
-		post_traverse(pBinTree);
-        delete_tree(pBinTree);
-    }
-    return 0;
-}
+// int main() {
+//     t_tree *pBinTree = NULL;
+//     char str[] = "cat < a.txt | grep h | wc -l";
+//     pBinTree = tokenize(str);
+//     if (pBinTree != NULL) {
+//         printf("Preorder Iterative Traversal\n");
+// 		printf ("------------------------------------\n");
+// 		printf ("cmd | arg | fg\n");
+// 		printf ("전위순회\n");
+//         pre_traverse(pBinTree);
+// 		printf ("중위순회\n");
+// 		in_traverse(pBinTree);
+// 		printf ("후위순회\n");
+// 		post_traverse(pBinTree);
+//         delete_tree(pBinTree);
+//     }
+//     return 0;
+// }
 
