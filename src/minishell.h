@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gshim <gshim@student.42seoul.kr>           +#+  +:+       +#+        */
+/*   By: gshim <gshim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/16 17:21:43 by gshim             #+#    #+#             */
-/*   Updated: 2022/03/24 16:26:10 by gshim            ###   ########.fr       */
+/*   Updated: 2022/03/26 21:46:53 by gshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,11 +61,9 @@ enum e_delimiter_flag
 typedef struct s_tree_node
 {
 	int flag;//무슨 노드인지
-	char *command; //명령어, 구분문자 , 파일명 여기들어갈듯
-	char *argument; //실행인자 여기들어갈듯
-	//char *arg[5];// arg[0] = "ls", arg[1] = NULL
-	struct s_tree_node* left_child;
-	struct s_tree_node* right_child;
+	char **command;
+	struct s_tree_node* left;
+	struct s_tree_node* right;
 } t_tree_node;
 
 typedef struct s_tree
@@ -153,9 +151,9 @@ t_tree *tokenize(char *line);
 ** b_tree.c
 */
 t_tree*		create_tree();
-t_tree_node*	insert_root(t_tree* tree, char *command, char *argument, int flag);
-t_tree_node*	insert_left(t_tree_node* parent,  char *command, char *argument, int flag);
-t_tree_node*	insert_right(t_tree_node* parent, char *command, char *argument, int flag);
+t_tree_node*	insert_root(t_tree* tree, char **command, int flag);
+t_tree_node*	insert_left(t_tree_node* parent,  char **command, int flag);
+t_tree_node*	insert_right(t_tree_node* parent, char **command, int flag);
 void	delete_tree(t_tree* tree);
 
 void	post_traverse(t_tree *tree);
@@ -175,5 +173,6 @@ int		redir_in(t_tree_node *root, t_tree_node *right);
 //int redir_in(char **cmdvector);
 int		execute_builtin(char *command, char **arg, char **env);
 //void exit(char **env);
+char **gather(t_list *list);
 
 #endif

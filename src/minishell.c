@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gshim <gshim@student.42seoul.kr>           +#+  +:+       +#+        */
+/*   By: gshim <gshim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 19:23:29 by gshim             #+#    #+#             */
-/*   Updated: 2022/03/24 16:34:16 by gshim            ###   ########.fr       */
+/*   Updated: 2022/03/26 21:47:22 by gshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ int main(int argc, char **argv, char **envv)
     {
         print_intro();
         env_list = parse_envv(envv);
+		gather(env_list);
         sigHandler();
         while (1)
         {
@@ -31,6 +32,7 @@ int main(int argc, char **argv, char **envv)
             check_syntax(line);
             //line에 들어있는 문자열 파싱하는 함수
             token_tree = tokenize(line);
+
             pre_traverse(token_tree, envv);
             //-----------------------------------내 역할 끝??
             //파싱한 자료구조(이진트리 예상)에서 빌트인 처리, 리디렉션 처리

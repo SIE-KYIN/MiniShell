@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strjoin.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gshim <gshim@student.42seoul.kr>           +#+  +:+       +#+        */
+/*   By: gshim <gshim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/03 16:35:07 by gshim             #+#    #+#             */
-/*   Updated: 2021/08/22 18:55:09 by gshim            ###   ########.fr       */
+/*   Updated: 2022/03/26 21:36:31 by gshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,5 +44,27 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	ret[0] = '\0';
 	ft_strcat(ret, (char *)s1);
 	ft_strcat(ret, (char *)s2);
+	return (ret);
+}
+
+char	*ft_strjoin_3(char const *s1, char const *s2, char const *s3)
+{
+	int		s1size;
+	int		s2size;
+	int		s3size;
+	char	*ret;
+
+	if (!s1 || !s2 || !s3)
+		return (0);
+	s1size = ft_strlen(s1);
+	s2size = ft_strlen(s2);
+	s3size = ft_strlen(s3);
+	ret = (char *)malloc(sizeof(char) * (s1size + s2size + s3size + 1));
+	if (!ret)
+		return (0);
+	ret[0] = '\0';
+	ft_strcat(ret, (char *)s1);
+	ft_strcat(ret, (char *)s2);
+	ft_strcat(ret, (char *)s3);
 	return (ret);
 }

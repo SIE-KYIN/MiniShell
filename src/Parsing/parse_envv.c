@@ -23,3 +23,32 @@ t_list *parse_envv(char **envv)
     }
     return (list);
 }
+
+char **gather(t_list *list)
+{
+	char **ret;
+	int i;
+	t_list_node *node;
+
+	ret = malloc(sizeof(char *) * (list->cnt) + 1);
+	i = 0;
+	node = list->top.next;
+	// 모든 리스트노드에 접근
+	while(i < list->cnt)
+	{
+		char *var = ft_strdup(node->var);
+		char *data = ft_strdup(node->data);
+		ret[i] = ft_strjoin_3(var, "=", data);
+		free(var);
+		free(data);
+		node = node->next;
+		i++;
+	}
+
+	for(int i=0;i<list->cnt;i++)
+	{
+		printf("%s\n", ret[i]);
+	}
+
+	return ret;
+}

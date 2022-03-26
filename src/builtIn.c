@@ -27,6 +27,7 @@ int execute(char *command, char **arg, char **env)
 {
 	(void)command;
 	char *filepath = ft_strjoin("/bin/", arg[0]);
+	printf("[DEBUG]%s\n", filepath);
 	execve(filepath, arg, env);
 	// 이 밑이 어떻게 실행되는걸까....!!
 	// quit이 arg[0]일때, 즉 해당명령을 찾지 못했다면 수행된다.

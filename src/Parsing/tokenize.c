@@ -18,22 +18,22 @@ char **find_cmd(char *line)
 {
     char **ret;
     int i;
-    int j;
+    int flag;
 
-    i = 0;
-    j = 0;
-    if (!is_there_space(line))
-        return (NULL);
-    while (line[i] != ' ')
-        i++;
-    while (line[i + j] == ' ')
-        j++;
-    ret = (char **)malloc(3);
-    ret[0] = ft_strndup(line, 0, i - 1);
-    if ((int)ft_strlen(line) == i)
-        ret[1] = NULL;
+    flag = 0;
+    i = -1;
+    while (line[++i])
+        if (line[i] == 'e' && line[i + 1] == 'c' && line[i + 2] == 'h' && line[i + 3] == 'o')
+            flag = 1;
+    if (flag == 1)
+    {
+        ret = (char **)malloc(3);
+        ret[0] = ft_strndup(line, i - 4, i);
+        ret[1] = ft_strndup(line, i + 1, ft_strlen(line) - 1);
+        ret[2] = 0;
+    }
     else
-        ret[1] = ft_strndup(line, i + j, ft_strlen(line) - 2);
+        ret = ft_split(line, ' ');
     return (ret);
 }
 
@@ -81,20 +81,23 @@ void _token_to_tree(t_tree_node *parent, char **token, int token_loc)
 
     deli_loc = is_there_delimiter(token);
     // token_loc = get_latest_token_loc(token);
-    tmp = find_cmd(token[token_loc]);
     if (!deli_loc)
     {
         tmp = find_cmd(token[0]);
-        insert_left(parent, tmp[0], tmp[1], COMMON_BUILTIN);
+        insert_left(parent, tmp, COMMON_BUILTIN);
         tmp = find_cmd(token[2]);
-        insert_right(parent, tmp[0], tmp[1], COMMON_BUILTIN);
+        insert_right(parent, tmp, COMMON_BUILTIN);
         return ;
     }
-    insert_right(parent, tmp[0], tmp[1], -1);
-    insert_left(parent, token[deli_loc], NULL, DELIMITER);
+    tmp = find_cmd(token[token_loc]);
+    insert_right(parent, tmp, -1);
+    tmp = (char **)malloc(2);
+    tmp[0] = token[deli_loc];
+    tmp[1] = 0;
+    insert_left(parent, tmp, DELIMITER);
     free(token[deli_loc]);
     token[deli_loc] = NULL;
-    _token_to_tree(parent->left_child, token, token_loc - 2);
+    _token_to_tree(parent->left, token, token_loc - 2);
 }
 
 void token_to_tree(t_tree *token_tree, char **token)
@@ -107,7 +110,10 @@ void token_to_tree(t_tree *token_tree, char **token)
     token_loc = get_latest_token_loc(token);
     if (deli_loc)
     {
-        insert_root(token_tree, token[deli_loc], NULL, DELIMITER);
+        tmp = (char **)malloc(3);
+        tmp[0] = token[deli_loc];
+        tmp[1] = 0;
+        insert_root(token_tree, tmp, DELIMITER);
         free(token[deli_loc]);
         token[deli_loc] = NULL;
         _token_to_tree(token_tree->root_node, token, token_loc);
@@ -115,7 +121,7 @@ void token_to_tree(t_tree *token_tree, char **token)
     else
     {
         tmp = find_cmd(token[0]);
-        insert_root(token_tree, tmp[0], tmp[1], COMMON_BUILTIN);
+        insert_root(token_tree, tmp, COMMON_BUILTIN);
     }
 }
 
@@ -134,20 +140,20 @@ t_tree *tokenize(char *line)
 
 // int main() {
 //     t_tree *pBinTree = NULL;
-//     char str[] = "cat < a.txt | grep h | wc -l";
+//     char str[] = "ls | echo ho > a.txt";
 //     pBinTree = tokenize(str);
-//     if (pBinTree != NULL) {
-//         printf("Preorder Iterative Traversal\n");
-// 		printf ("------------------------------------\n");
-// 		printf ("cmd | arg | fg\n");
-// 		printf ("전위순회\n");
-//         pre_traverse(pBinTree);
-// 		printf ("중위순회\n");
-// 		in_traverse(pBinTree);
-// 		printf ("후위순회\n");
-// 		post_traverse(pBinTree);
-//         delete_tree(pBinTree);
-//     }
+//     // if (pBinTree != NULL) {
+//     //     printf("Preorder Iterative Traversal\n");
+// 	// 	printf ("------------------------------------\n");
+// 	// 	printf ("cmd | arg | fg\n");
+// 	// 	printf ("전위순회\n");
+//     //     pre_traverse(pBinTree);
+// 	// 	printf ("중위순회\n");
+// 	// 	in_traverse(pBinTree);
+// 	// 	printf ("후위순회\n");
+// 	// 	post_traverse(pBinTree);
+//     //     delete_tree(pBinTree);
+//     // }
 //     return 0;
 // }
 
