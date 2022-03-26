@@ -1,0 +1,4 @@
+this is a.txt file
+apple
+peach
+pear

@@ -4,41 +4,32 @@ typedef struct minishell{
 	char dir[1024];
 }minishell;
 
-int redir_out(char **cmdvector){
-	int i;
-	int fd;
-
-	// 리다이렉션 존재여부 판단
-	for(i=0;cmdvector[i]!=NULL;i++){
-		if(!strcmp(cmdvector[i], ">")) break;
-	}
-
-	if(cmdvector[i]){
-		if(!cmdvector[i+1]) return -1;
-		else{
-			if((fd = open(cmdvector[i+1], O_RDWR|O_CREAT, 0644)) == -1){
-				perror(cmdvector[i+1]);
-				return -1;
-			}
-		}
-		dup2(fd, 1);
-		close(fd);
-		for(;cmdvector[i+2]!=NULL;i++){
-			cmdvector[i] = cmdvector[i+2];
-		}
-		cmdvector[i] = NULL;
-	}
-	return 0;
-}
-
 int main(int argc, char **argv, char **envv){
-	char *cmd;
+	int fd[2];
+	int pipe_val;
+	pid_t pid;
+	char buff[100];
 
-	(void)envv;
-	(void)argc;
-	(void)argv;
-	cmd = ft_strdup("ls -al > a.txt");
-	redir_out(ft_split(cmd, ' '));
+	pipe_val = pipe(fd);	// 파이프입구출구 fd[1] -> fd[0]
+	if(pipe_val == -1) printf("ERROR\n");
+	pid = fork();
+	if(pid == -1) printf("ERROR\n");
+
+	// 부모프로세스는 파이프의 출구에서 값을 읽어온다.
+	if(pid > 0)
+	{
+		// parent's process
+		wait(0);
+		read(fd[0], buff, 100);
+		printf("%s\n", buff);
+	}
+	// 자식프로세스는 파이프의 입구로 값을 입력한다.
+	else if(pid == 0)
+	{
+		// child's process
+		char *str = "|Hello, parent|";
+		write(fd[1], str, strlen(str));
+	}
 }
 /*
 	char dir[1024];

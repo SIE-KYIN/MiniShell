@@ -49,23 +49,55 @@ static void		_pre_traverse(t_tree_node *root, char **env)
 {
 	int backup_std[2];
 	int pid;
+	int pipe_fd[2];	// 파이프 입출력용
 	char *arg[5];
 
-	arg[0] = root->left_child->command;	// ls
-	arg[1] = root->left_child->argument;
-	if (ft_strncmp(root->left_child->argument, "", 1) == 0)
-		arg[1] = NULL;
+	if(root->left_child)
+		arg[0] = root->left_child->command;	// ls
+	if(root->left_child)
+		arg[1] = root->left_child->argument;
+	// 	arg[1] = NULL;
 	arg[2] = NULL;
-
-	//탈출조건
+	// Redirection
 	backup_std[0] = dup(0);
 	backup_std[1] = dup(1);
 
-	// Redirection
-	redir_out(root, root->right_child);
-	//redir_in(root->left_child);
+	// 파이프 처리가 필요한 경우
+	if (ft_strncmp(root->command, "|", 1) == 0)
+	{
+		pid = pipe(pipe_fd);
+		if (pid == -1) printf("ERROR\n");
+		pid = fork();
+		if (pid == -1) printf("ERROR\n");
+		// child's process, pipeline Input
+		if (pid == 0)
+		{
+			// if(pipe처리)
+				close(pipe_fd[0]);
+				dup2(pipe_fd[1], 1);	// 파이프의 출력을 표준출력으로 처리
+			_pre_traverse(root->left_child, env);
+		}
+		// parent's process, pipeline OUTPUT
+		else
+		{
+			// 근데,,, pipeline에서 입력을 읽어 arg에 넣는건 알겠는데
+			// 기존에 arg값이 존재하면 앞에 넣어야 하나 뒤에 넣어야 하나...?
+			// if(pipe처리)
+				close(pipe_fd[1]);
+				dup2(pipe_fd[0], 0);	// 파이프의 입력을 표준입력으로 처리
+			_pre_traverse(root->right_child, env);
+		}
+		return ;
+	}
+	// redirect 처리가 필요한 경우
+	else if(root->flag == 1)
+	{
+		redir_out(root, root->right_child);
+		redir_in(root, root->right_child);
+	}
 
-	//check_builtIn : 빌트인명령이라면 부모프로세스에서 수행됩니다.
+
+	// INTERNAL EXECUTE
 	if (execute_builtin(root->left_child->command, arg, env) == 0)
 	{
 		dup2(backup_std[0], 0);
@@ -73,27 +105,27 @@ static void		_pre_traverse(t_tree_node *root, char **env)
 		return ;
 	}
 
-	//자식프로세스 생성
+	// EXTERNAL EXECUTE
     if ((pid = fork()) == -1) printf("FORK ERROR\n");
-    else if (pid != 0)
-	{
-		// parent's process
-        pid = wait(NULL);
-    }
-    else
+    else if (pid == 0)
 	{
 		// child's process
 		execute(root->left_child->command, arg, env);
 		printf("AFTER execute\n");
     }
+    else if (pid != 0)
+	{
+		// parent's process
+        pid = wait(NULL);
+    }
 	dup2(backup_std[0], 0);
 	dup2(backup_std[1], 1);
-	if (!root->left_child)
-		return ;
+
 	// 재귀
-	// _pre_traverse(root->left_child, env);
-	// _pre_traverse(root->right_child, env);
-	return ;
+	if (!root->left_child->left_child)// !root->left_child->left_child
+		return ;
+	_pre_traverse(root->left_child, env);
+	_pre_traverse(root->right_child, env);
 }
 
 void	pre_traverse(t_tree *tree, char **env)

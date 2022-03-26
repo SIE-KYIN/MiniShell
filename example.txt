@@ -1,6 +1,0 @@
-hello
-my
-name
-is
-gshim
-Nice to meet you.

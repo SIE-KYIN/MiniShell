@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gshim <gshim@student.42.fr>                +#+  +:+       +#+        */
+/*   By: gshim <gshim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/16 17:21:43 by gshim             #+#    #+#             */
-/*   Updated: 2022/03/23 21:36:54 by gshim            ###   ########.fr       */
+/*   Updated: 2022/03/24 16:26:10 by gshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,6 @@
 # include <unistd.h>
 # include <string.h>
 # include <fcntl.h> // 파일모드를위해추가
-
-
-
 
 // kyujlee
 typedef struct s_list_node
@@ -166,16 +163,17 @@ void	in_traverse(t_tree *tree);
 void	pre_traverse(t_tree *tree, char **env);
 
 // gshim
-int execute(char *command, char **arg, char **env);
-void ft_echo(char *argv[], char **env);
-void ft_cd(char *argv[], char **env);
-void ft_pwd();
-void ft_export(char **env);
-void ft_unset(char **env);
-void ft_env(char **env);
-int	redir_out(t_tree_node *root, t_tree_node *left);
+int		execute(char *command, char **arg, char **env);
+void	ft_echo(char *argv[], char **env);
+void	ft_cd(char *argv[], char **env);
+void	ft_pwd();
+void	ft_export(char **env);
+void	ft_unset(char **env);
+void	ft_env(char **env);
+int		redir_out(t_tree_node *root, t_tree_node *left);
+int		redir_in(t_tree_node *root, t_tree_node *right);
 //int redir_in(char **cmdvector);
-int execute_builtin(char *command, char **arg, char **env);
+int		execute_builtin(char *command, char **arg, char **env);
 //void exit(char **env);
 
 #endif
