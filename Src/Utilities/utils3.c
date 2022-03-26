@@ -1,5 +1,6 @@
 #include "../../Inc/minishell.h"
 
+
 int is_delimiter(char c, char next)
 {
     if (c == '>')
@@ -47,18 +48,21 @@ int cnt_word(char *line)
 	int tmp;
 
 	cnt = 0;
-	while (*line)
+	i = -1;
+	while (line[++i])
 	{
-		tmp = is_delimiter(*line,  *(line + 1));
+		tmp = is_delimiter(line[i],  line[i + 1]);
 		if (tmp)
 		{
 			cnt++;
-			line += tmp;
+			i += tmp;
 			continue;
 		}
-		cnt++;
-		while (!is_delimiter(*line, *(line + 1)) && *line)
-			line++;
+		while (line[++i])
+		{
+			if (is_delimiter(line[i],  line[i + 1]))
+				break;
+		}
 	}
 	return (cnt);
 }
@@ -83,78 +87,93 @@ void cut_str(char *line, char **ret)
 	}
 }
 
-char *ft_emptystr()
+int strcnt_double_ptr(char **ret)
 {
-	char *ret;
-
-	ret = (char *)malloc(sizeof(char) + 1);
-	if (ret == NULL)
-		return NULL;
-	
-	ret[0] = '\0';
-	
-	return ret;
-}
-
-char *ft_strcjoin(char *str, char c){
-	char *ret;
-	int len;
-	int i = -1;
-
-	while (str[len])
-		len++;
-
-	ret = (char *)malloc(sizeof(char) * (len + 2));
-	if (ret == NULL)
-		return NULL;
-	
-	ret[len] = c;
-	ret[len + 1] = '\0';
-	
-	while (++i < len)
-		ret[i] = str[i];
-
-	return ret;
-}
-
-void delete_space(char **ret)
-{
-	char **tmp;
-	char *tmp_str;
 	int i;
-	int j;
 
-	i = -1;
-	while (ret[++i])
-	{
-		if (is_delimiter(ret[i][0], ret[i][1]))
-			continue;
-		tmp = ft_split(ret[i] , ' ');
-		free(ret[i]);
-		ret[i] = ft_emptystr();
-		j = 0;
-		while (tmp[j])
-		{
-			tmp_str = ret[i];
-			ret[i] = ft_strjoin(ret[i], tmp[j]);
-			free(tmp_str);
-			if (tmp[j + 1])
-			{
-				tmp_str = ret[i];
-				ret[i] = ft_strcjoin(ret[i], ' ');
-				free(tmp_str);
-			}
-			free(tmp[j]);
-			j++;
-		}
-		free(tmp);
-	}
+	i = 0;
+	while (ret[i])
+		i++;
+	return (i);
 }
 
-char **ft_ms_split(char *line)
+char **plus_space(char **str, int criteria)
+{
+	int cnt;
+	char **ret;
+	int i;
+
+	cnt = strcnt_double_ptr(str);
+	ret = (char **)malloc(cnt + 2);
+	i = -1;
+	while (++i < cnt)
+	{
+		if (i < criteria)
+			ret[i] = str[i];
+		else
+			ret[i + 1] = str[i];
+	}
+	ret[cnt + 1] = 0;
+	return (ret);
+}
+
+void divide_str(char **ret, int i)
+{
+	char *command = NULL;
+	char *argument = NULL;
+	int j;
+	int criteria = 0;
+	int flag;
+	char *tmp;
+
+	tmp = ft_strdup(ret[i + 2]);
+	flag = 0;
+	j = -1;
+	while (tmp[++j])
+	{
+		if (flag == 1 && tmp[j] == ' ')
+		{
+			criteria = j;
+			flag++;
+		}
+		if (!flag && tmp[j] != ' ')
+			flag = 1;
+	}
+	argument = ft_strndup(tmp, 0, criteria);
+	command = ft_strndup(tmp, criteria + 1, j - 1);
+	ret[i] = command;
+	// free(ret[i + 2]);
+	ret[i + 2] = argument;
+	// free(tmp);
+}
+
+char **repositioning(char **str)
+{
+	char **ret = NULL;
+	int cnt;
+	int i;
+	
+	i = -1;
+	while (str[++i])
+	{
+		if (is_delimiter(str[i][0], str[i][1]))
+		{
+			if (i == 0 || is_delimiter(str[i - 1][0], str[i -1][1]))
+			{
+				ret = plus_space(str, i);
+				divide_str(ret, i);
+			}
+			
+		}
+	}
+	return (ret);
+}
+
+char **ft_ms_split(char *line, t_list *env_list)
 {
 	char **ret;
 	int cnt;
+	char **tmp;
 
 	cnt = cnt_word(line);
 	ret = (char **)malloc(sizeof(char *) * (cnt + 1));
@@ -163,16 +182,100 @@ char **ft_ms_split(char *line)
 		ret[0] = ft_strdup(line);
 	else
 		cut_str(line, ret);
-	// delete_space(ret);
-	return (ret);
+	tmp = repositioning(ret);
+	if (!tmp)
+	// key_to_value(env_list, ret);
+		return (ret);
+	else 
+	{
+		free(ret);
+		return (tmp);
+	}
 }
 
-// int main(){
-// 	char **ret;
-// 	int i=0;
-// 	ret =ft_ms_split("echo \"abc\"\'ccc    \'\"d    acc    \">a>b");
-// 	while (ret[i]){
-// 		printf ("%s\n",ret[i]);
-// 		i++;
+int main(int argc, char **argv, char **envv)
+{
+	char **strstr;
+	t_list *ho;
+	ho = NULL;
+	// ho = parse_envv(envv);
+
+	int i=0;
+	strstr = ft_ms_split("ls | echo ho > a.txt", ho);
+
+	while (strstr[i]){
+		printf ("%s\n",strstr[i]);
+		i++;
+	}
+	system("leaks a.out > leaks_result_temp; cat leaks_result_temp | grep leaked");
+	return (0);
+}
+
+
+// char *ft_emptystr()
+// {
+// 	char *ret;
+
+// 	ret = (char *)malloc(sizeof(char) + 1);
+// 	if (ret == NULL)
+// 		return NULL;
+	
+// 	ret[0] = '\0';
+	
+// 	return ret;
+// }
+
+// char *ft_strcjoin(char *str, char c){
+// 	char *ret;
+// 	int len;
+// 	int i = -1;
+
+// 	while (str[len])
+// 		len++;
+
+// 	ret = (char *)malloc(sizeof(char) * (len + 2));
+// 	if (ret == NULL)
+// 		return NULL;
+	
+// 	ret[len] = c;
+// 	ret[len + 1] = '\0';
+	
+// 	while (++i < len)
+// 		ret[i] = str[i];
+
+// 	return ret;
+// }
+
+// void delete_space(char **ret)
+// {
+// 	char **tmp;
+// 	char *tmp_str;
+// 	int i;
+// 	int j;
+
+// 	i = -1;
+// 	while (ret[++i])
+// 	{
+// 		if (is_delimiter(ret[i][0], ret[i][1]))
+// 			continue;
+// 		tmp = ft_split(ret[i] , ' ');
+// 		free(ret[i]);
+// 		ret[i] = ft_emptystr();
+// 		j = 0;
+// 		while (tmp[j])
+// 		{
+// 			tmp_str = ret[i];
+// 			ret[i] = ft_strjoin(ret[i], tmp[j]);
+// 			free(tmp_str);
+// 			if (tmp[j + 1])
+// 			{
+// 				tmp_str = ret[i];
+// 				ret[i] = ft_strcjoin(ret[i], ' ');
+// 				free(tmp_str);
+// 			}
+// 			free(tmp[j]);
+// 			j++;
+// 		}
+// 		free(tmp);
 // 	}
 // }

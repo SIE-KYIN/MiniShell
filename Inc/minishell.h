@@ -40,10 +40,9 @@ enum e_delimiter_flag
 typedef struct s_tree_node
 {
 	int flag;//무슨 노드인지
-	char *command; //명령어, 구분문자 , 파일명 여기들어갈듯
-	char *argument; //실행인자 여기들어갈듯
-	struct s_tree_node* left_child;
-	struct s_tree_node* right_child;
+	char **command;
+	struct s_tree_node* left;
+	struct s_tree_node* right;
 } t_tree_node;
 
 typedef struct s_tree
@@ -72,7 +71,7 @@ void delete_list(t_list *list);
 /*
 ** utils1.c 
 */
-char	*ft_strndup(const char *src, int from, int to);
+char	*ft_strndup(char *src, int from, int to);
 void ft_error(int flag);
 int is_same(char *str1, char *str2);
 void print_intro();
@@ -92,7 +91,7 @@ char	*ft_strjoin(char const *s1, char const *s2);
 */
 int is_delimiter(char c, char next);
 char			**ft_split(char const *s, char c);
-char **ft_ms_split(char *line);
+char **ft_ms_split(char *line, t_list *env_list);
 int cnt_delimiter(char *line);
 
 /*
@@ -122,7 +121,7 @@ int check_syntax(char *line);
 /*
 ** tokenize.c
 */
-t_tree *tokenize(char *line);
+t_tree *tokenize(char *line, t_list *env_list);
 
 
 
@@ -130,9 +129,9 @@ t_tree *tokenize(char *line);
 ** b_tree.c
 */
 t_tree*		create_tree();
-t_tree_node*	insert_root(t_tree* tree, char *command, char *argument, int flag);
-t_tree_node*	insert_left(t_tree_node* parent,  char *command, char *argument, int flag);
-t_tree_node*	insert_right(t_tree_node* parent, char *command, char *argument, int flag);
+t_tree_node*	insert_root(t_tree* tree, char **command, int flag);
+t_tree_node*	insert_left(t_tree_node* parent,  char **command, int flag);
+t_tree_node*	insert_right(t_tree_node* parent, char **command, int flag);
 void	delete_tree(t_tree* tree);
 
 void	post_traverse(t_tree *tree);

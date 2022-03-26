@@ -14,7 +14,7 @@ void ft_error(int flag)
 
 }
 
-char	*ft_strndup(const char *src, int from, int to)
+char	*ft_strndup(char *src, int from, int to)
 {
 	char	*str;
     int i;

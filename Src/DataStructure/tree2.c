@@ -13,10 +13,9 @@ static void		_delete_tree(t_tree_node *root)
 
 	if (!root)
 		return ;
-	_delete_tree(root->left_child);
-	_delete_tree(root->right_child);
+	_delete_tree(root->left);
+	_delete_tree(root->right);
 	free(root->command);
-	free(root->argument);
 	free(root);
 	
 }
