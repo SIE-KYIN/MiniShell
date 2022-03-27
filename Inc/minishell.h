@@ -52,7 +52,13 @@ typedef struct s_tree
 
 
 /*
-** DataStucture-LinkedList1
+** *****************************************
+** *************DATASTRUCTURE***************
+** *****************************************
+*/
+
+/*
+** LinkedList1
 */
 void add_node(t_list* list, int position, char *var, char *data);
 t_list_node* get_node(t_list* list, int position);
@@ -62,36 +68,37 @@ int get_position(t_list *list, char *str);
 
 
 /*
-** DataStucture-LinkedList2
+** LinkedList2
 */
 t_list	*create_list(void);
 void delete_list(t_list *list);
 
+/*
+** tree1
+*/
+t_tree_node*	insert_root(t_tree* tree, char **command, int flag);
+t_tree_node*	insert_left(t_tree_node* parent,  char **command, int flag);
+t_tree_node*	insert_right(t_tree_node* parent, char **command, int flag);
+void	pre_traverse(t_tree *tree);
 
 /*
-** utils1.c 
+** tree2 
+** +1
 */
-char	*ft_strndup(char *src, int from, int to);
-void ft_error(int flag);
-int is_same(char *str1, char *str2);
-void print_intro();
-
+t_tree*		create_tree();
+void	delete_tree(t_tree* tree);
 
 /*
-** utils2.c  ++++++++3
+** *****************************************
+** ****************Parsing******************
+** *****************************************
 */
-size_t	ft_strlen(const char *s);
-void	*ft_memcpy(void *dst, const void *src, size_t n);
-char *ft_colorstr(char *str);
-char	*ft_strdup(const char *s1);
-char	*ft_strjoin(char const *s1, char const *s2);
 
 /*
-** utils3.c  ++++++++3
+** check_syntax.c 
+** +3
 */
-char			**ft_split(char const *s, char c);
-
-
+int check_syntax(char *line);
 
 /*
 ** ft_ms_split.c
@@ -108,11 +115,16 @@ t_list *parse_envv(char **envv);
 
 
 /*
-** ms_sighandle.c
+** tokenize.c
 */
-void sig_int(int sig);
-void sigHandler();
+t_tree *tokenize(char *line, t_list *env_list);
 
+
+/*
+** *****************************************
+** ****************Prompt*******************
+** *****************************************
+*/
 
 /*
 ** readline.c
@@ -121,28 +133,64 @@ int read_line(t_list *env_list, char **line);
 
 
 /*
-** check_syntax.c
+** readline_utils.c
 */
-int check_syntax(char *line);
-int str_in_quote2(char *line, int i, int single_flag, int double_flag);
+void sig_int(int sig);
+void sigHandler();
+char *ft_colorstr(char *str);
+
+
+/*
+** *****************************************
+** ****************Utilities****************
+** *****************************************
+*/
+
+/*
+** utils1.c 
+*/
+void ft_error(int flag);
+char	*ft_strndup(char *src, int from, int to);
+int is_same(char *str1, char *str2);
+void print_intro();
+
+/*
+** utils2.c
+** related to check_syntax.c
+*/
 int str_in_quote(char *line, int i, int *single_flag, int *double_flag);
+int str_in_quote2(char *line, int i, int single_flag, int double_flag);
 int is_valid_s_c(char c);
-/*
-** tokenize.c
-*/
-t_tree *tokenize(char *line, t_list *env_list);
-
-
 
 /*
-** b_tree.c
+** utils3.c
+** related to ft_ms_split.c
 */
-t_tree*		create_tree();
-t_tree_node*	insert_root(t_tree* tree, char **command, int flag);
-t_tree_node*	insert_left(t_tree_node* parent,  char **command, int flag);
-t_tree_node*	insert_right(t_tree_node* parent, char **command, int flag);
-void	delete_tree(t_tree* tree);
+int is_delimiter(char c, char next);
+int cnt_delimiter(char *line);
+void change_str(t_list *env_list, char **line, int fst, int sec);
+int strcnt_double_ptr(char **ret);
+char *ft_emptystr();
 
-void	post_traverse(t_tree *tree);
-void	in_traverse(t_tree *tree);
-void	pre_traverse(t_tree *tree);
+/*
+** utils4.c
+** related to ft_ms_split.c
+*/
+char **plus_space(char **str, int criteria);
+void divide_str(char **ret, int i);
+
+
+
+
+/*
+** utils2.c  ++++++++3
+*/
+size_t	ft_strlen(const char *s);
+void	*ft_memcpy(void *dst, const void *src, size_t n);
+char	*ft_strdup(const char *s1);
+char	*ft_strjoin(char const *s1, char const *s2);
+
+/*
+** utils3.c  ++++++++3
+*/
+char			**ft_split(char const *s, char c);

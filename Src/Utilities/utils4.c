@@ -1,61 +1,45 @@
 #include "../../Inc/minishell.h"
 
-size_t	ft_strlen(const char *s)
+
+char **plus_space(char **str, int criteria)
 {
-	size_t	i;
+	int cnt;
+	char **ret;
+	int i;
 
-	i = 0;
-	while (*(s + i))
-		i++;
-	return (i);
-}
-
-void	*ft_memcpy(void *dst, const void *src, size_t n)
-{
-	if (!dst && !src)
-		return ((void *)0);
-	while (n-- > 0)
-		*((unsigned char *)dst + n) = *((unsigned char *)src + n);
-	return (dst);
-}
-
-char	*ft_strjoin(char const *s1, char const *s2)
-{
-	size_t	len_1;
-	size_t	len_2;
-	char	*ret;
-
-	if (!s1 && !s2)
-		return (0);
-	if (!s1)
-		return ((char *)s2);
-	if (!s2)
-		return ((char *)s1);
-	len_1 = ft_strlen(s1);
-	len_2 = ft_strlen(s2);
-	if ((ret = (char *)malloc(len_1 + len_2 + 1)) == 0)
-		return (0);
-	*(ret + len_1 + len_2) = 0;
-	ft_memcpy(ret, s1, len_1);
-	ft_memcpy(ret + len_1, s2, len_2);
-	return (ret);
-}
-
-char	*ft_strdup(const char *s1)
-{
-	char	*ret;
-	int		len;
-	int		i;
-
-	len = ft_strlen(s1);
-	i = 0;
-	if ((ret = (char *)malloc(len + 1)) == 0)
-		return (0);
-	*(ret + len) = 0;
-	while (i < len)
+	cnt = strcnt_double_ptr(str);
+	ret = (char **)malloc(sizeof(char *) * (cnt + 2));
+	i = -1;
+	while (++i < cnt)
 	{
-		*(ret + i) = *(s1 + i);
-		i++;
+		if (i < criteria)
+			ret[i] = ft_strdup(str[i]);
+		else
+			ret[i + 1] = ft_strdup(str[i]);
 	}
+	ret[cnt + 1] = NULL;
 	return (ret);
+}
+
+void divide_str(char **ret, int i)
+{
+	char *command = NULL;
+	char *argument = NULL;
+	int j;
+	int flag;
+
+	flag = 0;
+	j = -1;
+	while (ret[i + 2][++j])
+	{
+		if (!flag && ret[i + 2][j] != ' ')
+			flag = 1;
+		if (flag && ret[i + 2][j] == ' ')
+			break;
+	}
+	argument = ft_strndup(ret[i + 2], 0, j);
+	command = ft_strndup(ret[i + 2], j + 1, ft_strlen(ret[i + 2]) - 1);
+	ret[i] = command;
+	free(ret[i + 2]);
+	ret[i + 2] = argument;
 }
