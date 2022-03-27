@@ -1,6 +1,6 @@
 #include "../../Inc/minishell.h"
 
-void read_line(t_list *env_list, char **line)
+int read_line(t_list *env_list, char **line)
 {
     
     char *info = ft_colorstr(get_node(env_list, 
@@ -9,10 +9,10 @@ void read_line(t_list *env_list, char **line)
     free(info);
     if (*line == NULL)
         exit(0);
+    if (*line[0] == '\0')
+        return 0;
     add_history(*line);
-    // free(line);
-
-    // *line = NULL;
+    return (1);
 }
 
 

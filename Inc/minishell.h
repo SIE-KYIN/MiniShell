@@ -110,13 +110,14 @@ void sigHandler();
 /*
 ** readline.c
 */
-void read_line(t_list *env_list, char **line);
+int read_line(t_list *env_list, char **line);
 
 
 /*
 ** check_syntax.c
 */
 int check_syntax(char *line);
+int str_in_quote2(char *line, int i, int single_flag, int double_flag);
 
 /*
 ** tokenize.c

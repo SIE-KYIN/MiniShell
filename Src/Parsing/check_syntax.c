@@ -155,11 +155,11 @@ int check_syntax(char *line)
         ft_error(2);
         return (0);
     }
-    if (!is_valid_location(line))
-    {
-        ft_error(3);
-        return (0);
-    }
+    // if (!is_valid_location(line))
+    // {
+    //     ft_error(3);
+    //     return (0);
+    // }
     if (!is_opened_quotes(line))
     {
         ft_error(4);

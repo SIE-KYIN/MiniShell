@@ -1,33 +1,28 @@
-Process:         a.out [99639]
-Path:            /Volumes/VOLUME/*/a.out
+Process:         token [49068]
+Path:            /Volumes/VOLUME/*/token
 Load Address:    0x100000000
-Identifier:      a.out
+Identifier:      token
 Version:         ???
 Code Type:       X86-64
-Parent Process:  debugserver [99640]
+Parent Process:  debugserver [49069]
 
-Date/Time:       2022-03-27 12:18:09.075 +0900
-Launch Time:     2022-03-27 12:16:43.927 +0900
+Date/Time:       2022-03-27 15:33:53.378 +0900
+Launch Time:     2022-03-27 15:33:21.673 +0900
 OS Version:      Mac OS X 10.15.7 (19H1824)
 Report Version:  7
 Analysis Tool:   /Applications/Xcode.app/Contents/Developer/usr/bin/leaks
 Analysis Tool Version:  Xcode 12.3 (12C33)
 
-Physical footprint:         1380K
-Physical footprint (peak):  1380K
+Physical footprint:         1388K
+Physical footprint (peak):  1388K
 ----
 
 leaks Report Version: 4.0
-Process 99639: 158 nodes malloced for 12 KB
-Process 99639: 6 leaks for 96 total leaked bytes.
+Process 49068: 169 nodes malloced for 12 KB
+Process 49068: 4 leaks for 112 total leaked bytes.
 
-    6 (96 bytes) << TOTAL >>
-
-      3 (48 bytes) ROOT LEAK: 0x100504080 [16]
-         1 (16 bytes) 0x1005040a0 [16]  length: 5  "test "
-         1 (16 bytes) 0x1005040b0 [16]  length: 7  "echo ho"
-
-      1 (16 bytes) ROOT LEAK: 0x100404270 [16]  length: 1  ">"
-      1 (16 bytes) ROOT LEAK: 0x100404280 [16]  length: 12  "test echo ho"
-      1 (16 bytes) ROOT LEAK: 0x100504090 [16]
+    4 (112 bytes) ROOT LEAK: 0x100404300 [48]
+       1 (32 bytes) 0x100404390 [32]  length: 17  "          echo ho"
+       1 (16 bytes) 0x100404330 [16]  length: 3  "ls "
+       1 (16 bytes) 0x100404380 [16]  length: 6  "a.txt "
 

@@ -23,17 +23,25 @@ char **find_cmd(char *line)
     flag = 0;
     i = -1;
     while (line[++i])
-        if (line[i] == 'e' && line[i + 1] == 'c' && line[i + 2] == 'h' && line[i + 3] == 'o')
+        if (line[i] == 'e' && line[i + 1] == 'c' && line[i + 2] == 'h' && line[i + 3] == 'o' && line[i + 4] == ' ')
+        {
             flag = 1;
+            break;
+        }
     if (flag == 1)
     {
-        ret = (char **)malloc(3);
-        ret[0] = ft_strndup(line, i - 4, i);
-        ret[1] = ft_strndup(line, i + 1, ft_strlen(line) - 1);
+        ret = (char **)malloc(sizeof(char *) * 3);
+        ret[0] = ft_strndup(line, i, i + 3);
+        i += 3;
+        while (line[++i])
+            if (line[i] != ' ')
+                break;
+        ret[1] = ft_strndup(line, i, ft_strlen(line) - 1);
         ret[2] = 0;
     }
     else
         ret = ft_split(line, ' ');
+    free(line);
     return (ret);
 }
 
@@ -91,8 +99,8 @@ void _token_to_tree(t_tree_node *parent, char **token, int token_loc)
     }
     tmp = find_cmd(token[token_loc]);
     insert_right(parent, tmp, -1);
-    tmp = (char **)malloc(2);
-    tmp[0] = token[deli_loc];
+    tmp = (char **)malloc(sizeof(char *) * 2);
+    tmp[0] = ft_strdup(token[deli_loc]);
     tmp[1] = 0;
     insert_left(parent, tmp, DELIMITER);
     free(token[deli_loc]);
@@ -110,8 +118,8 @@ void token_to_tree(t_tree *token_tree, char **token)
     token_loc = get_latest_token_loc(token);
     if (deli_loc)
     {
-        tmp = (char **)malloc(2);
-        tmp[0] = token[deli_loc];
+        tmp = (char **)malloc(sizeof(char *) * 2);
+        tmp[0] = ft_strdup(token[deli_loc]);
         tmp[1] = 0;
         insert_root(token_tree, tmp, DELIMITER);
         free(token[deli_loc]);
@@ -133,27 +141,33 @@ t_tree *tokenize(char *line, t_list *env_list)
     token_tree = create_tree();
     token = ft_ms_split(line, env_list);
     token_to_tree(token_tree, token);
-    
+    free(token);
+    pre_traverse(token_tree);
     return (token_tree);
 }
 
 
-int main() {
+int main(int argc, char **argv, char **envv) {
     t_tree *pBinTree = NULL;
-    char str[] = "ls |> echo ho a.txt";
-    pBinTree = tokenize(str, NULL);
+    char *str;
+    	t_list *ho;
+	ho = parse_envv(envv);
+    str = ft_strdup("ls |> test echo ho");
+    pBinTree = tokenize(str, ho);
+    
     // if (pBinTree != NULL) {
     //     printf("Preorder Iterative Traversal\n");
-	// 	printf ("------------------------------------\n");
-	// 	printf ("cmd | arg | fg\n");
-	// 	printf ("전위순회\n");
-    //     pre_traverse(pBinTree);
+	// 	printf ("....------------------------------------\n");
+		// // printf ("cmd | fg\n");
+		// printf ("\n\n\n전위순회\n");
+        // pre_traverse(pBinTree);
 	// 	printf ("중위순회\n");
 	// 	in_traverse(pBinTree);
 	// 	printf ("후위순회\n");
 	// 	post_traverse(pBinTree);
     //     delete_tree(pBinTree);
     // }
+    system("leaks token > leaks_result_temp; cat leaks_result_temp | grep leaked");
     return 0;
 }
 

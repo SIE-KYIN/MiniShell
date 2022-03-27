@@ -1,6 +1,5 @@
 #include "../../Inc/minishell.h"
 
-
 int is_delimiter(char c, char next)
 {
     if (c == '>')
@@ -24,7 +23,6 @@ int cnt_delimiter(char *line)
 {
 	int ret;
 	int tmp;
-
 
 	ret = 0;
 	while (*line)
@@ -126,49 +124,37 @@ char **plus_space(char **str, int criteria)
 	while (++i < cnt)
 	{
 		if (i < criteria)
-			ret[i] = str[i];
+			ret[i] = ft_strdup(str[i]);
 		else
-			ret[i + 1] = str[i];
+			ret[i + 1] = ft_strdup(str[i]);
 	}
 	ret[cnt + 1] = NULL;
 	return (ret);
 }
 
-char **divide_str(char **ret, int i)
+void divide_str(char **ret, int i)
 {
+	char *command = NULL;
+	char *argument = NULL;
 	int j;
-	int criteria = 0;
 	int flag;
-	char *tmp;
-	char **str_ret;
-	
-	str_ret = (char **)malloc(sizeof(char *) * 3);
-	tmp = ft_strdup(ret[i + 2]);
+
 	flag = 0;
 	j = -1;
-	while (tmp[++j])
-	{
-		if (flag == 1 && tmp[j] == ' ')
-		{
-			criteria = j;
-			flag++;
-		}
-		if (!flag && tmp[j] != ' ')
-			flag = 1;
-	}
-	str_ret[1] = ft_strndup(tmp, 0, criteria);
-	str_ret[0] = ft_strndup(tmp, criteria + 1, j - 1);
-	str_ret[2] = NULL;
-	free(tmp);
-	return (str_ret);
+	while (ret[i + 2][++j])
+		if (ret[i + 2][j] == ' ')
+			break;
+	argument = ft_strndup(ret[i + 2], 0, j);
+	command = ft_strndup(ret[i + 2], j + 1, ft_strlen(ret[i + 2]) - 1);
+	ret[i] = command;
+	free(ret[i + 2]);
+	ret[i + 2] = argument;
 }
 
 char **repositioning(char **str)
 {
 	char **ret = NULL;
-	int cnt;
 	int i;
-	char **tmp;
 	
 	i = -1;
 	while (str[++i])
@@ -178,16 +164,70 @@ char **repositioning(char **str)
 			if (i == 0 || is_delimiter(str[i - 1][0], str[i -1][1]))
 			{
 				ret = plus_space(str, i);
-				tmp = divide_str(ret, i);
-				ret[i] = tmp[0];
-				free(ret[i + 2]);
-				ret[i + 2] = tmp[1];
-				free(tmp);
+				divide_str(ret, i);
 			}
-			
 		}
 	}
 	return (ret);
+}
+
+void change_ktv(t_list *env_list, char **line, int fst, int sec)
+{
+	int tmp;
+	char *fst_str;
+	char *sec_str;
+	char *thd_str;
+	char *free_ptr;
+	char *ret;
+
+	fst_str = ft_strndup(*line, 0, fst - 1);
+	sec_str = ft_strndup(*line, fst + 1, sec - 1);
+	thd_str = ft_strndup(*line, sec, ft_strlen(*line) - 1);
+	tmp = get_position(env_list, sec_str);
+	free(sec_str);
+	if (tmp == -1)
+		sec_str = ft_emptystr();
+	else
+		sec_str = ft_strdup(get_node(env_list, tmp)->data);
+	free_ptr = ft_strjoin(fst_str, sec_str);
+	free(*line);
+	*line = ft_strjoin(free_ptr, thd_str);
+	free(free_ptr);
+	free(fst_str);
+	free(sec_str);
+	free(thd_str);
+}
+
+void key_to_value(t_list *env_list, char **line)
+{
+	int i;
+	int tmp;
+	char *tmp_str;
+	int flag;
+
+	i = 0;
+	flag = 0;
+	while ((*line)[i])
+	{
+		if ((*line)[i] == '\'')
+		{
+			i = str_in_quote2((*line), i, 0, 0);
+			continue;
+		}
+		if ((*line)[i] == '$')
+		{
+			tmp = i;
+			while((*line)[++i])
+				if ((*line)[i] == ' ' || (*line)[i] == '"' || (*line)[i] == '\\')
+					break;
+			if (i == ft_strlen(*line))
+				flag = 1;
+			change_ktv(env_list, line, tmp, i);
+		}
+		if (flag == 1)
+			break;
+		i++;
+	}
 }
 
 char **ft_ms_split(char *line, t_list *env_list)
@@ -199,38 +239,43 @@ char **ft_ms_split(char *line, t_list *env_list)
 	cnt = cnt_word(line);
 	ret = (char **)malloc(sizeof(char *) * (cnt + 1));
 	ret[cnt] = NULL;
+	key_to_value(env_list, &line);
 	if (cnt == 1)
 		ret[0] = ft_strdup(line);
 	else
 		cut_str(line, ret);
 	tmp = repositioning(ret);
+	free(line);
 	if (!tmp)
-	// key_to_value(env_list, ret);
 		return (ret);
 	else 
 	{
+		cnt = -1;
+		while (ret[++cnt])
+			free(ret[cnt]);
 		free(ret);
 		return (tmp);
 	}
+	
 }
 
-int main(int argc, char **argv, char **envv)
-{
-	char **strstr;
-	t_list *ho;
-	ho = NULL;
-	// ho = parse_envv(envv);
+// int main(int argc, char **argv, char **envv)
+// {
+// 	char **strstr;
+// 	char *tmp;
+// 	t_list *ho;
+// 	ho = parse_envv(envv);
+// 	tmp = ft_strdup("ls |>test echo ho");
+// 	int i=0;
+// 	strstr = ft_ms_split(tmp, ho);
 
-	int i=0;
-	strstr = ft_ms_split("ls |>test echo ho", ho);
-
-	while (strstr[i]){
-		printf ("%s\n",strstr[i]);
-		i++;
-	}
-	system("leaks a.out > leaks_result_temp; cat leaks_result_temp | grep leaked");
-	return (0);
-}
+// 	while (strstr[i]){
+// 		printf ("%s\n",strstr[i]);
+// 		i++;
+// 	}
+// 	system("leaks a.out > leaks_result_temp; cat leaks_result_temp | grep leaked");
+// 	return (0);
+// }
 
 
 // char *ft_emptystr()

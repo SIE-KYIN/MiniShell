@@ -38,27 +38,27 @@ t_tree_node*	insert_right(t_tree_node* parent, char **command, int flag)
 	return (new);
 }
 
-// //전위순회
-// static void		_pre_traverse(t_tree_node *root)
-// {
-// 	if (!root)
-// 		return ;
-// 	printf("%s   |", root->command);
-// 	printf("%d \n", root->flag);
-// 	_pre_traverse(root->left);
-// 	_pre_traverse(root->right);
-// 	return ;
-// }
+//전위순회
+static void		_pre_traverse(t_tree_node *root)
+{
+	if (!root)
+		return ;
+	printf("%s|", root->command[0]);
+	printf("%s\n", root->command[1]);
+	_pre_traverse(root->left);
+	_pre_traverse(root->right);
+	return ;
+}
 
-// void	pre_traverse(t_tree *tree)
-// {
-// 	t_tree_node *root;
+void	pre_traverse(t_tree *tree)
+{
+	t_tree_node *root;
 
-// 	if (!tree)
-// 		return ;
-// 	root = tree->root_node;
-// 	_pre_traverse(root);
-// }
+	if (!tree)
+		return ;
+	root = tree->root_node;
+	_pre_traverse(root);
+}
 
 // static void		_in_traverse(t_tree_node *root)
 // {
