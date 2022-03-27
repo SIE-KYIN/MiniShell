@@ -88,7 +88,6 @@ void _token_to_tree(t_tree_node *parent, char **token, int token_loc)
     int deli_loc;
 
     deli_loc = is_there_delimiter(token);
-    // token_loc = get_latest_token_loc(token);
     if (!deli_loc)
     {
         tmp = find_cmd(token[0]);
@@ -142,19 +141,24 @@ t_tree *tokenize(char *line, t_list *env_list)
     token = ft_ms_split(line, env_list);
     token_to_tree(token_tree, token);
     free(token);
-    pre_traverse(token_tree);
     return (token_tree);
 }
 
-
-// int main(int argc, char **argv, char **envv) {
+// void token(char **envv)
+// {
 //     t_tree *pBinTree = NULL;
 //     char *str;
 //     	t_list *ho;
 // 	ho = parse_envv(envv);
-//     str = ft_strdup("ls |> test echo ho");
+//     str = ft_strdup("dfasf");
 //     pBinTree = tokenize(str, ho);
+//     delete_tree(pBinTree);
+//     // delete_list(ho);
+// }
+
+// int main(int argc, char **argv, char **envv) {
     
+//     token(envv);
 //     // if (pBinTree != NULL) {
 //     //     printf("Preorder Iterative Traversal\n");
 // 	// 	printf ("....------------------------------------\n");

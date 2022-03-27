@@ -89,10 +89,17 @@ char	*ft_strjoin(char const *s1, char const *s2);
 /*
 ** utils3.c  ++++++++3
 */
-int is_delimiter(char c, char next);
 char			**ft_split(char const *s, char c);
+
+
+
+/*
+** ft_ms_split.c
+*/
 char **ft_ms_split(char *line, t_list *env_list);
 int cnt_delimiter(char *line);
+int is_delimiter(char c, char next);
+
 
 /*
 ** parse_envv.c
@@ -118,7 +125,8 @@ int read_line(t_list *env_list, char **line);
 */
 int check_syntax(char *line);
 int str_in_quote2(char *line, int i, int single_flag, int double_flag);
-
+int str_in_quote(char *line, int i, int *single_flag, int *double_flag);
+int is_valid_s_c(char c);
 /*
 ** tokenize.c
 */

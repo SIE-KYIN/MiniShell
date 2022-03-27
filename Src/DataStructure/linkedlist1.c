@@ -47,7 +47,7 @@ void remove_node(t_list* list, int position)
     {
       pre_node = get_node(list, position);
       curr_node = pre_node->next;
-      pre_node->next=curr_node->next;
+        pre_node->next=curr_node->next;
       if (curr_node->next)
         curr_node->next->prev= pre_node;
       free(curr_node);

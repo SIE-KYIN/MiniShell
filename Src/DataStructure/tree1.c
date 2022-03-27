@@ -43,8 +43,9 @@ static void		_pre_traverse(t_tree_node *root)
 {
 	if (!root)
 		return ;
-	printf("%s|", root->command[0]);
-	printf("%s\n", root->command[1]);
+	// printf("%s|", root->command[0]);
+	// printf("%s\n", root->command[1]);
+	printf ("%d\n", root->flag);
 	_pre_traverse(root->left);
 	_pre_traverse(root->right);
 	return ;
@@ -113,46 +114,49 @@ void	pre_traverse(t_tree *tree)
 //     t_tree_node *pNodeJ = NULL, *pNodeK = NULL, *pNodeL = NULL;
 //     t_tree_node *pNodeM = NULL;
 //     t_tree_node node = {0,};
+// 	char **tmp;
 
     
 //     pReturn = create_tree();
 //     if (pReturn != NULL) {
-//         pNodeA = insert_root(pReturn, "A", "ㅂ", 0);
+// 		tmp = (char **)malloc(sizeof(char *) * 3);
+// 		tmp[0] = ft_strdup
+//         pNodeA = insert_root(pReturn, NULL, 0);
         
-//         pNodeB = insert_left(pNodeA, "B", "ㅈ", 1);
+//         pNodeB = insert_left(pNodeA, NULL, 1);
         
-//         pNodeC = insert_right(pNodeA,"C", "ㄷ", 2);
+//         pNodeC = insert_right(pNodeA,NULL, 2);
 //         if (pNodeB != NULL) {
             
-//             pNodeD = insert_left(pNodeB, "D", "ㄱ", 3);
+//             pNodeD = insert_left(pNodeB, NULL, 3);
             
-//             pNodeE = insert_right(pNodeB,"E", "ㅅ", 4);
+//             pNodeE = insert_right(pNodeB,NULL, 4);
 //         }
 //         if (pNodeC != NULL) {
             
-//             pNodeF = insert_left(pNodeC, "F", "ㅛ", 5);
+//             pNodeF = insert_left(pNodeC, NULL, 5);
             
-//             pNodeG = insert_right(pNodeC, "G", "ㅕ",6);
+//             pNodeG = insert_right(pNodeC, NULL,6);
 //         }
 //         if (pNodeD != NULL) {
             
-//             pNodeH = insert_left(pNodeD, "H", "ㅑ", 7);
+//             pNodeH = insert_left(pNodeD, NULL, 7);
             
-//             pNodeI = insert_right(pNodeD, "I", "ㅐ", 8);
+//             pNodeI = insert_right(pNodeD, NULL, 8);
 //         }
 //         if (pNodeE != NULL) {
             
-//             pNodeJ = insert_left(pNodeE, "J", "ㅔ", 9);
+//             pNodeJ = insert_left(pNodeE, NULL, 9);
 //         }
 //         if (pNodeF != NULL) {
             
-//             pNodeK = insert_right(pNodeF, "K", "ㅁ", 10);
+//             pNodeK = insert_right(pNodeF, NULL, 10);
 //         }
 //         if (pNodeG != NULL) {
             
-//             pNodeL = insert_left(pNodeG, "L", "ㄴ", 11);
+//             pNodeL = insert_left(pNodeG, NULL, 11);
             
-//             pNodeM = insert_right(pNodeG, "M", "ㅇ", 12);
+//             pNodeM = insert_right(pNodeG, NULL, 12);
 //         }
 //     }
 
@@ -160,8 +164,9 @@ void	pre_traverse(t_tree *tree)
 // }
 
 
-// int main() {
-//     t_tree *pBinTree = NULL;
+// void  ho()
+// {
+// 	t_tree *pBinTree = NULL;
 //     pBinTree = createExampleBinTree();
 //     if (pBinTree != NULL) {
 //         printf("Preorder Iterative Traversal\n");
@@ -169,11 +174,11 @@ void	pre_traverse(t_tree *tree)
 // 		printf ("cmd | arg | fg\n");
 // 		printf ("전위순회\n");
 //         pre_traverse(pBinTree);
-// 		printf ("중위순회\n");
-// 		in_traverse(pBinTree);
-// 		printf ("후위순회\n");
-// 		post_traverse(pBinTree);
 //         delete_tree(pBinTree);
 //     }
+// }
+// int main() {
+//     ho();
+// 	system("leaks a.out > leaks_result_temp; cat leaks_result_temp | grep leaked");
 //     return 0;
 // }

@@ -1,72 +1,65 @@
 #include "../../Inc/minishell.h"
 
-size_t	ft_strlen(const char *s)
+int str_in_quote(char *line, int i, int *single_flag, int *double_flag)
 {
-	size_t	i;
+    int tmp1;
+    int tmp2;
 
-	i = 0;
-	while (*(s + i))
-		i++;
-	return (i);
+    tmp1 = *single_flag + 2;
+    tmp2 = *double_flag + 2;
+    while (tmp1 != *single_flag && tmp2 != *double_flag && line[++i])
+    {
+        if (*single_flag == tmp1 - 2 && line[i] == '"')
+        {
+            if (line[i - 1] == '\\')
+                continue;
+            (*double_flag)++;
+        }
+        else if (*double_flag == tmp2 - 2 && line[i] == '\'')
+        {
+            if (line[i - 1] == '\\')
+                continue;
+            (*single_flag)++;
+        }
+    }
+    return (i);
 }
 
-void	*ft_memcpy(void *dst, const void *src, size_t n)
+int str_in_quote2(char *line, int i, int single_flag, int double_flag)
 {
-	if (!dst && !src)
-		return ((void *)0);
-	while (n-- > 0)
-		*((unsigned char *)dst + n) = *((unsigned char *)src + n);
-	return (dst);
+    int tmp1;
+    int tmp2;
+
+    tmp1 = 2;
+    tmp2 = 2;
+    while (tmp1 != single_flag && tmp2 != double_flag && line[++i])
+    {
+        if (single_flag == tmp1 - 2 && line[i] == '"')
+        {
+            if (line[i - 1] == '\\')
+                continue;
+            (double_flag)++;
+        }
+        else if (double_flag == tmp2 - 2 && line[i] == '\'')
+        {
+            if (line[i - 1] == '\\')
+                continue;
+            (single_flag)++;
+        }
+    }
+    return (i);
 }
 
-char	*ft_strjoin(char const *s1, char const *s2)
+int is_valid_s_c(char c)
 {
-	size_t	len_1;
-	size_t	len_2;
-	char	*ret;
-
-	if (!s1 && !s2)
-		return (0);
-	if (!s1)
-		return ((char *)s2);
-	if (!s2)
-		return ((char *)s1);
-	len_1 = ft_strlen(s1);
-	len_2 = ft_strlen(s2);
-	if ((ret = (char *)malloc(len_1 + len_2 + 1)) == 0)
-		return (0);
-	*(ret + len_1 + len_2) = 0;
-	ft_memcpy(ret, s1, len_1);
-	ft_memcpy(ret + len_1, s2, len_2);
-	return (ret);
-}
-
-char *ft_colorstr(char *str)
-{
-    char *ret;
-    char *tmp;
-
-    tmp = ft_strjoin("\033[0;32m", str);
-    ret = ft_strjoin(tmp, "\x1b[0m ▶️  ");
-    free(tmp);
-    return (ret);
-}
-
-char	*ft_strdup(const char *s1)
-{
-	char	*ret;
-	int		len;
-	int		i;
-
-	len = ft_strlen(s1);
-	i = 0;
-	if ((ret = (char *)malloc(len + 1)) == 0)
-		return (0);
-	*(ret + len) = 0;
-	while (i < len)
-	{
-		*(ret + i) = *(s1 + i);
-		i++;
-	}
-	return (ret);
+    if (33 <= c && c <= 47
+            || 58 <= c && c <= 64
+            || 91 <= c && c <= 96
+            || 123 <= c && c <= 126)
+                if (c != '|' && c != '<' 
+                    && c != '>' && c != '$'
+                    && c != '"' && c != '\''
+                    && c != '?' && c != '.')
+                         return (0);
+    return (1);
 }

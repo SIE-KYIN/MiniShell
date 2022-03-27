@@ -14,3 +14,14 @@ void sigHandler()
     signal(SIGINT, sig_int);
     signal(SIGQUIT, SIG_IGN);
 }
+
+char *ft_colorstr(char *str)
+{
+    char *ret;
+    char *tmp;
+
+    tmp = ft_strjoin("\033[0;32m", str);
+    ret = ft_strjoin(tmp, "\x1b[0m ▶️  ");
+    free(tmp);
+    return (ret);
+}

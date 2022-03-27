@@ -18,7 +18,7 @@ void delete_list(t_list *list)
   if (list)
   {
     while (list->cnt > 0)
-      remove_node(list, list->cnt);
+      remove_node(list, list->cnt - 1);
     free(list);
   }
 }
