@@ -147,27 +147,27 @@ t_tree *tokenize(char *line, t_list *env_list)
 }
 
 
-int main(int argc, char **argv, char **envv) {
-    t_tree *pBinTree = NULL;
-    char *str;
-    	t_list *ho;
-	ho = parse_envv(envv);
-    str = ft_strdup("ls |> test echo ho");
-    pBinTree = tokenize(str, ho);
+// int main(int argc, char **argv, char **envv) {
+//     t_tree *pBinTree = NULL;
+//     char *str;
+//     	t_list *ho;
+// 	ho = parse_envv(envv);
+//     str = ft_strdup("ls |> test echo ho");
+//     pBinTree = tokenize(str, ho);
     
-    // if (pBinTree != NULL) {
-    //     printf("Preorder Iterative Traversal\n");
-	// 	printf ("....------------------------------------\n");
-		// // printf ("cmd | fg\n");
-		// printf ("\n\n\n전위순회\n");
-        // pre_traverse(pBinTree);
-	// 	printf ("중위순회\n");
-	// 	in_traverse(pBinTree);
-	// 	printf ("후위순회\n");
-	// 	post_traverse(pBinTree);
-    //     delete_tree(pBinTree);
-    // }
-    system("leaks token > leaks_result_temp; cat leaks_result_temp | grep leaked");
-    return 0;
-}
+//     // if (pBinTree != NULL) {
+//     //     printf("Preorder Iterative Traversal\n");
+// 	// 	printf ("....------------------------------------\n");
+// 		// // printf ("cmd | fg\n");
+// 		// printf ("\n\n\n전위순회\n");
+//         // pre_traverse(pBinTree);
+// 	// 	printf ("중위순회\n");
+// 	// 	in_traverse(pBinTree);
+// 	// 	printf ("후위순회\n");
+// 	// 	post_traverse(pBinTree);
+//     //     delete_tree(pBinTree);
+//     // }
+//     system("leaks token > leaks_result_temp; cat leaks_result_temp | grep leaked");
+//     return 0;
+// }
 

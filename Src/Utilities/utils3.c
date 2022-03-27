@@ -142,8 +142,12 @@ void divide_str(char **ret, int i)
 	flag = 0;
 	j = -1;
 	while (ret[i + 2][++j])
-		if (ret[i + 2][j] == ' ')
+	{
+		if (!flag && ret[i + 2][j] != ' ')
+			flag = 1;
+		if (flag && ret[i + 2][j] == ' ')
 			break;
+	}
 	argument = ft_strndup(ret[i + 2], 0, j);
 	command = ft_strndup(ret[i + 2], j + 1, ft_strlen(ret[i + 2]) - 1);
 	ret[i] = command;
@@ -265,7 +269,7 @@ char **ft_ms_split(char *line, t_list *env_list)
 // 	char *tmp;
 // 	t_list *ho;
 // 	ho = parse_envv(envv);
-// 	tmp = ft_strdup("ls |>test echo ho");
+// 	tmp = ft_strdup("ls |> test echo ho");
 // 	int i=0;
 // 	strstr = ft_ms_split(tmp, ho);
 
