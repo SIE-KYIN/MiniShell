@@ -46,8 +46,10 @@ int cnt_word(char *line)
 	int i;
 	int cnt;
 	int tmp;
+	int flag;
 
 	cnt = 0;
+	flag = 0;
 	i = -1;
 	while (line[++i])
 	{
@@ -55,13 +57,15 @@ int cnt_word(char *line)
 		if (tmp)
 		{
 			cnt++;
-			i += tmp;
+			if (tmp == 2)
+				i++;
+			flag = 0;
 			continue;
 		}
-		while (line[++i])
+		else if (flag == 0 && tmp == 0)
 		{
-			if (is_delimiter(line[i],  line[i + 1]))
-				break;
+			cnt++;
+			flag = 1;
 		}
 	}
 	return (cnt);
@@ -97,6 +101,19 @@ int strcnt_double_ptr(char **ret)
 	return (i);
 }
 
+char *ft_emptystr()
+{
+	char *ret;
+
+	ret = (char *)malloc(sizeof(char) + 1);
+	if (ret == NULL)
+		return NULL;
+	
+	ret[0] = '\0';
+	
+	return ret;
+}
+
 char **plus_space(char **str, int criteria)
 {
 	int cnt;
@@ -104,7 +121,7 @@ char **plus_space(char **str, int criteria)
 	int i;
 
 	cnt = strcnt_double_ptr(str);
-	ret = (char **)malloc(cnt + 2);
+	ret = (char **)malloc(sizeof(char *) * (cnt + 2));
 	i = -1;
 	while (++i < cnt)
 	{
@@ -113,19 +130,19 @@ char **plus_space(char **str, int criteria)
 		else
 			ret[i + 1] = str[i];
 	}
-	ret[cnt + 1] = 0;
+	ret[cnt + 1] = NULL;
 	return (ret);
 }
 
-void divide_str(char **ret, int i)
+char **divide_str(char **ret, int i)
 {
-	char *command = NULL;
-	char *argument = NULL;
 	int j;
 	int criteria = 0;
 	int flag;
 	char *tmp;
-
+	char **str_ret;
+	
+	str_ret = (char **)malloc(sizeof(char *) * 3);
 	tmp = ft_strdup(ret[i + 2]);
 	flag = 0;
 	j = -1;
@@ -139,12 +156,11 @@ void divide_str(char **ret, int i)
 		if (!flag && tmp[j] != ' ')
 			flag = 1;
 	}
-	argument = ft_strndup(tmp, 0, criteria);
-	command = ft_strndup(tmp, criteria + 1, j - 1);
-	ret[i] = command;
-	// free(ret[i + 2]);
-	ret[i + 2] = argument;
-	// free(tmp);
+	str_ret[1] = ft_strndup(tmp, 0, criteria);
+	str_ret[0] = ft_strndup(tmp, criteria + 1, j - 1);
+	str_ret[2] = NULL;
+	free(tmp);
+	return (str_ret);
 }
 
 char **repositioning(char **str)
@@ -152,6 +168,7 @@ char **repositioning(char **str)
 	char **ret = NULL;
 	int cnt;
 	int i;
+	char **tmp;
 	
 	i = -1;
 	while (str[++i])
@@ -161,7 +178,11 @@ char **repositioning(char **str)
 			if (i == 0 || is_delimiter(str[i - 1][0], str[i -1][1]))
 			{
 				ret = plus_space(str, i);
-				divide_str(ret, i);
+				tmp = divide_str(ret, i);
+				ret[i] = tmp[0];
+				free(ret[i + 2]);
+				ret[i + 2] = tmp[1];
+				free(tmp);
 			}
 			
 		}
@@ -173,11 +194,11 @@ char **ft_ms_split(char *line, t_list *env_list)
 {
 	char **ret;
 	int cnt;
-	char **tmp;
+	char **tmp = NULL;
 
 	cnt = cnt_word(line);
 	ret = (char **)malloc(sizeof(char *) * (cnt + 1));
-	ret[cnt] = 0;
+	ret[cnt] = NULL;
 	if (cnt == 1)
 		ret[0] = ft_strdup(line);
 	else
@@ -201,7 +222,7 @@ int main(int argc, char **argv, char **envv)
 	// ho = parse_envv(envv);
 
 	int i=0;
-	strstr = ft_ms_split("ls | echo ho > a.txt", ho);
+	strstr = ft_ms_split("ls |>test echo ho", ho);
 
 	while (strstr[i]){
 		printf ("%s\n",strstr[i]);

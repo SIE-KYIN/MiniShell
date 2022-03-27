@@ -1,32 +1,33 @@
-Process:         a.out [47231]
+Process:         a.out [99639]
 Path:            /Volumes/VOLUME/*/a.out
 Load Address:    0x100000000
 Identifier:      a.out
 Version:         ???
 Code Type:       X86-64
-Parent Process:  debugserver [47232]
+Parent Process:  debugserver [99640]
 
-Date/Time:       2022-03-26 17:43:00.112 +0900
-Launch Time:     2022-03-26 17:42:49.317 +0900
+Date/Time:       2022-03-27 12:18:09.075 +0900
+Launch Time:     2022-03-27 12:16:43.927 +0900
 OS Version:      Mac OS X 10.15.7 (19H1824)
 Report Version:  7
 Analysis Tool:   /Applications/Xcode.app/Contents/Developer/usr/bin/leaks
 Analysis Tool Version:  Xcode 12.3 (12C33)
 
-Physical footprint:         400K
-Physical footprint (peak):  400K
+Physical footprint:         1380K
+Physical footprint (peak):  1380K
 ----
 
 leaks Report Version: 4.0
-Process 47231: 157 nodes malloced for 12 KB
-Process 47231: 5 leaks for 80 total leaked bytes.
+Process 99639: 158 nodes malloced for 12 KB
+Process 99639: 6 leaks for 96 total leaked bytes.
 
-    5 (80 bytes) << TOTAL >>
+    6 (96 bytes) << TOTAL >>
 
-      2 (32 bytes) ROOT LEAK: 0x1004042a0 [16]
-         1 (16 bytes) 0x1004042c0 [16]  length: 7  "echo ho"
+      3 (48 bytes) ROOT LEAK: 0x100504080 [16]
+         1 (16 bytes) 0x1005040a0 [16]  length: 5  "test "
+         1 (16 bytes) 0x1005040b0 [16]  length: 7  "echo ho"
 
       1 (16 bytes) ROOT LEAK: 0x100404270 [16]  length: 1  ">"
-      1 (16 bytes) ROOT LEAK: 0x100404280 [16]  length: 13  " test echo ho"
-      1 (16 bytes) ROOT LEAK: 0x1004042b0 [16]
+      1 (16 bytes) ROOT LEAK: 0x100404280 [16]  length: 12  "test echo ho"
+      1 (16 bytes) ROOT LEAK: 0x100504090 [16]
 

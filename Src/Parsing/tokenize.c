@@ -110,7 +110,7 @@ void token_to_tree(t_tree *token_tree, char **token)
     token_loc = get_latest_token_loc(token);
     if (deli_loc)
     {
-        tmp = (char **)malloc(3);
+        tmp = (char **)malloc(2);
         tmp[0] = token[deli_loc];
         tmp[1] = 0;
         insert_root(token_tree, tmp, DELIMITER);
@@ -140,7 +140,7 @@ t_tree *tokenize(char *line, t_list *env_list)
 
 int main() {
     t_tree *pBinTree = NULL;
-    char str[] = "ls | echo ho > a.txt";
+    char str[] = "ls |> echo ho a.txt";
     pBinTree = tokenize(str, NULL);
     // if (pBinTree != NULL) {
     //     printf("Preorder Iterative Traversal\n");
