@@ -75,9 +75,6 @@ void ft_cd(char *argv[], t_list *env)
 	char dir[512];
 	t_list_node *node;
 
-	(void)argv;
-	(void)env;
-
 	// 1. chdir의 대상으로 argv를 입력.
 	getcwd(dir, sizeof(dir));
 	chdir(argv[1]);
@@ -85,7 +82,6 @@ void ft_cd(char *argv[], t_list *env)
 	{
 		strerror(errno);
 	}
-	printf("after cd : %s\n", dir);
 
 	// 2. 현재 경로를 환경변수에 최신화.
 	node = search_node(env, "PWD");
@@ -93,29 +89,30 @@ void ft_cd(char *argv[], t_list *env)
 	node->data = ft_strdup(getcwd(dir, sizeof(dir)));
 }
 
-// 현재 디렉토리 출력
-// getcwd를 수행하고 이를 환경변수에도 적용해야 하는가?
 void ft_pwd()
 {
 	char dir[512];
 
-	printf("[PWD]\n");
 	getcwd(dir, 512);
 	printf("%s\n", dir);
-
-	// $PWD 수정
 }
 
 // 환경변수를 출력한다. 이때 env는 최신화가 되어있어야 겠네...
 void ft_export(t_list *env)
 {
-	(void)env;
+	char **envv;
+	int i;
+
+	// env의 var기준으로 오름차순정렬하는 로직이 필요함.
+	envv = gather(env);
+	i = 0;
 	printf("[EXPORT]\n");
-	// [DEBUG] 왜 파란색으로 나오지...?
-	// for(int i=0;i<list->cnt;i++)
-	// {
-	// 	printf("%s\n", ret[i]);
-	// }
+	while(envv[i])
+	{
+		if (ft_strncmp(envv[i], "_=", 2))	// 이건 출력하면 안됨.
+			printf("declare -x %s\n", envv[i]);
+		i++;
+	}
 }
 
 // >unset PWD
@@ -128,19 +125,23 @@ void ft_unset(t_list *env)
 
 // 옵션없으니 export랑 똑같지 않나?
 // export가 주는 변수들과 env가 주는 변수들의 차이는??
+//		env에는 환경변수 _가 추가로 존재.
+//		export는 var를 기준으로 오름차순으로 정렬해야 함.
 // 32줄 vs 33줄....???
 void ft_env(t_list *env)
 {
-	// t_list_node *node;
+	char **envv;
+	int i;
 
-	// node = (*env).top;
-	// // [DEBUG] 왜 파란색으로 나오지...?
-	// for(int i=0;i<env->cnt;i++)
-	// {
-	// 	printf("%s\n", env->top);
-	// 	node = node->next;
-	// }
-	(void)env;
+	envv = gather(env);
+	i = 0;
+	printf("[ENV]\n");
+	// 환경변수 싹다출력
+	while(envv[i])
+	{
+		printf("%s\n", envv[i]);
+		i++;
+	}
 }
 
 // void exit(char **env)
