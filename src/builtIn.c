@@ -80,9 +80,7 @@ void ft_cd(char *argv[], t_list *env)
 
 	// 1. chdir의 대상으로 argv를 입력.
 	getcwd(dir, sizeof(dir));
-	printf("argv[0] : %s\n", argv[1]);
-	printf("before cd : %s\n", dir);
-	chdir(argv[0]);
+	chdir(argv[1]);
 	if (getcwd(dir, sizeof(dir)) == NULL)
 	{
 		strerror(errno);
@@ -93,7 +91,6 @@ void ft_cd(char *argv[], t_list *env)
 	node = search_node(env, "PWD");
 	free(node->data);
 	node->data = ft_strdup(getcwd(dir, sizeof(dir)));
-	displayDoublyList(env);
 }
 
 // 현재 디렉토리 출력
