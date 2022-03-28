@@ -47,7 +47,7 @@ void remove_node(t_list* list, int position)
     {
       pre_node = get_node(list, position);
       curr_node = pre_node->next;
-      pre_node->next=curr_node->next;
+        pre_node->next=curr_node->next;
       if (curr_node->next)
         curr_node->next->prev= pre_node;
       free(curr_node);
@@ -72,12 +72,15 @@ int get_position(t_list *list, char *str)
 
   i = 0;
   node = &(list->top);
-  while(1)
+  while(i < list->cnt)
   {
     node = node->next;
     if (is_same(node->var, str))
       break;
     i++;
   }
-  return i + 1;
+  if (i < list->cnt)
+    return i + 1;
+  else
+    return (-1);
 }

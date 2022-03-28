@@ -24,13 +24,14 @@ t_list *parse_envv(char **envv)
     return (list);
 }
 
+// list -> char **
 char **gather(t_list *list)
 {
 	char **ret;
 	int i;
 	t_list_node *node;
 
-	ret = malloc(sizeof(char *) * (list->cnt) + 1);
+	ret = malloc(sizeof(char *) * (list->cnt + 1));
 	i = 0;
 	node = list->top.next;
 	// 모든 리스트노드에 접근
@@ -44,11 +45,13 @@ char **gather(t_list *list)
 		node = node->next;
 		i++;
 	}
+	ret[i] = NULL;
 
-	for(int i=0;i<list->cnt;i++)
-	{
-		printf("%s\n", ret[i]);
-	}
+	// [DEBUG] 왜 파란색으로 나오지...?
+	// for(int i=0;i<list->cnt;i++)
+	// {
+	// 	printf("%s\n", ret[i]);
+	// }
 
 	return ret;
 }

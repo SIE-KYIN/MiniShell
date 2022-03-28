@@ -9,11 +9,15 @@ t_tree*		create_tree()
 
 static void		_delete_tree(t_tree_node *root)
 {
+	int i;
 
 	if (!root)
 		return ;
 	_delete_tree(root->left);
 	_delete_tree(root->right);
+	i = -1;
+	while (root->command[++i])
+		free(root->command[i]);
 	free(root->command);
 	free(root);
 

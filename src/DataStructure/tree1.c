@@ -39,58 +39,37 @@ t_tree_node*	insert_right(t_tree_node* parent, char **command, int flag)
 }
 
 // //전위순회
-static void		_pre_traverse(t_tree_node *root, char **env)
+void		_pre_traverse(t_tree_node *root, t_list *env)
 {
 	int backup_std[2];
-	int pid;
 
-	// arg[0] = root->left->command;	// ls
-	// arg[1] = root->left->argument;
-	// if (ft_strncmp(root->left->argument, "", 1) == 0)
-	// 	arg[1] = NULL;
-	// arg[2] = NULL;
-
-	//탈출조건
 	backup_std[0] = dup(0);
 	backup_std[1] = dup(1);
 
-	// Redirection
-	redir_out(root, root->right);
-	//redir_in(root->left_child);
-
-	//check_builtIn : 빌트인명령이라면 부모프로세스에서 수행됩니다.
-	if (execute_builtin(root->left->command[0], root->left->command, env) == 0)
+	// pipe
+	if (ft_strncmp(root->command[0], "|", 1) == 0)
 	{
-		dup2(backup_std[0], 0);
-		dup2(backup_std[1], 1);
-		return ;
+		ft_pipe(root, env);
+	}
+	// redirect
+	else if(root->flag == 0)
+	{
+		redir_out(root, root->right);
+		redir_in(root, root->right);
+		_pre_traverse(root->left, env);
+	}
+	// command
+	else if(root->flag == 1)
+	{
+		ft_command(root, env);
 	}
 
-	//자식프로세스 생성
-    if ((pid = fork()) == -1) printf("FORK ERROR\n");
-    else if (pid != 0)
-	{
-		// parent's process
-        pid = wait(NULL);
-    }
-    else
-	{
-		// child's process
-		execute(root->left->command[0], root->left->command, env);
-		printf("AFTER execute\n");
-    }
 	dup2(backup_std[0], 0);
 	dup2(backup_std[1], 1);
-	if (!root->left)
-		return ;
-	// 재귀
-	// _pre_traverse(root->left_child, env);
-	// _pre_traverse(root->right_child, env);
-	return ;
 }
 
 
-void	pre_traverse(t_tree *tree, char **env)
+void	pre_traverse(t_tree *tree, t_list *env)
 {
 	t_tree_node *root;
 

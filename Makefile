@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: gshim <gshim@student.42.fr>                +#+  +:+       +#+         #
+#    By: gshim <gshim@student.42seoul.kr>           +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/02/22 17:48:50 by gshim             #+#    #+#              #
-#    Updated: 2022/03/26 17:09:41 by gshim            ###   ########.fr        #
+#    Updated: 2022/03/28 13:39:46 by gshim            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,12 +20,13 @@ SRCS_DIR = ./src
 SRCS =  src/DataStructure/linkedlist1.c src/DataStructure/linkedlist2.c \
 	src/DataStructure/tree1.c src/DataStructure/tree2.c \
 	src/Parsing/parse_envv.c src/Parsing/check_syntax.c \
-	src/Parsing/tokenize.c \
+	src/Parsing/tokenize.c src/Parsing/ft_ms_split.c \
 	src/Utilities/utils1.c src/Utilities/utils2.c \
-	src/Utilities/utils3.c\
+	src/Utilities/utils3.c src/Utilities/utils4.c \
 	src/minishell.c src/builtIn.c \
-	src/Prompt/readline.c src/Prompt/sighandle.c \
-	src/Redirect/redirect.c
+	src/Prompt/readline.c src/Prompt/readline_utils.c \
+	src/Redirect/redirect.c src/Redirect/ft_pipe.c src/Redirect/ft_command.c
+
 OBJS = $(SRCS:.c=.o)
 
 SHELL	= /bin/bash
@@ -43,7 +44,7 @@ LIB = $(addprefix $(LIB_DIR)/, libft.a)
 $(NAME) : $(OBJS)
 	$(MAKE) -C $(LIB_DIR) all
 	$(CC) $(CFLAGS) -L$(LIB_DIR) -l$(LIB_NAME) \
-	-lreadline -L/Users/gshim/.brew/opt/readline/lib $^ -o $@
+	-lreadline -L/opt/homebrew/opt/readline/lib $^ -o $@
 #libft list 중복이라 bonus로 컴파일 안함
 #my mac #-L/opt/homebrew/opt/readline/lib -I/opt/homebrew/opt/readline/include
 #cluster#-lreadline -L/Users/gshim/.brew/opt/readline/lib -I/Users/gshim/.brew/opt/readline/include $^ -o $@
@@ -56,7 +57,7 @@ $(SRCS_DIR)/%.o : $(SRCS_DIR)/%.c
 		echo -n "☕️ ☕️ MINISHELL Loading ...\n";\
 	fi
 	@printf "\b$(chr)"
-	@$(CC) $(CFLAGS) -I$(LIB_DIR) -I/Users/gshim/.brew/opt/readline/include -c $< -o $@
+	@$(CC) $(CFLAGS) -I$(LIB_DIR) -I/opt/homebrew/opt/readline/include -c $< -o $@
 
 all : $(NAME)
 

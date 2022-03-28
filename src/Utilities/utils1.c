@@ -10,11 +10,9 @@ void ft_error(int flag)
         printf ("Syntax ERROR : Invalid Location\n");
     else if (flag == 4)
         printf ("Syntax ERROR : Opened Quote\n");
-
-
 }
 
-char	*ft_strndup(const char *src, int from, int to)
+char	*ft_strndup(char *src, int from, int to)
 {
 	char	*str;
     int i;
@@ -32,7 +30,6 @@ char	*ft_strndup(const char *src, int from, int to)
 	str[i] = '\0';
 	return (str);
 }
-
 
 int is_same(char *str1, char *str2)
 {

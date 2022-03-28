@@ -1,20 +1,20 @@
 #include "minishell.h"
 
-int execute_builtin(char *command, char **arg, char **env)
+int execute_builtin(char **arg, t_list *env)
 {
-	if (ft_strncmp("echo", command, 4) == 0)
+	if (ft_strncmp("echo", arg[0], 4) == 0)
 		ft_echo(arg, env);
-	else if (ft_strncmp("cd", command, 2) == 0)
+	else if (ft_strncmp("cd", arg[0], 2) == 0)
 		ft_cd(arg, env);
-	else if (ft_strncmp("pwd", command, 3) == 0)
+	else if (ft_strncmp("pwd", arg[0], 3) == 0)
 		ft_pwd(env);
-	else if (ft_strncmp("export", command, 6) == 0)
+	else if (ft_strncmp("export", arg[0], 6) == 0)
 		ft_export(env);
-	else if (ft_strncmp("unset", command, 5) == 0)
+	else if (ft_strncmp("unset", arg[0], 5) == 0)
 		ft_unset(env);
-	else if (ft_strncmp("env", command, 3) == 0)
+	else if (ft_strncmp("env", arg[0], 3) == 0)
 		ft_env(env);
-    else if (ft_strncmp(command, "exit", 4) == 0)
+    else if (ft_strncmp(arg[0], "exit", 4) == 0)
 		exit(1); // exit명령 처리
 	else
 		return (-1);
@@ -23,23 +23,45 @@ int execute_builtin(char *command, char **arg, char **env)
 
 // "cat", void, env
 // 모든 PATH를 조회하도록
-int execute(char *command, char **arg, char **env)
+int execute(char **arg, t_list *env)
 {
-	(void)command;
-	char *filepath = ft_strjoin("/bin/", arg[0]);
-	printf("[DEBUG]%s\n", filepath);
-	execve(filepath, arg, env);
+	char *filepath;
+	int ret;
+
+	(void)env;
+	filepath = ft_strjoin("/bin/", arg[0]);
+	ret = execve(filepath, arg, gather(env));
+	if (ret != 0)
+	{
+		char *error_message = strerror(errno);
+		printf("%s\n", error_message);
+	}
 	// 이 밑이 어떻게 실행되는걸까....!!
 	// quit이 arg[0]일때, 즉 해당명령을 찾지 못했다면 수행된다.
 	// 이곳은 명령어가 없다는 에러문을 출력하기 좋을 것 같다.
-	printf("AFTER EXEC\n");
 	// 지역변수를 사용하는게 좋을듯 하다.
 	free(filepath);
-	exit(1);
+	return (1);
+}
+
+// 나중에 LinkedList로 옮길것.
+t_list_node *search_node(t_list* list, char *var)
+{
+	t_list_node *node;
+
+	node = list->top.next;
+
+	while(node)
+	{
+		if (!strcmp(node->var, var))	// 나중에 libft함수로 바꿀것.
+			return node;
+		node = node->next;
+	}
+	return (NULL);
 }
 
 // -n
-void ft_echo(char *argv[], char **env)
+void ft_echo(char *argv[], t_list *env)
 {
 	(void)argv;
 	(void)env;
@@ -48,34 +70,30 @@ void ft_echo(char *argv[], char **env)
 
 // arg : dir
 // cd에 인자가 없으면 $HOME디렉토리로 이동한다.
-void ft_cd(char *argv[], char **env)
+void ft_cd(char *argv[], t_list *env)
 {
-	int i;
-	char **s;
 	char dir[512];
+	t_list_node *node;
 
+	(void)argv;
 	(void)env;
 
-	// 디렉토리 변경 -> 부모프로세스에서 변경적용이 안될듯
-	// 				 환경변수 **env는 변경가능.
+	// 1. chdir의 대상으로 argv를 입력.
+	getcwd(dir, sizeof(dir));
+	printf("argv[0] : %s\n", argv[1]);
+	printf("before cd : %s\n", dir);
 	chdir(argv[0]);
-	getcwd(dir, 512);	// getcwd는 어디서 가져오는건지?
-	// 환경변수에 저장 어떻게?
-	i = -1;
-	while(!argv[++i])
+	if (getcwd(dir, sizeof(dir)) == NULL)
 	{
-		s = ft_split(argv[i], '=');
-		if (strncmp(s[0], "PWD", 3) == 0)
-		{
-			printf("환경변수 PWD 발견\n");
-			free(argv[i]);
-			argv[i] = ft_strjoin(s[0], ft_strdup(dir));
-		}
-		free(s[0]);
-		free(s[1]);
-		free(s);
+		strerror(errno);
 	}
+	printf("after cd : %s\n", dir);
 
+	// 2. 현재 경로를 환경변수에 최신화.
+	node = search_node(env, "PWD");
+	free(node->data);
+	node->data = ft_strdup(getcwd(dir, sizeof(dir)));
+	displayDoublyList(env);
 }
 
 // 현재 디렉토리 출력
@@ -92,15 +110,20 @@ void ft_pwd()
 }
 
 // 환경변수를 출력한다. 이때 env는 최신화가 되어있어야 겠네...
-void ft_export(char **env)
+void ft_export(t_list *env)
 {
+	(void)env;
 	printf("[EXPORT]\n");
-	displayDoublyList(parse_envv(env));
+	// [DEBUG] 왜 파란색으로 나오지...?
+	// for(int i=0;i<list->cnt;i++)
+	// {
+	// 	printf("%s\n", ret[i]);
+	// }
 }
 
 // >unset PWD
 // 쉘 환경에서 변수를 제거하는 리눅스 명령어
-void ft_unset(char **env)
+void ft_unset(t_list *env)
 {
 	(void)env;
 	printf("UNSET\n");
@@ -109,12 +132,18 @@ void ft_unset(char **env)
 // 옵션없으니 export랑 똑같지 않나?
 // export가 주는 변수들과 env가 주는 변수들의 차이는??
 // 32줄 vs 33줄....???
-void ft_env(char **env)
+void ft_env(t_list *env)
 {
-	t_list *env_list;
+	// t_list_node *node;
 
-	env_list = parse_envv(env);
-	displayDoublyList(env_list);
+	// node = (*env).top;
+	// // [DEBUG] 왜 파란색으로 나오지...?
+	// for(int i=0;i<env->cnt;i++)
+	// {
+	// 	printf("%s\n", env->top);
+	// 	node = node->next;
+	// }
+	(void)env;
 }
 
 // void exit(char **env)
