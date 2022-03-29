@@ -6,7 +6,7 @@
 /*   By: gshim <gshim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 19:23:29 by gshim             #+#    #+#             */
-/*   Updated: 2022/03/28 23:52:37 by gshim            ###   ########.fr       */
+/*   Updated: 2022/03/28 23:57:03 by gshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 
 int main(int argc, char **argv, char **envv)
 {
-    (void)argv;
     char *line;
     t_list *env_list;
     t_tree *token_tree;
