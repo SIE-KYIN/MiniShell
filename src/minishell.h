@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gshim <gshim@student.42seoul.kr>           +#+  +:+       +#+        */
+/*   By: gshim <gshim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/16 17:21:43 by gshim             #+#    #+#             */
-/*   Updated: 2022/03/28 13:37:25 by gshim            ###   ########.fr       */
+/*   Updated: 2022/03/29 21:43:13 by gshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,7 @@ t_tree_node*	insert_root(t_tree* tree, char **command, int flag);
 t_tree_node*	insert_left(t_tree_node* parent,  char **command, int flag);
 t_tree_node*	insert_right(t_tree_node* parent, char **command, int flag);
 void	pre_traverse(t_tree *tree, t_list *env);
-void	_pre_traverse(t_tree_node *root, t_list *env);
+void	_pre_traverse(t_tree_node *root, t_list *env, char parent);
 
 /*
 ** tree2
@@ -223,8 +223,8 @@ int		execute(char **arg, t_list *env);
 void	ft_echo(char *argv[], t_list *env);
 void	ft_cd(char *argv[], t_list *env);
 void	ft_pwd();
-void	ft_export(t_list *env);
-void	ft_unset(t_list *env);
+void	ft_export(char *argv[], t_list *env);
+void	ft_unset(char *argv[], t_list *env);
 void	ft_env(t_list *env);
 int		redir_out(t_tree_node *root, t_tree_node *left);
 int		redir_in(t_tree_node *root, t_tree_node *right);
@@ -235,4 +235,5 @@ char **gather(t_list *list);
 int ft_pipe(t_tree_node *root, t_list *env);
 int ft_command(t_tree_node *root, t_list *env);
 t_list_node *search_node(t_list* list, char *var);
+void delete_node(t_list* list, char *var);
 #endif

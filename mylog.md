@@ -168,3 +168,17 @@ arg, env각각 한번씩 빼먹어서...ㅎ
 	갑자기 고쳐짐...... 아 또 말록 어디서 잘못해준건가...?
 
 - cd를 구현중인데 ..이나 /가 들어가면 오류뜬다. 흠.
+
+- [단축키] cmd shift 대괄호키를 통해 터미널 전환가능.
+
+- nerdtree
+
+# minishell에서 minishell을 키면 시그널처리가 중첩된다고 함....
+
+# bash vs my minishell
+bash$ cat < a.txt b.txt c.txt
+im b
+im c
+
+/Users/gshim/Study/minishell ▶️  cat < a.txt b.txt c.txt
+im a

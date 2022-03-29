@@ -90,8 +90,13 @@ https://badayak.com/entry/C%EC%96%B8%EC%96%B4-%EB%A7%81%ED%81%AC-%EC%82%AD%EC%A0
 fd값을 복제해주는 함수.
 ```C
 <unistd.h>
+
+a open -> fd: 10
+dup(10) => 11
+dup2()
 int dup(int fd);			// fd가 가리키고 있는것을 가리키는 다른fd값을 반환(최솟값)
-int dup(int fd, int fd2);	// fd가 가리키고 있는것을 fd2가 가리키게 한다.
+int dup2(int fd, int fd2);	// fd가 가리키고 있는것을 fd2가 가리키게 한다.
+dup(10, 1)
 ```
 https://reakwon.tistory.com/104
 

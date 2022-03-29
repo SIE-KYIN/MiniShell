@@ -39,7 +39,8 @@ t_tree_node*	insert_right(t_tree_node* parent, char **command, int flag)
 }
 
 // //전위순회
-void		_pre_traverse(t_tree_node *root, t_list *env)
+// parent 0null, 1<, 2>
+void		_pre_traverse(t_tree_node *root, t_list *env, char parent)
 {
 	int backup_std[2];
 
@@ -54,9 +55,12 @@ void		_pre_traverse(t_tree_node *root, t_list *env)
 	// redirect
 	else if(root->flag == 0)
 	{
-		redir_out(root, root->right);
-		redir_in(root, root->right);
-		_pre_traverse(root->left, env);
+		if (!(parent == root->command[0][0] && (parent == '<' || parent == '>')))
+		{
+			redir_out(root, root->right);
+			redir_in(root, root->right);
+		}
+		_pre_traverse(root->left, env, root->command[0][0]);
 	}
 	// command
 	else if(root->flag == 1)
@@ -76,7 +80,7 @@ void	pre_traverse(t_tree *tree, t_list *env)
 	if (!tree)
 		return ;
 	root = tree->root_node;
-	_pre_traverse(root, env);
+	_pre_traverse(root, env, 0);
 }
 
 // static void		_in_traverse(t_tree_node *root)

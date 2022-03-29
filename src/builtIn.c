@@ -9,12 +9,12 @@ int execute_builtin(char **arg, t_list *env)
 	else if (ft_strncmp("pwd", arg[0], 3) == 0)
 		ft_pwd(env);
 	else if (ft_strncmp("export", arg[0], 6) == 0)
-		ft_export(env);
+		ft_export(arg, env);
 	else if (ft_strncmp("unset", arg[0], 5) == 0)
-		ft_unset(env);
+		ft_unset(arg, env);
 	else if (ft_strncmp("env", arg[0], 3) == 0)
 		ft_env(env);
-    else if (ft_strncmp(arg[0], "exit", 4) == 0)
+    else if (ft_strncmp("exit", arg[0], 4) == 0)
 		exit(1); // exit명령 처리
 	else
 		return (-1);
@@ -26,21 +26,30 @@ int execute_builtin(char **arg, t_list *env)
 int execute(char **arg, t_list *env)
 {
 	char *filepath;
+	char **path;
 	int ret;
+	int	i;
 
-	(void)env;
-	filepath = ft_strjoin("/bin/", arg[0]);
-	ret = execve(filepath, arg, gather(env));
+	// 현재폴더에서 실행이거나, 절대경로일때
+	ret = execve(arg[0], arg, gather(env));
+
+
+	// 모든 path에 대해 찾아야함.
+	path = ft_split(search_node(env, "PATH")->data, ':');
+	i = -1;
+	while(path[++i])
+	{
+		filepath = ft_strjoin_3(path[i], "/", arg[0]);
+		ret = execve(filepath, arg, gather(env));
+		free(filepath);
+	}
+
+	// 여기가 실행된다는 것은 명령어를 찾지 못했다는 뜻이다.
 	if (ret != 0)
 	{
-		char *error_message = strerror(errno);
-		printf("%s\n", error_message);
+		strerror(errno); // 왜 출력이 안되는걸까
+		printf("minishell: %s: command not found\n", arg[0]);
 	}
-	// 이 밑이 어떻게 실행되는걸까....!!
-	// quit이 arg[0]일때, 즉 해당명령을 찾지 못했다면 수행된다.
-	// 이곳은 명령어가 없다는 에러문을 출력하기 좋을 것 같다.
-	// 지역변수를 사용하는게 좋을듯 하다.
-	free(filepath);
 	return (1);
 }
 
@@ -60,30 +69,82 @@ t_list_node *search_node(t_list* list, char *var)
 	return (NULL);
 }
 
+void delete_node(t_list* list, char *var)
+{
+	t_list_node *node;
+
+	node = list->top.next;
+	while(node)
+	{
+		if (strcmp(node->var, var)){	// 나중에 libft함수로 바꿀것.
+			node = node->next;
+			continue;
+		}
+		// next x
+		if (!node->next)
+		{
+			list->cnt -= 1;
+			node->prev = NULL;
+			free(node);
+		}
+		// etc
+		else
+		{
+			node->prev->next = node->next;
+			node->next->prev = node->prev;
+			list->cnt -= 1;
+		}
+		break;
+	}
+}
+
 // -n
 void ft_echo(char *argv[], t_list *env)
 {
-	(void)argv;
-	(void)env;
-	printf("ECHO\n");
+	char **arg;
+	int flag;
+	int i;
+
+	arg = ft_split(argv[1], ' ');
+	flag = 0;
+	if (!ft_strncmp(arg[0], "-n", 2))
+		flag = 1;
+	i = -1;
+	while(arg[++i])
+	{
+		// 인자사이 공백
+		if (i != flag)
+			printf(" ");
+		// 환경변수
+		if (arg[i][0] == '$')
+			printf("%s", search_node(env, arg[i] + 1)->data);
+		else
+			printf("%s", arg[i]);
+	}
+
+	// OUTPUT
+	if (ft_strncmp(argv[1], "-n", 2))
+		printf("\n");
 }
 
-// arg : dir
-// cd에 인자가 없으면 $HOME디렉토리로 이동한다.
+//번외로, bash/tcsh shell 에선 "cd -" 명령을 이용해서 직전 디렉토리로 되돌아가는 기능을 제공합니다. => OLDPWD이용
 void ft_cd(char *argv[], t_list *env)
 {
 	char dir[512];
 	t_list_node *node;
+	char *nextdir;
 
-	// 1. chdir의 대상으로 argv를 입력.
 	getcwd(dir, sizeof(dir));
-	chdir(argv[1]);
-	if (getcwd(dir, sizeof(dir)) == NULL)
-	{
+	if (!argv[1])
+		nextdir = search_node(env, "HOME")->data;
+	else
+		nextdir = argv[1];
+	if (chdir(nextdir) == -1){
+		printf("minishell: cd: hello: No such file or directory\n");
 		strerror(errno);
 	}
-
-	// 2. 현재 경로를 환경변수에 최신화.
+	if (!getcwd(dir, sizeof(dir)))
+		strerror(errno);
 	node = search_node(env, "PWD");
 	free(node->data);
 	node->data = ft_strdup(getcwd(dir, sizeof(dir)));
@@ -98,29 +159,59 @@ void ft_pwd()
 }
 
 // 환경변수를 출력한다. 이때 env는 최신화가 되어있어야 겠네...
-void ft_export(t_list *env)
+void ft_export(char *argv[], t_list *env)
 {
 	char **envv;
+	t_list_node *ret;
+	char **split;
 	int i;
 
-	// env의 var기준으로 오름차순정렬하는 로직이 필요함.
-	envv = gather(env);
 	i = 0;
+	envv = gather(env);
 	printf("[EXPORT]\n");
-	while(envv[i])
+	printf("before cnt: %d\n", env->cnt);
+	// 인자값이 없다.
+	if (argv[1] == NULL)
 	{
-		if (ft_strncmp(envv[i], "_=", 2))	// 이건 출력하면 안됨.
-			printf("declare -x %s\n", envv[i]);
-		i++;
+		// sort!
+		while(envv[i])
+		{
+			if (ft_strncmp(envv[i], "_=", 2))	// 이건 출력하면 안됨.
+				printf("declare -x %s\n", envv[i]);	// declare -x A="B"꼴로 출력, declare -x A 도 있을 수 있음.
+			i++;
+		}
 	}
+	// 인자값을 환경변수로 등록
+	else
+	{
+		// 이미 존재한다면 무시.
+		ret = search_node(env, argv[1]);
+		if (ret)
+			return ;
+		else
+		{
+			split = ft_split(argv[1], '=');
+			add_node(env, env->cnt, split[0], split[1]);
+			displayDoublyList(env);
+			free(split);
+			// free[0], free[1]은 노드가 가져야 하므로 free하지 않음
+		}
+	}
+	printf("after cnt: %d\n", env->cnt);
 }
 
 // >unset PWD
 // 쉘 환경에서 변수를 제거하는 리눅스 명령어
-void ft_unset(t_list *env)
+void ft_unset(char *argv[], t_list *env)
 {
-	(void)env;
-	printf("UNSET\n");
+	int i;
+
+	i = 0;
+	printf("[UNSET]\n");
+	if (argv[0] == NULL)
+		return ;
+
+	delete_node(env, argv[1]);
 }
 
 // 옵션없으니 export랑 똑같지 않나?
@@ -135,7 +226,6 @@ void ft_env(t_list *env)
 
 	envv = gather(env);
 	i = 0;
-	printf("[ENV]\n");
 	// 환경변수 싹다출력
 	while(envv[i])
 	{
@@ -143,8 +233,3 @@ void ft_env(t_list *env)
 		i++;
 	}
 }
-
-// void exit(char **env)
-// {
-
-// }
