@@ -6,7 +6,7 @@
 /*   By: gshim <gshim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 19:23:29 by gshim             #+#    #+#             */
-/*   Updated: 2022/03/29 21:56:28 by gshim            ###   ########.fr       */
+/*   Updated: 2022/03/30 18:36:44 by gshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,8 +65,8 @@ int main(int argc, char **argv, char **envv)
 		read_line(env_list, &line);
 
 		// 빈 입력을 받았을때
-		if(*line == '\0')
-			continue;
+		// if(*line == '\0')
+		// 	continue;
 		// 공백입력을 받았을때....?!
 
 

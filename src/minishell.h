@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gshim <gshim@student.42seoul.kr>           +#+  +:+       +#+        */
+/*   By: gshim <gshim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/16 17:21:43 by gshim             #+#    #+#             */
-/*   Updated: 2022/03/30 12:46:21 by gshim            ###   ########.fr       */
+/*   Updated: 2022/03/30 18:15:58 by gshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -226,9 +226,9 @@ void	ft_pwd();
 void	ft_export(char *argv[], t_list *env);
 void	ft_unset(char *argv[], t_list *env);
 void	ft_env(t_list *env);
-int		redir_out(t_tree_node *root, t_tree_node *left);
-int		redir_in(t_tree_node *root, t_tree_node *right);
-//int redir_in(char **cmdvector);
+int		redir_out(t_tree_node *root, t_tree_node *left, bool flag);
+int		redir_in(t_tree_node *root, t_tree_node *right, bool flag);
+void	heredoc(t_tree_node *root, t_tree_node *right, bool flag);
 int		execute_builtin(char **arg, t_list *env);
 //void exit(char **env);
 char **gather(t_list *list);

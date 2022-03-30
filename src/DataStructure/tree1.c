@@ -43,7 +43,7 @@ t_tree_node*	insert_right(t_tree_node* parent, char **command, int flag)
 void		_pre_traverse(t_tree_node *root, t_list *env, char parent)
 {
 	int backup_std[2];
-
+	int flag;
 	backup_std[0] = dup(0);
 	backup_std[1] = dup(1);
 
@@ -55,11 +55,11 @@ void		_pre_traverse(t_tree_node *root, t_list *env, char parent)
 	// redirect
 	else if(root->flag == 0)
 	{
+		flag = false;
 		if (!(parent == root->command[0][0] && (parent == '<' || parent == '>')))
-		{
-			redir_out(root, root->right);
-			redir_in(root, root->right);
-		}
+			flag = true;
+		redir_out(root, root->right, flag);
+		redir_in(root, root->right, flag);
 		_pre_traverse(root->left, env, root->command[0][0]);
 	}
 	// command

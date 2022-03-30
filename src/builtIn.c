@@ -15,7 +15,7 @@ int execute_builtin(char **arg, t_list *env)
 	else if (ft_strncmp("env", arg[0], 3) == 0)
 		ft_env(env);
     else if (ft_strncmp("exit", arg[0], 4) == 0)
-		exit(1); // exit명령 처리
+		exit(0); // exit명령 처리
 	else
 		return (-1);
 	return (0);
@@ -124,7 +124,7 @@ void ft_echo(char *argv[], t_list *env)
 	}
 
 	// OUTPUT
-	if (flag == 1)
+	if (flag == 0)
 		printf("\n");
 }
 
@@ -172,8 +172,10 @@ void ft_export(char *argv[], t_list *env)
 {
 	char **envv;
 	t_list_node *ret;
-	char **split;
 	int i;
+	int equal;
+	char *var;
+	char *data;
 
 	i = 0;
 	envv = gather(env);
@@ -188,19 +190,29 @@ void ft_export(char *argv[], t_list *env)
 			i++;
 		}
 	}
-	// 인자값을 환경변수로 등록
+	// 인자값을 환경변수로 등록 => [export a] x, [export a=] o,
+	// ft_substr한 것들 free해줘야함...
 	else
 	{
-		// 이미 존재한다면 무시.
-		ret = search_node(env, argv[1]);
-		if (ret)
+		equal = (int)(ft_strchr(argv[1], '=') - argv[1]);
+		if (equal <= 0)	// equal문자가 없으면 음수값이 저장된다.
 			return ;
+		// 이미 존재한다면 덮어쓰기
+		var = ft_substr(argv[1], 0, equal);
+		data = ft_substr(argv[1], equal + 1, ft_strlen(argv[1]) - equal - 1);
+		ret = search_node(env, var);
+		if (ret)
+		{
+			free(ret->data);
+			ret->data = ft_substr(argv[1], equal + 1, ft_strlen(argv[1]) - equal - 1);
+		}
+		// 새로 생성
 		else
 		{
-			split = ft_split(argv[1], '=');
-			add_node(env, env->cnt, split[0], split[1]);
-			//displayDoublyList(env); // for debug
-			free(split);
+			// '='기호가 없다면 바로 종료시킨다.
+			if (ft_strchr(argv[1], '=') == NULL)
+				return ;
+			add_node(env, env->cnt, ft_substr(argv[1], 0, equal), ft_substr(argv[1], equal + 1, ft_strlen(argv[1]) - equal - 1));
 			// free[0], free[1]은 노드가 가져야 하므로 free하지 않음
 		}
 	}
@@ -213,8 +225,7 @@ void ft_unset(char *argv[], t_list *env)
 	int i;
 
 	i = 0;
-	printf("[UNSET]\n");
-	if (argv[0] == NULL)
+	if (argv[1] == NULL)
 		return ;
 
 	delete_node(env, argv[1]);
