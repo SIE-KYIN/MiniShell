@@ -102,17 +102,17 @@ void delete_node(t_list* list, char *var)
 void ft_echo(char *argv[], t_list *env)
 {
 	char **arg;
-	int flag;
 	int i;
+	int flag;
 
 	arg = ft_split(argv[1], ' ');
+	// flag에 옵션 여부를 저장합니다., flag에 따라 arg의 읽기순서가 첫번째부턴지 두번째부턴지 달라집니다.
 	flag = 0;
 	if (!ft_strncmp(arg[0], "-n", 2))
 		flag = 1;
-	i = -1;
-	while(arg[++i])
+	i = flag;
+	while(arg[i])
 	{
-		// 인자사이 공백
 		if (i != flag)
 			printf(" ");
 		// 환경변수
@@ -120,34 +120,43 @@ void ft_echo(char *argv[], t_list *env)
 			printf("%s", search_node(env, arg[i] + 1)->data);
 		else
 			printf("%s", arg[i]);
+		i++;
 	}
 
 	// OUTPUT
-	if (ft_strncmp(argv[1], "-n", 2))
+	if (flag == 1)
 		printf("\n");
 }
 
-//번외로, bash/tcsh shell 에선 "cd -" 명령을 이용해서 직전 디렉토리로 되돌아가는 기능을 제공합니다. => OLDPWD이용
 void ft_cd(char *argv[], t_list *env)
 {
 	char dir[512];
-	t_list_node *node;
+	t_list_node *pwd;
+	t_list_node *old_pwd;
 	char *nextdir;
 
 	getcwd(dir, sizeof(dir));
+	// cd
 	if (!argv[1])
 		nextdir = search_node(env, "HOME")->data;
+	// cd -
+	else if (!strcmp(argv[1], "-"))
+		nextdir = search_node(env, "OLDPWD")->data;
+	// cd [path]
 	else
 		nextdir = argv[1];
 	if (chdir(nextdir) == -1){
-		printf("minishell: cd: hello: No such file or directory\n");
+		printf("minishell: cd: %s: No such file or directory\n", nextdir);
 		strerror(errno);
 	}
 	if (!getcwd(dir, sizeof(dir)))
 		strerror(errno);
-	node = search_node(env, "PWD");
-	free(node->data);
-	node->data = ft_strdup(getcwd(dir, sizeof(dir)));
+	pwd = search_node(env, "PWD");
+	old_pwd = search_node(env, "OLDPWD");
+
+	free(old_pwd->data);
+	old_pwd->data = pwd->data;
+	pwd->data = ft_strdup(getcwd(dir, sizeof(dir)));
 }
 
 void ft_pwd()
@@ -168,8 +177,6 @@ void ft_export(char *argv[], t_list *env)
 
 	i = 0;
 	envv = gather(env);
-	printf("[EXPORT]\n");
-	printf("before cnt: %d\n", env->cnt);
 	// 인자값이 없다.
 	if (argv[1] == NULL)
 	{
@@ -192,12 +199,11 @@ void ft_export(char *argv[], t_list *env)
 		{
 			split = ft_split(argv[1], '=');
 			add_node(env, env->cnt, split[0], split[1]);
-			displayDoublyList(env);
+			//displayDoublyList(env); // for debug
 			free(split);
 			// free[0], free[1]은 노드가 가져야 하므로 free하지 않음
 		}
 	}
-	printf("after cnt: %d\n", env->cnt);
 }
 
 // >unset PWD
