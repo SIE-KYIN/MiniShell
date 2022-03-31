@@ -116,10 +116,12 @@ void ft_echo(char *argv[], t_list *env)
 		if (i != flag)
 			printf(" ");
 		// 환경변수
-		if (arg[i][0] == '$')
-			printf("%s", search_node(env, arg[i] + 1)->data);
-		else
-			printf("%s", arg[i]);
+		// if (arg[i][0] == '$')
+		// 	printf("%s", search_node(env, arg[i] + 1)->data);
+		// else
+		// 	printf("%s", arg[i]);
+		(void)env;
+		printf("%s", arg[i]);
 		i++;
 	}
 
