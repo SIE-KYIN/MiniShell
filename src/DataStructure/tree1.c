@@ -1,157 +1,132 @@
 #include "../minishell.h"
 
-t_tree_node	*create_node(t_tree_node *left, t_tree_node *right, char *command, char *argument)
+t_tree_node	*create_node(t_tree_node *left_child, t_tree_node *right_child, char **command)
 {
 	t_tree_node *new = malloc(sizeof(t_tree_node));
 	if (!new)
 		return (NULL);
 	if (command)
-		new->command = ft_strdup(command);
+		new->command = command;
 	else
 		new->command = NULL;
-	if (argument)
-		new->argument = ft_strdup(argument);
-	else
-		new->argument = NULL;
-	new->left_child = left;
-	new->right_child = right;
+	new->left = left_child;
+	new->right = right_child;
 	return (new);
 }
 
-t_tree_node*	insert_root(t_tree* tree, char *command, char *argument, int flag)
+t_tree_node*	insert_root(t_tree* tree, char **command, int flag)
 {
-	t_tree_node *new = create_node(NULL, NULL,  command, argument);
+	t_tree_node *new = create_node(NULL, NULL,  command);
 	new->flag = flag;
 	tree->root_node = new;
 	return (new);
 }
 
-t_tree_node*	insert_left(t_tree_node* parent,  char *command, char *argument, int flag)
+t_tree_node*	insert_left(t_tree_node* parent,  char **command, int flag)
 {
-	t_tree_node *new = create_node(NULL, NULL, command, argument);
+	t_tree_node *new = create_node(NULL, NULL, command);
 	new->flag = flag;
-	parent->left_child = new;
+	parent->left = new;
 	return (new);
 }
 
-t_tree_node*	insert_right(t_tree_node* parent, char *command, char *argument, int flag)
+t_tree_node*	insert_right(t_tree_node* parent, char **command, int flag)
 {
-	t_tree_node *new = create_node(NULL, NULL,  command, argument);
+	t_tree_node *new = create_node(NULL, NULL,  command);
 	new->flag = flag;
-	parent->right_child= new;
+	parent->right= new;
 	return (new);
 }
 
-//전위순회
-// [cat hello](left) >(root) [a.txt](right)
-// left cat hello
-static void		_pre_traverse(t_tree_node *root, char **env)
+// //전위순회
+// parent 0null, 1<, 2>
+void		_pre_traverse(t_tree_node *root, t_list *env, char parent)
 {
 	int backup_std[2];
-	int pid;
-	char *arg[5];
-
-	arg[0] = root->left_child->command;	// ls
-	arg[1] = root->left_child->argument;
-	if (ft_strncmp(root->left_child->argument, "", 1) == 0)
-		arg[1] = NULL;
-	arg[2] = NULL;
-
-	//탈출조건
+	int flag;
 	backup_std[0] = dup(0);
 	backup_std[1] = dup(1);
 
-	// Redirection
-	redir_out(root, root->right_child);
-	//redir_in(root->left_child);
-
-	//check_builtIn : 빌트인명령이라면 부모프로세스에서 수행됩니다.
-	if (execute_builtin(root->left_child->command, arg, env) == 0)
+	// pipe
+	if (ft_strncmp(root->command[0], "|", 1) == 0)
 	{
-		dup2(backup_std[0], 0);
-		dup2(backup_std[1], 1);
-		return ;
+		ft_pipe(root, env);
+	}
+	// redirect
+	else if(root->flag == 0)
+	{
+		flag = false;
+		if (!(parent == root->command[0][0] && (parent == '<' || parent == '>')))
+			flag = true;
+		redir_out(root, root->right, flag);
+		redir_in(root, root->right, flag);
+		_pre_traverse(root->left, env, root->command[0][0]);
+	}
+	// command
+	else if(root->flag == 1)
+	{
+		ft_command(root, env);
 	}
 
-	//자식프로세스 생성
-    if ((pid = fork()) == -1) printf("FORK ERROR\n");
-    else if (pid != 0)
-	{
-		// parent's process
-        pid = wait(NULL);
-    }
-    else
-	{
-		// child's process
-		execute(root->left_child->command, arg, env);
-		printf("AFTER execute\n");
-    }
 	dup2(backup_std[0], 0);
 	dup2(backup_std[1], 1);
-	if (!root->left_child)
-		return ;
-	// 재귀
-	// _pre_traverse(root->left_child, env);
-	// _pre_traverse(root->right_child, env);
-	return ;
 }
 
-void	pre_traverse(t_tree *tree, char **env)
+
+void	pre_traverse(t_tree *tree, t_list *env)
 {
 	t_tree_node *root;
 
 	if (!tree)
 		return ;
 	root = tree->root_node;
-	_pre_traverse(root, env);
+	_pre_traverse(root, env, 0);
 }
 
-static void		_in_traverse(t_tree_node *root)
-{
-	if (!root)
-		return ;
+// static void		_in_traverse(t_tree_node *root)
+// {
+// 	if (!root)
+// 		return ;
 
-	_in_traverse(root->left_child);
-	printf("%s   |", root->command);
-	printf("%s   |", root->argument);
-	printf("%d \n", root->flag);
-	_in_traverse(root->right_child);
-	return ;
-}
+// 	_in_traverse(root->left);
+// 	printf("%s   |", root->command);
+// 	printf("%d \n", root->flag);
+// 	_in_traverse(root->right);
+// 	return ;
+// }
 
-void	in_traverse(t_tree *tree)
-{
-	t_tree_node *root;
+// void	in_traverse(t_tree *tree)
+// {
+// 	t_tree_node *root;
 
-	if (!tree)
-		return ;
-	root = tree->root_node;
-	_in_traverse(root);
-}
+// 	if (!tree)
+// 		return ;
+// 	root = tree->root_node;
+// 	_in_traverse(root);
+// }
 
 
-static void		_post_traverse(t_tree_node *root)
-{
-	if (!root)
-		return ;
+// static void		_post_traverse(t_tree_node *root)
+// {
+// 	if (!root)
+// 		return ;
 
-	_in_traverse(root->left_child);
-	_in_traverse(root->right_child);
-	printf("%s   |", root->command);
-	printf("%s   |", root->argument);
-	printf("%d \n", root->flag);
-	return ;
-}
+// 	_in_traverse(root->left);
+// 	_in_traverse(root->right);
+// 	printf("%s   |", root->command);
+// 	printf("%d \n", root->flag);
+// 	return ;
+// }
 
-void	post_traverse(t_tree *tree)
-{
-	t_tree_node *root;
+// void	post_traverse(t_tree *tree)
+// {
+// 	t_tree_node *root;
 
-	if (!tree)
-		return ;
-	root = tree->root_node;
-	_post_traverse(root);
-}
+// 	if (!tree)
+// 		return ;
+// 	root = tree->root_node;
+// 	_post_traverse(root);
+// }
 
 // t_tree *createExampleBinTree() {
 //     t_tree *pReturn = NULL;

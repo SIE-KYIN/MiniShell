@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: gshim <gshim@student.42.fr>                +#+  +:+       +#+         #
+#    By: gshim <gshim@student.42seoul.kr>           +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/02/22 17:48:50 by gshim             #+#    #+#              #
-#    Updated: 2022/03/23 19:38:59 by gshim            ###   ########.fr        #
+#    Updated: 2022/03/31 11:54:22 by gshim            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,15 +16,23 @@ CFLAGS = -Wall -Wextra -Werror -g
 
 NAME = minishell
 
+RL_CLUSTER_L = -L/Users/gshim/.brew/opt/readline/lib
+RL_CLUSTER_I = -I/Users/gshim/.brew/opt/readline/include
+RL_MYMAC_L = -L/opt/homebrew/opt/readline/lib
+RL_MYMAC_I = -I/opt/homebrew/opt/readline/include
+
 SRCS_DIR = ./src
 SRCS =  src/DataStructure/linkedlist1.c src/DataStructure/linkedlist2.c \
 	src/DataStructure/tree1.c src/DataStructure/tree2.c \
 	src/Parsing/parse_envv.c src/Parsing/check_syntax.c \
-	src/Parsing/tokenize.c \
+	src/Parsing/tokenize.c src/Parsing/ft_ms_split.c \
 	src/Utilities/utils1.c src/Utilities/utils2.c \
-	src/Utilities/utils3.c\
+	src/Utilities/utils3.c src/Utilities/utils4.c \
 	src/minishell.c src/builtIn.c \
-	src/Prompt/readline.c src/Prompt/sighandle.c
+	src/Prompt/readline.c src/Prompt/readline_utils.c \
+	src/Redirect/redirect.c src/Redirect/ft_pipe.c src/Redirect/ft_command.c \
+	#src/Redirect/heredoc.c
+
 OBJS = $(SRCS:.c=.o)
 
 SHELL	= /bin/bash
@@ -42,7 +50,7 @@ LIB = $(addprefix $(LIB_DIR)/, libft.a)
 $(NAME) : $(OBJS)
 	$(MAKE) -C $(LIB_DIR) all
 	$(CC) $(CFLAGS) -L$(LIB_DIR) -l$(LIB_NAME) \
-	-lreadline -L/Users/gshim/.brew/opt/readline/lib $^ -o $@
+	-lreadline $(RL_MYMAC_L) $^ -o $@
 #libft list 중복이라 bonus로 컴파일 안함
 #my mac #-L/opt/homebrew/opt/readline/lib -I/opt/homebrew/opt/readline/include
 #cluster#-lreadline -L/Users/gshim/.brew/opt/readline/lib -I/Users/gshim/.brew/opt/readline/include $^ -o $@
@@ -55,7 +63,7 @@ $(SRCS_DIR)/%.o : $(SRCS_DIR)/%.c
 		echo -n "☕️ ☕️ MINISHELL Loading ...\n";\
 	fi
 	@printf "\b$(chr)"
-	@$(CC) $(CFLAGS) -I$(LIB_DIR) -I/Users/gshim/.brew/opt/readline/include -c $< -o $@
+	@$(CC) $(CFLAGS) -I$(LIB_DIR) $(RL_MYMAC_I) -c $< -o $@
 
 all : $(NAME)
 
@@ -68,8 +76,5 @@ fclean :
 	$(MAKE) -C $(LIB_DIR) fclean
 
 re : fclean all
-
-
-
 
 .PHONY : all clean fclean re

@@ -1,36 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strdup.c                                        :+:      :+:    :+:   */
+/*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gshim <gshim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/05/03 16:18:49 by gshim             #+#    #+#             */
-/*   Updated: 2022/03/29 20:37:43 by gshim            ###   ########.fr       */
+/*   Created: 2022/03/30 18:12:47 by gshim             #+#    #+#             */
+/*   Updated: 2022/03/30 18:27:33 by gshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "minishell.h"
 
-char	*ft_strdup(const char *src)
+void	heredoc(t_tree_node *root, t_tree_node *right, bool flag)
 {
-	int		i;
-	char	*str;
+	char *buffer[256];
 
-	i = 0;
-	if (!src)
-		return (0);
-	while (src[i] != '\0')
-		i++;
-	str = (char *)malloc(sizeof(char) * (i + 1));
-	if (!str)
-		return (0);
-	i = 0;
-	while (src[i])
-	{
-		str[i] = src[i];
-		i++;
-	}
-	str[i] = '\0';
-	return (str);
+	// 무한반복
+		// readline으로 한줄씩 계속해서 입력받는다.
+		// 한줄이 right->command[0]와 일치하면 루프를 빠져나온다. [break]
+		// 일치하지 않으면 입력을 저장한다.
+
+	// 버퍼를 차례대로 출력한다.
 }

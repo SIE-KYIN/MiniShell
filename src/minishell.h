@@ -6,7 +6,7 @@
 /*   By: gshim <gshim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/16 17:21:43 by gshim             #+#    #+#             */
-/*   Updated: 2022/03/23 21:36:54 by gshim            ###   ########.fr       */
+/*   Updated: 2022/03/30 18:15:58 by gshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,7 @@
 # include <unistd.h>
 # include <string.h>
 # include <fcntl.h> // 파일모드를위해추가
-
-
-
+# include <errno.h>
 
 // kyujlee
 typedef struct s_list_node
@@ -64,11 +62,9 @@ enum e_delimiter_flag
 typedef struct s_tree_node
 {
 	int flag;//무슨 노드인지
-	char *command; //명령어, 구분문자 , 파일명 여기들어갈듯
-	char *argument; //실행인자 여기들어갈듯
-	//char *arg[5];// arg[0] = "ls", arg[1] = NULL
-	struct s_tree_node* left_child;
-	struct s_tree_node* right_child;
+	char **command;
+	struct s_tree_node* left;
+	struct s_tree_node* right;
 } t_tree_node;
 
 typedef struct s_tree
@@ -78,7 +74,13 @@ typedef struct s_tree
 
 
 /*
-** DataStucture-LinkedList1
+** *****************************************
+** *************DATASTRUCTURE***************
+** *****************************************
+*/
+
+/*
+** LinkedList1
 */
 void add_node(t_list* list, int position, char *var, char *data);
 t_list_node* get_node(t_list* list, int position);
@@ -88,37 +90,46 @@ int get_position(t_list *list, char *str);
 
 
 /*
-** DataStucture-LinkedList2
+** LinkedList2
 */
 t_list	*create_list(void);
 void delete_list(t_list *list);
 
+/*
+** tree1
+*/
+t_tree_node*	insert_root(t_tree* tree, char **command, int flag);
+t_tree_node*	insert_left(t_tree_node* parent,  char **command, int flag);
+t_tree_node*	insert_right(t_tree_node* parent, char **command, int flag);
+void	pre_traverse(t_tree *tree, t_list *env);
+void	_pre_traverse(t_tree_node *root, t_list *env, char parent);
 
 /*
-** utils1.c
+** tree2
+** +1
 */
-char	*ft_strndup(const char *src, int from, int to);
-void ft_error(int flag);
-int is_same(char *str1, char *str2);
-void print_intro();
-
+t_tree*		create_tree();
+void	delete_tree(t_tree* tree);
 
 /*
-** utils2.c  ++++++++3
+** *****************************************
+** ****************Parsing******************
+** *****************************************
 */
-size_t	ft_strlen(const char *s);
-void	*ft_memcpy(void *dst, const void *src, size_t n);
-char *ft_colorstr(char *str);
-char	*ft_strdup(const char *s1);
-char	*ft_strjoin(char const *s1, char const *s2);
 
 /*
-** utils3.c  ++++++++3
+** check_syntax.c
+** +3
 */
-int is_delimiter(char c, char next);
-char			**ft_split(char const *s, char c);
-char **ft_ms_split(char *line);
+int check_syntax(char *line);
+
+/*
+** ft_ms_split.c
+*/
+char **ft_ms_split(char *line, t_list *env_list);
 int cnt_delimiter(char *line);
+int is_delimiter(char c, char next);
+
 
 /*
 ** parse_envv.c
@@ -127,55 +138,102 @@ t_list *parse_envv(char **envv);
 
 
 /*
-** ms_sighandle.c
+** tokenize.c
 */
-void sig_int(int sig);
-void sigHandler();
+t_tree *tokenize(char *line, t_list *env_list);
 
+
+/*
+** *****************************************
+** ****************Prompt*******************
+** *****************************************
+*/
 
 /*
 ** readline.c
 */
-//void parse_line(t_tree *tree, char **env);
-void read_line(t_list *env_list, char **line);
-void parse_line(t_tree *tree, char **env);
-
-/*
-** check_syntax.c
-*/
-int check_syntax(char *line);
-
-/*
-** tokenize.c
-*/
-t_tree *tokenize(char *line);
-
+int read_line(t_list *env_list, char **line);
 
 
 /*
-** b_tree.c
+** readline_utils.c
 */
-t_tree*		create_tree();
-t_tree_node*	insert_root(t_tree* tree, char *command, char *argument, int flag);
-t_tree_node*	insert_left(t_tree_node* parent,  char *command, char *argument, int flag);
-t_tree_node*	insert_right(t_tree_node* parent, char *command, char *argument, int flag);
-void	delete_tree(t_tree* tree);
+void sig_int(int sig);
+void sigHandler();
+char *ft_colorstr(char *str);
 
-void	post_traverse(t_tree *tree);
-void	in_traverse(t_tree *tree);
-void	pre_traverse(t_tree *tree, char **env);
+
+/*
+** *****************************************
+** ****************Utilities****************
+** *****************************************
+*/
+
+/*
+** utils1.c
+*/
+void ft_error(int flag);
+char	*ft_strndup(char *src, int from, int to);
+int is_same(char *str1, char *str2);
+void print_intro();
+
+/*
+** utils2.c
+** related to check_syntax.c
+*/
+int str_in_quote(char *line, int i, int *single_flag, int *double_flag);
+int str_in_quote2(char *line, int i, int single_flag, int double_flag);
+int is_valid_s_c(char c);
+
+/*
+** utils3.c
+** related to ft_ms_split.c
+*/
+int is_delimiter(char c, char next);
+int cnt_delimiter(char *line);
+void change_str(t_list *env_list, char **line, int fst, int sec);
+int strcnt_double_ptr(char **ret);
+char *ft_emptystr();
+
+/*
+** utils4.c
+** related to ft_ms_split.c
+*/
+char **plus_space(char **str, int criteria);
+void divide_str(char **ret, int i);
+
+
+
+
+/*
+** utils2.c  ++++++++3
+*/
+size_t	ft_strlen(const char *s);
+void	*ft_memcpy(void *dst, const void *src, size_t n);
+char	*ft_strdup(const char *s1);
+char	*ft_strjoin(char const *s1, char const *s2);
+
+/*
+** utils3.c  ++++++++3
+*/
+char			**ft_split(char const *s, char c);
 
 // gshim
-int execute(char *command, char **arg, char **env);
-void ft_echo(char *argv[], char **env);
-void ft_cd(char *argv[], char **env);
-void ft_pwd();
-void ft_export(char **env);
-void ft_unset(char **env);
-void ft_env(char **env);
-int	redir_out(t_tree_node *root, t_tree_node *left);
-//int redir_in(char **cmdvector);
-int execute_builtin(char *command, char **arg, char **env);
+int		execute(char **arg, t_list *env);
+void	ft_echo(char *argv[], t_list *env);
+void	ft_cd(char *argv[], t_list *env);
+void	ft_pwd();
+void	ft_export(char *argv[], t_list *env);
+void	ft_unset(char *argv[], t_list *env);
+void	ft_env(t_list *env);
+int		redir_out(t_tree_node *root, t_tree_node *left, bool flag);
+int		redir_in(t_tree_node *root, t_tree_node *right, bool flag);
+void	heredoc(t_tree_node *root, t_tree_node *right, bool flag);
+int		execute_builtin(char **arg, t_list *env);
 //void exit(char **env);
-
+char **gather(t_list *list);
+int ft_pipe(t_tree_node *root, t_list *env);
+int ft_command(t_tree_node *root, t_list *env);
+t_list_node *search_node(t_list* list, char *var);
+void delete_node(t_list* list, char *var);
 #endif
