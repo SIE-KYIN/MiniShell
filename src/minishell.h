@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gshim <gshim@student.42.fr>                +#+  +:+       +#+        */
+/*   By: gshim <gshim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/16 17:21:43 by gshim             #+#    #+#             */
-/*   Updated: 2022/03/30 18:15:58 by gshim            ###   ########.fr       */
+/*   Updated: 2022/03/31 12:50:29 by gshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,6 +125,7 @@ int check_syntax(char *line);
 
 /*
 ** ft_ms_split.c
+** +4
 */
 char **ft_ms_split(char *line, t_list *env_list);
 int cnt_delimiter(char *line);
@@ -133,12 +134,14 @@ int is_delimiter(char c, char next);
 
 /*
 ** parse_envv.c
+** +1
 */
 t_list *parse_envv(char **envv);
 
 
 /*
 ** tokenize.c
+** +2
 */
 t_tree *tokenize(char *line, t_list *env_list);
 
@@ -202,23 +205,22 @@ char *ft_emptystr();
 char **plus_space(char **str, int criteria);
 void divide_str(char **ret, int i);
 
-
-
+/*
+** utils5.c
+** related to tokenize.c
+*/
+int is_there_space(char *line);
+char **find_cmd(char *line, int flag);
+int token_cnt(char **token);
+int is_there_delimiter(char **token);
+int get_latest_token_loc(char **token);
 
 /*
-** utils2.c  ++++++++3
+** *****************************************
+** ****************gshim********************
+** *****************************************
 */
-size_t	ft_strlen(const char *s);
-void	*ft_memcpy(void *dst, const void *src, size_t n);
-char	*ft_strdup(const char *s1);
-char	*ft_strjoin(char const *s1, char const *s2);
 
-/*
-** utils3.c  ++++++++3
-*/
-char			**ft_split(char const *s, char c);
-
-// gshim
 int		execute(char **arg, t_list *env);
 void	ft_echo(char *argv[], t_list *env);
 void	ft_cd(char *argv[], t_list *env);

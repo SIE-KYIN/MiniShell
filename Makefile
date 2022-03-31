@@ -6,7 +6,7 @@
 #    By: gshim <gshim@student.42seoul.kr>           +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/02/22 17:48:50 by gshim             #+#    #+#              #
-#    Updated: 2022/03/31 11:54:22 by gshim            ###   ########.fr        #
+#    Updated: 2022/03/31 12:44:20 by gshim            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,7 +27,7 @@ SRCS =  src/DataStructure/linkedlist1.c src/DataStructure/linkedlist2.c \
 	src/Parsing/parse_envv.c src/Parsing/check_syntax.c \
 	src/Parsing/tokenize.c src/Parsing/ft_ms_split.c \
 	src/Utilities/utils1.c src/Utilities/utils2.c \
-	src/Utilities/utils3.c src/Utilities/utils4.c \
+	src/Utilities/utils3.c src/Utilities/utils4.c src/Utilities/utils5.c \
 	src/minishell.c src/builtIn.c \
 	src/Prompt/readline.c src/Prompt/readline_utils.c \
 	src/Redirect/redirect.c src/Redirect/ft_pipe.c src/Redirect/ft_command.c \
@@ -53,7 +53,8 @@ $(NAME) : $(OBJS)
 	-lreadline $(RL_MYMAC_L) $^ -o $@
 #libft list 중복이라 bonus로 컴파일 안함
 #my mac #-L/opt/homebrew/opt/readline/lib -I/opt/homebrew/opt/readline/include
-#cluster#-lreadline -L/Users/gshim/.brew/opt/readline/lib -I/Users/gshim/.brew/opt/readline/include $^ -o $@
+#cluster#-lreadline -L/Users/gshim/.brew/opt/readline/lib -I/Users/gshim/.brew/opt/readline/include
+#kyujin : -lreadline -L/Users/kyujlee/.brew/opt/readline/lib -I/Users/kyujlee/.brew/opt/readline/include
 
 $(SRCS_DIR)/%.o : $(SRCS_DIR)/%.c
 	$(eval idx = $(shell expr $(idx) + 1))

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gshim <gshim@student.42.fr>                +#+  +:+       +#+        */
+/*   By: gshim <gshim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 19:23:29 by gshim             #+#    #+#             */
-/*   Updated: 2022/03/30 18:36:44 by gshim            ###   ########.fr       */
+/*   Updated: 2022/03/31 12:46:18 by gshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,8 @@ int main(int argc, char **argv, char **envv)
 		// 공백입력을 받았을때....?!
 
 
-		check_syntax(line);
+		if (!check_syntax(line))
+            continue;
 		//line에 들어있는 문자열 파싱하는 함수
 		token_tree = tokenize(line, env_list);
 
@@ -78,7 +79,7 @@ int main(int argc, char **argv, char **envv)
 		//-----------------------------------내 역할 끝??
 		//파싱한 자료구조(이진트리 예상)에서 빌트인 처리, 리디렉션 처리
 		//리스트로 할 수 있는데 이진트리가 탐색하기 쉬움 (정확히는 재귀하향트리)
-
+        delete_tree(token_tree);
 		//free(line); [gshim] : pointer being freed was not allocated오류가 발생한다.
 	}
 

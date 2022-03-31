@@ -1,1 +1,0 @@
-sort a.txt | grep ea
