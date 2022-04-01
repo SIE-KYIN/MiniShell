@@ -39,7 +39,8 @@ t_tree_node*	insert_right(t_tree_node* parent, char **command, int flag)
 }
 
 // //전위순회
-// parent 0null, 1<, 2>
+// parent 0null, 1<, 2>  ==> 현재'>>'이나, '<<'의 경우를 표현할수 없다.
+// 지역변수 flag는 리다이렉션의 연속되면 false를 저장합니다.
 void		_pre_traverse(t_tree_node *root, t_list *env, char parent)
 {
 	int backup_std[2];
@@ -61,6 +62,8 @@ void		_pre_traverse(t_tree_node *root, t_list *env, char parent)
 		redir_out(root, root->right, flag);
 		redir_in(root, root->right, flag);
 		_pre_traverse(root->left, env, root->command[0][0]);
+		if (!strcmp(root->command[0], "<<"))
+			unlink(".heredoc");
 	}
 	// command
 	else if(root->flag == 1)
