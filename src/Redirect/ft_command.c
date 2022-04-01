@@ -16,10 +16,9 @@ int ft_command(t_tree_node *root, t_list *env)
 {
 	int pid;
 
-	//check_builtIn : 빌트인명령이라면 부모프로세스에서 수행됩니다.
+	//check_builtIn : 빌트인명령이라면 부모프세스에서 수행됩니다.
 	if (execute_builtin(root->command, env) == 0)
 		return (0);
-
 	//자식프로세스 생성
 	if ((pid = fork()) == -1) printf("FORK ERROR\n");
 	else if (pid == 0)

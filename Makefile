@@ -11,7 +11,7 @@
 # **************************************************************************** #
 
 CC = gcc
-CFLAGS = -Wall -Wextra -Werror -g
+CFLAGS = -Wall -Wextra -Werror -g -fsanitize=address
 #CFLAGS = -Wall -Wextra -Werror -g -fsanitize=address
 
 NAME = minishell
@@ -23,7 +23,7 @@ SRCS =  src/DataStructure/linkedlist1.c src/DataStructure/linkedlist2.c \
 	src/Parsing/tokenize.c src/Parsing/ft_ms_split.c \
 	src/Utilities/utils1.c src/Utilities/utils2.c \
 	src/Utilities/utils3.c src/Utilities/utils4.c \
-	src/Utilities/utils5.c \
+	src/Utilities/utils5.c src/Utilities/utils6.c \
 	src/minishell.c src/builtIn.c \
 	src/Prompt/readline.c src/Prompt/readline_utils.c \
 	src/Redirect/redirect.c src/Redirect/ft_pipe.c src/Redirect/ft_command.c

@@ -14,19 +14,52 @@ int is_there_space(char *line)
     return (0);
 }
 
-char **find_cmd(char *line, int flag)
+int is_echo(char *line, int *i)
 {
-    char **ret;
-    int i;
-
-    i = -1;
-    while (line[++i])
-        if (line[i] == 'e' && line[i + 1] == 'c' && line[i + 2] == 'h' && line[i + 3] == 'o' && line[i + 4] == ' ')
+    *i = -1;
+    int flag;
+    
+    flag = 0;
+    while (line[++(*i)])
+    {
+        if (line[*i] == 'e' && line[*i + 1] == 'c' && line[*i + 2] == 'h' && line[*i + 3] == 'o' && line[*i + 4] == ' ')
         {
             flag = 1;
             break;
         }
+    }
     if (flag == 1)
+        return (1);
+    else
+        return (0);
+}
+
+int cnt_str(char *line)
+{
+    int ret;
+    int i;
+    // int tmp;
+
+    i = 0;
+    ret = 0;
+    while (line[++i])
+    {
+        if (line[i] == '\'' || line[i] == '"')
+		{
+			i = str_in_quote(line, i, 0, 0) - 1;
+            ret++;
+			continue;
+		}
+    }
+    return (ret);
+}
+
+char **find_cmd(char *line)
+{
+    char **ret;
+    int i;
+    printf ("%d\n", cnt_str(line));
+    if (is_echo(line, &i))
     {
         ret = (char **)malloc(sizeof(char *) * 3);
         ret[0] = ft_strndup(line, i, i + 3);
@@ -38,7 +71,7 @@ char **find_cmd(char *line, int flag)
         ret[2] = 0;
     }
     else
-        ret = ft_split(line, ' ');
+        ret = split_delete_quotes(line, ' ');
     free(line);
     return (ret);
 }

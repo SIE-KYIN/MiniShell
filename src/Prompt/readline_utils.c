@@ -2,12 +2,15 @@
 
 void sig_int(int sig)
 {
-    (void)sig;
-    rl_on_new_line();
-	printf("\n");
-	rl_on_new_line();
-	rl_replace_line("", 0);
-	rl_redisplay();
+    if (sig == SIGINT)
+	{
+		rl_on_new_line();
+		rl_redisplay();
+		printf("%c[K\n", 27);
+		rl_on_new_line();
+		rl_replace_line("", 0);
+		rl_redisplay();
+	}
 }
 
 void sigHandler()
@@ -15,6 +18,27 @@ void sigHandler()
     signal(SIGINT, sig_int);
     signal(SIGQUIT, SIG_IGN);
 }
+
+void	sig_in_child(int sig)
+{
+	if (sig == SIGINT)
+		printf("\n");
+	if (sig == SIGQUIT)
+		printf("Quit: 3\n");
+}
+
+void	set_signal()
+{
+	signal(SIGINT, sig_in_child);
+	signal(SIGQUIT, sig_in_child);
+}
+
+void	disable_signal()
+{
+	signal(SIGINT, SIG_IGN);
+	signal(SIGQUIT, SIG_IGN);
+}
+
 
 char *ft_colorstr(char *str)
 {

@@ -74,13 +74,13 @@ int get_position(t_list *list, char *str)
   node = &(list->top);
   while(i < list->cnt)
   {
-    node = node->next;
     if (is_same(node->var, str))
       break;
     i++;
+    node = node->next;
   }
   if (i < list->cnt)
-    return i + 1;
+    return i;
   else
     return (-1);
 }

@@ -1,6 +1,6 @@
 #include "../minishell.h"
 
-int cnt_word(char *line, int flag)
+static int cnt_word(char *line, int flag)
 {
 	int i;
 	int cnt;
@@ -28,7 +28,7 @@ int cnt_word(char *line, int flag)
 	return (cnt);
 }
 
-void cut_str(char *line, char **ret)
+static void cut_str(char *line, char **ret)
 {
 	int i;
 	int word;
@@ -48,7 +48,7 @@ void cut_str(char *line, char **ret)
 	}
 }
 
-char **repositioning(char **str)
+static char **repositioning(char **str)
 {
 	char **ret = NULL;
 	int i;
@@ -69,7 +69,7 @@ char **repositioning(char **str)
 }
 
 
-void key_to_value(t_list *env_list, char **line, int flag)
+static void key_to_value(t_list *env_list, char **line, int flag)
 {
 	int i;
 	int tmp;
@@ -79,7 +79,7 @@ void key_to_value(t_list *env_list, char **line, int flag)
 	{
 		if ((*line)[i] == '\'')
 		{
-			i = str_in_quote2((*line), i, 0, 0) - 1;
+			i = str_in_quote((*line), i, 0, 0) - 1;
 			continue;
 		}
 		if ((*line)[i] == '$')
