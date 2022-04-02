@@ -14,16 +14,17 @@ int is_there_space(char *line)
     return (0);
 }
 
-int is_echo(char *line, int *i)
+int is_echo(char *line)
 {
-    *i = -1;
+	 int i;
+    i = -1;
     int flag;
-    
+
     flag = 0;
-    while (line[++(*i)])
+    while (line[++(i)])
     {
-        if (line[*i] == 'e' && line[*i + 1] == 'c' && line[*i + 2] == 'h' && line[*i + 3] == 'o' && 
-            (line[*i + 4] == ' ' || line[*i + 4] == '"' || line[*i + 4] == '\''))
+        if (line[i] == 'e' && line[i + 1] == 'c' && line[i + 2] == 'h' && line[i + 3] == 'o' &&
+            (line[i + 4] == ' ' || line[i + 4] == '"' || line[i + 4] == '\''))
         {
             flag = 1;
             break;
@@ -38,7 +39,7 @@ int is_echo(char *line, int *i)
 int str_in_quote2(char *line, int i)
 {
     char curr_quote;
-    
+
     curr_quote = line[i];
     while(line[++i])
     {
@@ -81,7 +82,7 @@ void cut_echo_str(char **ret, char *line, int word_i)
 {
     int i;
     int tmp;
-    
+
     i = -1;
     while (line[++i])
     {
@@ -106,23 +107,31 @@ void cut_echo_str(char **ret, char *line, int word_i)
 }
 
 
-char **find_cmd(char *line)
+char **find_cmd(char *line,int flag)
 {
     char **ret;
-    // int i;
-    int cnt;
+    int i;
 
-    // if (is_echo(line, &i))
-    // {
-        cnt = cnt_echo_str(line);
-        ret = (char **)malloc(sizeof(char *) * (cnt + 1));
-        ret[cnt] = 0;
-        cut_echo_str(ret, line, 0);
-        // free(ret[0]);
-        // ret[0] = ft_strdup("echo");
-    // }
-    // else
-        // ret = split_delete_quotes(line, ' ');
+    i = -1;
+    while (line[++i])
+        if (line[i] == 'e' && line[i + 1] == 'c' && line[i + 2] == 'h' && line[i + 3] == 'o' && line[i + 4] == ' ')
+        {
+            flag = 1;
+            break;
+        }
+    if (flag == 1)
+    {
+        ret = (char **)malloc(sizeof(char *) * 3);
+        ret[0] = ft_strndup(line, i, i + 3);
+        i += 3;
+        while (line[++i])
+            if (line[i] != ' ')
+                break;
+        ret[1] = ft_strndup(line, i, ft_strlen(line) - 1);
+        ret[2] = 0;
+    }
+    else
+        ret = ft_split(line, ' ');
     free(line);
     return (ret);
 }
@@ -143,14 +152,18 @@ int token_cnt(char **token)
     return (ret);
 }
 
-int is_there_delimiter(char **token)
+int is_there_delimiter(char **token, int token_cnt)
 {
     int cnt;
 
-    cnt = token_cnt(token);
-    while (cnt--)
+    cnt = -1;
+    while (++cnt < token_cnt)
+	{
+		if (token[cnt] == NULL)
+			continue;
         if (is_delimiter(token[cnt][0], token[cnt][1]))
             return (cnt);
+	}
     return (0);
 }
 

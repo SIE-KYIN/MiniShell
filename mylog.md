@@ -354,3 +354,16 @@ exit 1 1 => too many argument error => exit 안됨.
 exit 1one2  => numberic error
 exit one  => numberic error
 => exit 됨.
+
+
+#
+bash-3.2$ cat << AAA << BBB
+> hello
+> BBB
+> qwerrty
+> AAA
+> qwerrrrr
+> BBB
+qwerrrrr
+
+# 쉘은 옵션을 어떻게 저장할까?

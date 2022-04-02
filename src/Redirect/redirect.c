@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirect.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gshim <gshim@student.42seoul.kr>           +#+  +:+       +#+        */
+/*   By: gshim <gshim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/24 01:46:41 by gshim             #+#    #+#             */
-/*   Updated: 2022/04/02 11:15:18 by gshim            ###   ########.fr       */
+/*   Updated: 2022/04/02 18:39:18 by gshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,12 @@ int redir_in(t_tree_node *root, t_tree_node *right, bool flag)
 		fd = open(right->command[0], STDIN_SIMPLE, 0644);
 	else if(!strcmp(root->command[0], "<<"))
 	{
+		//heredoc의 중첩처리
+		// if (!flag) // heredoc이 연속되었다면
+		// {
+		// 	unlink(".heredoc");
+		// }
+
 		fd = open(".heredoc", STDOUT_SIMPLE, 0644);
 		if (fd == -1){
 			printf("open fail\n");

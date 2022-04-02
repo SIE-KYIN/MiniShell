@@ -6,7 +6,7 @@
 /*   By: gshim <gshim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/16 17:21:43 by gshim             #+#    #+#             */
-/*   Updated: 2022/03/29 21:43:13 by gshim            ###   ########.fr       */
+/*   Updated: 2022/04/02 20:37:01 by gshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -209,11 +209,11 @@ void divide_str(char **ret, int i);
 ** related to tokenize.c
 */
 int is_there_space(char *line);
-char **find_cmd(char *line);
+char **find_cmd(char *line,int flag);
 int token_cnt(char **token);
-int is_there_delimiter(char **token);
+int is_there_delimiter(char **token, int i);
 int get_latest_token_loc(char **token);
-
+int token_cnt(char **token);
 
 char			**split_delete_quotes(char const *s, char c);
 
@@ -240,4 +240,5 @@ int ft_pipe(t_tree_node *root, t_list *env);
 int ft_command(t_tree_node *root, t_list *env);
 t_list_node *search_node(t_list* list, char *var);
 void delete_node(t_list* list, char *var);
+bool check_option(char *str, char *option);
 #endif

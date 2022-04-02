@@ -98,6 +98,26 @@ void delete_node(t_list* list, char *var)
 	}
 }
 
+// -뒤로 옵션에 해당하지 않는 문자가 있으면 옵션으로 취급하지 않습니다.
+bool check_option(char *str, char *option)
+{
+	size_t len;
+	size_t i;
+
+	if (!str)
+		return (false);
+	if (str[0] != '-')
+		return (false);
+	len = ft_strlen(str);
+	i = 0;
+	while(++i < len)
+	{
+		if (ft_strchr(option, str[i]) == NULL)
+			return (false);
+	}
+	return (true);
+}
+
 // -n
 void ft_echo(char *argv[], t_list *env)
 {
@@ -106,7 +126,7 @@ void ft_echo(char *argv[], t_list *env)
 
 	// flag에 옵션 여부를 저장합니다., flag에 따라 arg의 읽기순서가 첫번째부턴지 두번째부턴지 달라집니다.
 	flag = 1;
-	if (!ft_strncmp(argv[1], "-n", 2))
+	if (check_option(argv[1], "n"))
 		flag = 2;
 	i = flag;
 	while(argv[i])

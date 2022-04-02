@@ -1,51 +1,51 @@
 #include "../minishell.h"
 
-void _token_to_tree(t_tree_node *parent, char **token, int token_loc)
+void _token_to_tree(t_tree_node *parent, char **token, int token_loc, int token_cnt)
 {
     char **tmp;
     int deli_loc;
 
-    deli_loc = is_there_delimiter(token);
+    deli_loc = is_there_delimiter(token, token_cnt);
     if (!deli_loc)
     {
-        tmp = find_cmd(token[0]);
+        tmp = find_cmd(token[0], 0);
         insert_left(parent, tmp, COMMON_BUILTIN);
-        tmp = find_cmd(token[2]);
+        tmp = find_cmd(token[2],0);
         insert_right(parent, tmp, COMMON_BUILTIN);
         return ;
     }
-    tmp = find_cmd(token[token_loc]);
+    tmp = find_cmd(token[token_loc], 0);
     insert_right(parent, tmp, -1);
     tmp = (char **)malloc(sizeof(char *) * 2);
     tmp[0] = ft_strdup(token[deli_loc]);
     tmp[1] = 0;
     insert_left(parent, tmp, DELIMITER);
-    free(token[deli_loc]);
+    // free(token[deli_loc]);
     token[deli_loc] = NULL;
-    _token_to_tree(parent->left, token, token_loc - 2);
+    _token_to_tree(parent->left, token, token_loc + 2, token_cnt);
 }
 
 void token_to_tree(t_tree *token_tree, char **token)
 {
     int deli_loc;
-    int token_loc;
+    int token_cnt1;
     char **tmp;
+token_cnt1 = token_cnt(token);
+    deli_loc = is_there_delimiter(token, token_cnt1);
 
-    deli_loc = is_there_delimiter(token);
-    token_loc = get_latest_token_loc(token);
     if (deli_loc)
     {
         tmp = (char **)malloc(sizeof(char *) * 2);
         tmp[0] = ft_strdup(token[deli_loc]);
         tmp[1] = 0;
         insert_root(token_tree, tmp, DELIMITER);
-        free(token[deli_loc]);
+        // free(token[deli_loc]);
         token[deli_loc] = NULL;
-        _token_to_tree(token_tree->root_node, token, token_loc);
+        _token_to_tree(token_tree->root_node, token, 0,token_cnt1);
     }
     else
     {
-        tmp = find_cmd(token[0]);
+        tmp = find_cmd(token[0], 0);
         insert_root(token_tree, tmp, COMMON_BUILTIN);
     }
 }
@@ -58,7 +58,7 @@ t_tree *tokenize(char *line, t_list *env_list)
     token_tree = create_tree();
     token = ft_ms_split(line, env_list);
     token_to_tree(token_tree, token);
-    free(token);
+    // free(token);
     return (token_tree);
 }
 

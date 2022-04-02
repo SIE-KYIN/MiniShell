@@ -1,0 +1,15 @@
+Makefile
+README.md
+a
+a.txt
+builtIn.md
+checklist.md
+include
+minishell
+mylog.md
+readline.md
+src
+study.c
+study.md
+test
+1|0|
