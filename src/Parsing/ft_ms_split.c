@@ -79,7 +79,7 @@ static void key_to_value(t_list *env_list, char **line, int flag)
 	{
 		if ((*line)[i] == '\'')
 		{
-			i = str_in_quote((*line), i, 0, 0) - 1;
+			i = str_in_quote2((*line), i);
 			continue;
 		}
 		if ((*line)[i] == '$')

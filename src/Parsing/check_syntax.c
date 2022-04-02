@@ -1,5 +1,18 @@
 #include "../minishell.h"
 
+int is_empty_str(char *line)
+{
+    int i;
+
+    i = 0;
+    while (line[i])
+    {
+        if (line[i] != ' ')
+            return (1);
+        i++;
+    }
+    return (0);
+}
 int is_valid_special_character(char *line)
 {
     int i;
@@ -21,7 +34,7 @@ int is_valid_special_character(char *line)
                     return (0);
         }
         if (line[i + 1] == '"' || line[i + 1] == '\'')
-            i = str_in_quote(line, i, 0, 0);
+            i = str_in_quote2(line, i);
         else
             i++;
     }
@@ -80,6 +93,11 @@ int is_valid_location(char *line)
 
 int check_syntax(char *line)
 {
+    if (!is_empty_str(line))
+    {
+        free(line);
+        return (0);
+    }
     if (!is_valid_special_character(line))
     {
         ft_error(2);

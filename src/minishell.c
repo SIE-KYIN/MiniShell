@@ -65,8 +65,8 @@ int main(int argc, char **argv, char **envv)
 		read_line(env_list, &line);
 
 		// 빈 입력을 받았을때
-		if(*line == '\0')
-			continue;
+		// if(*line == '\0')
+		// 	continue;
 		// 공백입력을 받았을때....?!
 
 

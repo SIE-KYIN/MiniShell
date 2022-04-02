@@ -78,7 +78,7 @@ typedef struct s_tree
 ** *************DATASTRUCTURE***************
 ** *****************************************
 */
-
+int str_in_quote2(char *line, int i);
 /*
 ** LinkedList1
 */
