@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: gshim <gshim@student.42.fr>                +#+  +:+       +#+         #
+#    By: gshim <gshim@student.42seoul.kr>           +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/02/22 17:48:50 by gshim             #+#    #+#              #
-#    Updated: 2022/04/01 11:40:20 by gshim            ###   ########.fr        #
+#    Updated: 2022/04/02 11:10:33 by gshim            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -50,7 +50,7 @@ LIB = $(addprefix $(LIB_DIR)/, libft.a)
 $(NAME) : $(OBJS)
 	$(MAKE) -C $(LIB_DIR) all
 	$(CC) $(CFLAGS) -L$(LIB_DIR) -l$(LIB_NAME) \
-	-lreadline $(RL_CLUSTER_L) $^ -o $@
+	-lreadline $(RL_MYMAC_L) $^ -o $@
 #libft list 중복이라 bonus로 컴파일 안함
 #my mac #-L/opt/homebrew/opt/readline/lib -I/opt/homebrew/opt/readline/include
 #cluster#-lreadline -L/Users/gshim/.brew/opt/readline/lib -I/Users/gshim/.brew/opt/readline/include
@@ -64,7 +64,7 @@ $(SRCS_DIR)/%.o : $(SRCS_DIR)/%.c
 		echo -n "☕️ ☕️ MINISHELL Loading ...\n";\
 	fi
 	@printf "\b$(chr)"
-	@$(CC) $(CFLAGS) -I$(LIB_DIR) $(RL_CLUSTER_I) -c $< -o $@
+	@$(CC) $(CFLAGS) -I$(LIB_DIR) $(RL_MYMAC_I) -c $< -o $@
 
 all : $(NAME)
 

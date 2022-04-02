@@ -1,0 +1,17 @@
+Makefile
+a
+b
+b.txt
+builtIn.md
+c
+c.txt
+hghfg.c
+include
+minishell
+mylog.md
+one.txt
+readline.md
+src
+study.c
+study.md
+1|0|

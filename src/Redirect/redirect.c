@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirect.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gshim <gshim@student.42.fr>                +#+  +:+       +#+        */
+/*   By: gshim <gshim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/24 01:46:41 by gshim             #+#    #+#             */
-/*   Updated: 2022/04/01 13:40:30 by gshim            ###   ########.fr       */
+/*   Updated: 2022/04/02 11:15:18 by gshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,15 +71,8 @@ int redir_in(t_tree_node *root, t_tree_node *right, bool flag)
 		perror(right->command[0]);
 		return -1;
 	}
-	// if(flag)
-	// 	dup2(fd, 0);    // 표준출력의 방향은 1 -> fd
-	(void)flag;
-	dup2(fd, 0);
-
-	// char buf[100];
-	// read(fd, buf, sizeof(buf));
-	// printf("|%s|", buf);
-
+	if(flag)
+		dup2(fd, 0);    // 표준출력의 방향은 1 -> fd
 	close(fd);
 	return 0;
 }

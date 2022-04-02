@@ -59,9 +59,12 @@ void		_pre_traverse(t_tree_node *root, t_list *env, char parent)
 		flag = false;
 		if (!(parent == root->command[0][0] && (parent == '<' || parent == '>')))
 			flag = true;
-		redir_out(root, root->right, flag);
-		redir_in(root, root->right, flag);
-		_pre_traverse(root->left, env, root->command[0][0]);
+
+		// 리다이렉션이 성공시에만 재귀를 호출[리다이렉션 경우의수2]
+		if(redir_out(root, root->right, flag) != -1 && redir_in(root, root->right, flag) != -1)
+			_pre_traverse(root->left, env, root->command[0][0]);
+
+		// heredoc사용했다면 리다이렉션후 삭제.
 		if (!strcmp(root->command[0], "<<"))
 			unlink(".heredoc");
 	}
