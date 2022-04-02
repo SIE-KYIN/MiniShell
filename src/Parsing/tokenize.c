@@ -8,13 +8,13 @@ void _token_to_tree(t_tree_node *parent, char **token, int token_loc)
     deli_loc = is_there_delimiter(token);
     if (!deli_loc)
     {
-        tmp = find_cmd(token[0], 0);
+        tmp = find_cmd(token[0]);
         insert_left(parent, tmp, COMMON_BUILTIN);
-        tmp = find_cmd(token[2], 0);
+        tmp = find_cmd(token[2]);
         insert_right(parent, tmp, COMMON_BUILTIN);
         return ;
     }
-    tmp = find_cmd(token[token_loc], 0);
+    tmp = find_cmd(token[token_loc]);
     insert_right(parent, tmp, -1);
     tmp = (char **)malloc(sizeof(char *) * 2);
     tmp[0] = ft_strdup(token[deli_loc]);
@@ -45,7 +45,7 @@ void token_to_tree(t_tree *token_tree, char **token)
     }
     else
     {
-        tmp = find_cmd(token[0], 0);
+        tmp = find_cmd(token[0]);
         insert_root(token_tree, tmp, COMMON_BUILTIN);
     }
 }

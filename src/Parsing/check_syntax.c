@@ -1,5 +1,19 @@
 #include "../minishell.h"
 
+int is_empty_str(char *line)
+{
+    int i;
+
+    i = 0;
+    while (line[i])
+    {
+        if (line[i] != ' ')
+            return (1);
+        i++;
+    }
+    return (0);
+}
+
 int is_valid_special_character(char *line)
 {
     int i;
@@ -21,33 +35,31 @@ int is_valid_special_character(char *line)
                     return (0);
         }
         if (line[i + 1] == '"' || line[i + 1] == '\'')
-            i = str_in_quote2(line, i, 0, 0);
+            i = str_in_quote(line, i,0,0);
         else
             i++;
     }
     return (1);
 }
 
-int is_opened_quotes(char *line)
+int	is_opened_quotes(char *line)
 {
-    int single_flag;
-    int double_flag;
+	char	curr_quote;
     int i;
-
-    single_flag = 0;
-    double_flag = 0;
-    i = 0;
-
-    while (line[i])
-    {
-        if (line[i + 1] == '"' || line[i + 1] == '\'')
-            i = str_in_quote(line, i, &single_flag, &double_flag);
-        else
-            i++;
-    }
-    if (single_flag % 2 || double_flag % 2)
-        return (0);
-    return (1);
+    
+    i = -1;
+	curr_quote = 0;
+	while (line[++i])
+	{
+		if (!curr_quote &&(line[i] == '\'' || line[i] == '"'))
+        {
+            if (i == 0 || line[i - 1] != '\\')
+			    curr_quote = line[i];
+        }
+		else if (curr_quote && line[i - 1] != '\\' && line[i] == curr_quote)
+			curr_quote = 0;
+	}
+	return (curr_quote);
 }
 
 int is_valid_location(char *line)
@@ -59,8 +71,7 @@ int is_valid_location(char *line)
     {
         if (line[i] == ' ')
             continue;
-        else if (line[i] == '|' || line[i] == '$'
-                || line[i] == '\'' || line[i] == '"')
+        else if (line[i] == '|' || line[i] == '$')
             return (0);
         else
             break;
@@ -83,6 +94,11 @@ int is_valid_location(char *line)
 
 int check_syntax(char *line)
 {
+    if (!is_empty_str(line))
+    {
+        free(line);
+        return (0);
+    }
     if (!is_valid_special_character(line))
     {
         ft_error(2);
@@ -95,7 +111,7 @@ int check_syntax(char *line)
         free(line);
         return (0);
     }
-    if (!is_opened_quotes(line))
+    if (is_opened_quotes(line))
     {
         ft_error(4);
         free(line);

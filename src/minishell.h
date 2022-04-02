@@ -6,7 +6,7 @@
 /*   By: gshim <gshim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/16 17:21:43 by gshim             #+#    #+#             */
-/*   Updated: 2022/04/01 12:30:04 by gshim            ###   ########.fr       */
+/*   Updated: 2022/03/29 21:43:13 by gshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ typedef struct s_tree
 ** *************DATASTRUCTURE***************
 ** *****************************************
 */
-
+int str_in_quote2(char *line, int i);
 /*
 ** LinkedList1
 */
@@ -128,8 +128,6 @@ int check_syntax(char *line);
 ** +4
 */
 char **ft_ms_split(char *line, t_list *env_list);
-int cnt_delimiter(char *line);
-int is_delimiter(char c, char next);
 
 
 /*
@@ -163,6 +161,8 @@ int read_line(t_list *env_list, char **line);
 */
 void sig_int(int sig);
 void sigHandler();
+void	set_signal();
+void	disable_signal();
 char *ft_colorstr(char *str);
 
 
@@ -184,8 +184,7 @@ void print_intro();
 ** utils2.c
 ** related to check_syntax.c
 */
-int str_in_quote(char *line, int i, int *single_flag, int *double_flag);
-int str_in_quote2(char *line, int i, int single_flag, int double_flag);
+int str_in_quote(char *line, int i, int single_flag, int double_flag);
 int is_valid_s_c(char c);
 
 /*
@@ -210,10 +209,13 @@ void divide_str(char **ret, int i);
 ** related to tokenize.c
 */
 int is_there_space(char *line);
-char **find_cmd(char *line, int flag);
+char **find_cmd(char *line);
 int token_cnt(char **token);
 int is_there_delimiter(char **token);
 int get_latest_token_loc(char **token);
+
+
+char			**split_delete_quotes(char const *s, char c);
 
 /*
 ** *****************************************

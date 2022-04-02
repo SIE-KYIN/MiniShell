@@ -342,3 +342,15 @@ WIFSTOPPED
 WEXITSTATUS
 
 종료상태넣을때 free선행시켜줘야함
+
+
+# ㅗ답노트
+
+- exit 값의 범위 ll, %256해서 나눈다.
+음수의 경우에는 -10 => 246
+256에서 뺀값이 된다.
+
+exit 1 1 => too many argument error => exit 안됨.
+exit 1one2  => numberic error
+exit one  => numberic error
+=> exit 됨.

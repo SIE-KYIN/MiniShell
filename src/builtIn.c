@@ -101,17 +101,15 @@ void delete_node(t_list* list, char *var)
 // -n
 void ft_echo(char *argv[], t_list *env)
 {
-	char **arg;
 	int i;
 	int flag;
 
-	arg = ft_split(argv[1], ' ');
 	// flag에 옵션 여부를 저장합니다., flag에 따라 arg의 읽기순서가 첫번째부턴지 두번째부턴지 달라집니다.
-	flag = 0;
-	if (!ft_strncmp(arg[0], "-n", 2))
-		flag = 1;
+	flag = 1;
+	if (!ft_strncmp(argv[1], "-n", 2))
+		flag = 2;
 	i = flag;
-	while(arg[i])
+	while(argv[i])
 	{
 		if (i != flag)
 			printf(" ");
@@ -121,12 +119,12 @@ void ft_echo(char *argv[], t_list *env)
 		// else
 		// 	printf("%s", arg[i]);
 		(void)env;
-		printf("%s", arg[i]);
+		printf("%s", argv[i]);
 		i++;
 	}
 
 	// OUTPUT
-	if (flag == 0)
+	if (flag == 1)
 		printf("\n");
 }
 

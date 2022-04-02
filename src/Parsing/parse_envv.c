@@ -11,6 +11,8 @@ t_list *parse_envv(char **envv)
 
     i = -1;
     list = create_list();
+	list->top.data = ft_strdup("0");
+	list->top.var = ft_strdup("?");
     while (envv[++i])
     {
         j = -1;
