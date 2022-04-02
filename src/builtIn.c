@@ -15,7 +15,7 @@ int execute_builtin(char **arg, t_list *env)
 	else if (ft_strncmp("env", arg[0], 3) == 0)
 		ft_env(env);
     else if (ft_strncmp("exit", arg[0], 4) == 0)
-		exit(1); // exit명령 처리
+		exit(0); // exit명령 처리
 	else
 		return (-1);
 	return (0);
@@ -101,53 +101,62 @@ void delete_node(t_list* list, char *var)
 // -n
 void ft_echo(char *argv[], t_list *env)
 {
-	char **arg;
-	int flag;
 	int i;
+	int flag;
 
-	arg = ft_split(argv[1], ' ');
-	flag = 0;
-	if (!ft_strncmp(arg[0], "-n", 2))
-		flag = 1;
-	i = -1;
-	while(arg[++i])
+	// flag에 옵션 여부를 저장합니다., flag에 따라 arg의 읽기순서가 첫번째부턴지 두번째부턴지 달라집니다.
+	flag = 1;
+	if (!ft_strncmp(argv[1], "-n", 2))
+		flag = 2;
+	i = flag;
+	while(argv[i])
 	{
-		// 인자사이 공백
 		if (i != flag)
 			printf(" ");
 		// 환경변수
-		if (arg[i][0] == '$')
-			printf("%s", search_node(env, arg[i] + 1)->data);
-		else
-			printf("%s", arg[i]);
+		// if (arg[i][0] == '$')
+		// 	printf("%s", search_node(env, arg[i] + 1)->data);
+		// else
+		// 	printf("%s", arg[i]);
+		(void)env;
+		printf("%s", argv[i]);
+		i++;
 	}
 
 	// OUTPUT
-	if (ft_strncmp(argv[1], "-n", 2))
+	if (flag == 1)
 		printf("\n");
 }
 
-//번외로, bash/tcsh shell 에선 "cd -" 명령을 이용해서 직전 디렉토리로 되돌아가는 기능을 제공합니다. => OLDPWD이용
 void ft_cd(char *argv[], t_list *env)
 {
 	char dir[512];
-	t_list_node *node;
+	t_list_node *pwd;
+	t_list_node *old_pwd;
 	char *nextdir;
 
 	getcwd(dir, sizeof(dir));
+	// cd
 	if (!argv[1])
 		nextdir = search_node(env, "HOME")->data;
+	// cd -
+	else if (!strcmp(argv[1], "-"))
+		nextdir = search_node(env, "OLDPWD")->data;
+	// cd [path]
 	else
 		nextdir = argv[1];
 	if (chdir(nextdir) == -1){
-		printf("minishell: cd: hello: No such file or directory\n");
+		printf("minishell: cd: %s: No such file or directory\n", nextdir);
 		strerror(errno);
 	}
 	if (!getcwd(dir, sizeof(dir)))
 		strerror(errno);
-	node = search_node(env, "PWD");
-	free(node->data);
-	node->data = ft_strdup(getcwd(dir, sizeof(dir)));
+	pwd = search_node(env, "PWD");
+	old_pwd = search_node(env, "OLDPWD");
+
+	free(old_pwd->data);
+	old_pwd->data = pwd->data;
+	pwd->data = ft_strdup(getcwd(dir, sizeof(dir)));
 }
 
 void ft_pwd()
@@ -163,13 +172,13 @@ void ft_export(char *argv[], t_list *env)
 {
 	char **envv;
 	t_list_node *ret;
-	char **split;
 	int i;
+	int equal;
+	char *var;
+	char *data;
 
 	i = 0;
 	envv = gather(env);
-	printf("[EXPORT]\n");
-	printf("before cnt: %d\n", env->cnt);
 	// 인자값이 없다.
 	if (argv[1] == NULL)
 	{
@@ -181,23 +190,32 @@ void ft_export(char *argv[], t_list *env)
 			i++;
 		}
 	}
-	// 인자값을 환경변수로 등록
+	// 인자값을 환경변수로 등록 => [export a] x, [export a=] o,
+	// ft_substr한 것들 free해줘야함...
 	else
 	{
-		// 이미 존재한다면 무시.
-		ret = search_node(env, argv[1]);
-		if (ret)
+		equal = (int)(ft_strchr(argv[1], '=') - argv[1]);
+		if (equal <= 0)	// equal문자가 없으면 음수값이 저장된다.
 			return ;
+		// 이미 존재한다면 덮어쓰기
+		var = ft_substr(argv[1], 0, equal);
+		data = ft_substr(argv[1], equal + 1, ft_strlen(argv[1]) - equal - 1);
+		ret = search_node(env, var);
+		if (ret)
+		{
+			free(ret->data);
+			ret->data = ft_substr(argv[1], equal + 1, ft_strlen(argv[1]) - equal - 1);
+		}
+		// 새로 생성
 		else
 		{
-			split = ft_split(argv[1], '=');
-			add_node(env, env->cnt, split[0], split[1]);
-			displayDoublyList(env);
-			free(split);
+			// '='기호가 없다면 바로 종료시킨다.
+			if (ft_strchr(argv[1], '=') == NULL)
+				return ;
+			add_node(env, env->cnt, ft_substr(argv[1], 0, equal), ft_substr(argv[1], equal + 1, ft_strlen(argv[1]) - equal - 1));
 			// free[0], free[1]은 노드가 가져야 하므로 free하지 않음
 		}
 	}
-	printf("after cnt: %d\n", env->cnt);
 }
 
 // >unset PWD
@@ -207,8 +225,7 @@ void ft_unset(char *argv[], t_list *env)
 	int i;
 
 	i = 0;
-	printf("[UNSET]\n");
-	if (argv[0] == NULL)
+	if (argv[1] == NULL)
 		return ;
 
 	delete_node(env, argv[1]);

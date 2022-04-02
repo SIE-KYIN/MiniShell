@@ -13,6 +13,7 @@ int is_empty_str(char *line)
     }
     return (0);
 }
+
 int is_valid_special_character(char *line)
 {
     int i;
@@ -34,7 +35,7 @@ int is_valid_special_character(char *line)
                     return (0);
         }
         if (line[i + 1] == '"' || line[i + 1] == '\'')
-            i = str_in_quote2(line, i);
+            i = str_in_quote(line, i,0,0);
         else
             i++;
     }

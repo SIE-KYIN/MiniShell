@@ -109,20 +109,20 @@ void cut_echo_str(char **ret, char *line, int word_i)
 char **find_cmd(char *line)
 {
     char **ret;
-    int i;
+    // int i;
     int cnt;
 
-    if (is_echo(line, &i))
-    {
+    // if (is_echo(line, &i))
+    // {
         cnt = cnt_echo_str(line);
         ret = (char **)malloc(sizeof(char *) * (cnt + 1));
         ret[cnt] = 0;
         cut_echo_str(ret, line, 0);
-        free(ret[0]);
-        ret[0] = ft_strdup("echo");
-    }
-    else
-        ret = split_delete_quotes(line, ' ');
+        // free(ret[0]);
+        // ret[0] = ft_strdup("echo");
+    // }
+    // else
+        // ret = split_delete_quotes(line, ' ');
     free(line);
     return (ret);
 }
