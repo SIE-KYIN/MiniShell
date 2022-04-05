@@ -6,20 +6,47 @@
 /*   By: gshim <gshim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/24 01:46:41 by gshim             #+#    #+#             */
-/*   Updated: 2022/04/05 21:04:47 by gshim            ###   ########.fr       */
+/*   Updated: 2022/04/05 22:19:44 by gshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
+// 리다이렉션이나 파이프라면 0, 명령어 노드라면 1을 반환한다.
+// static int is_command(t_tree_node *root)
+// {
+// 	if (!ft_strcmp(root->command[0], "<") || !ft_strcmp(root->command[0], "<<"))
+// 		return (0);
+// 	else if (!ft_strcmp(root->command[0], ">") || !ft_strcmp(root->command[0], ">>"))
+// 		return (0);
+// 	else if (!ft_strcmp(root->command[0], "|"))
+// 		return (0);
+// 	else
+// 		return (1);
+// }
+
 // 리다이렉션의 자손이 heredoc이면 표준입출력을 바꾸지 않는다.
-static bool heredoc_condition(t_tree_node *root)
+static bool nesting_condition(t_tree_node *root)
 {
-	if (!ft_strcmp(root->command[0], "<<")
-		&& !ft_strcmp(root->left->command[0], "<<"))
-		return (false);
+	if (is_command(root->left))
+	{
+		if (!ft_strcmp(root->command[0], "<<"))
+			return (true);
+		else if (!ft_strcmp(root->command[0], "<"))
+			return (true);
+		else
+			return (true);
+	}
 	else
-		return (true);
+	{
+		if (!ft_strcmp(root->command[0], "<<"))
+			return (false);
+		else
+			return (true);
+	}
+
+
+
 }
 
 // dup(a, b) -> a
@@ -55,7 +82,16 @@ int redir_in(t_tree_node *root, t_tree_node *right, bool flag)
 	fd = 0;
 	// 리다이렉션 존재여부 판단
 	if(!ft_strcmp(root->command[0], "<"))
+	{
 		fd = open(right->command[0], STDIN_SIMPLE, 0644);
+		if (fd == -1)
+		{
+			perror(right->command[0]);
+			return -1;
+		}
+		// if (flag)
+		// 	dup2(fd, 0);
+	}
 	else if(!ft_strcmp(root->command[0], "<<"))
 	{
 		fd = open(".heredoc", STDOUT_SIMPLE, 0644);
@@ -67,35 +103,29 @@ int redir_in(t_tree_node *root, t_tree_node *right, bool flag)
 		heredoc(right, fd);
 		close(fd);
 		fd = open(".heredoc", O_RDONLY, 0644); // 왜 다시열어야 동작?
+		if (!ft_strcmp(root->left->command[0], "<"))
+			dup2(fd, 0);
 	}
 	else
 		return 0;
 
-	if (fd == -1)
+	// 나와 자식중 heredoc이 있다면 nesting condition
+	if ((!ft_strcmp(root->command[0], "<<") || !ft_strcmp(root->left->command[0], "<<")) && nesting_condition(root))
 	{
-		perror(right->command[0]);
-		return -1;
+		dup2(fd, 0);
 	}
-	if (ft_strcmp(root->command[0], "<<") && flag)
-		dup2(fd, 0);
-	if (!ft_strcmp(root->command[0], "<<") && heredoc_condition(root))
-		dup2(fd, 0);
+	else
+	{
+		if (flag)
+			dup2(fd, 0);
+	}
+	// if (!ft_strcmp(root->command[0], "<<") && heredoc_condition(root))
+	// 	dup2(fd, 0);
 	close(fd);
 	return 0;
 }
 
-// 리다이렉션이나 파이프라면 0, 명령어 노드라면 1을 반환한다.
-int is_command(t_tree_node *root)
-{
-	if (!ft_strcmp(root->command[0], "<") || !ft_strcmp(root->command[0], "<<"))
-		return (0);
-	else if (!ft_strcmp(root->command[0], ">") || !ft_strcmp(root->command[0], ">>"))
-		return (0);
-	else if (!ft_strcmp(root->command[0], "|"))
-		return (0);
-	else
-		return (1);
-}
+
 
 // int pipe_gshim(char **cmd)
 // {
