@@ -78,7 +78,6 @@ typedef struct s_tree
 ** *************DATASTRUCTURE***************
 ** *****************************************
 */
-int str_in_quote2(char *line, int i);
 /*
 ** LinkedList1
 */
@@ -206,6 +205,14 @@ void divide_str(char **ret, int i);
 
 /*
 ** utils5.c
+** related to ft_ms_split.c
+*/
+void divide_d_ptr(char **str, char **heredoc_str, char **ret, int heredoc_cnt);
+char **heredoc_processing(char **str);
+
+
+/*
+** utils6.c
 ** related to tokenize.c
 */
 int is_there_space(char *line);
@@ -214,8 +221,24 @@ int token_cnt(char **token);
 int is_there_delimiter(char **token);
 int get_latest_token_loc(char **token);
 
-
+/*
+** utils7.c
+** related to tokenize.c
+*/
 char			**ft_cmd_split(char *s, char c);
+int str_in_quote2(char *line, int i);
+void set_value(char **dup_str, bool *flag, int *j);
+
+/*
+** utils8.c
+** related to tokenize.c
+*/
+void delete_quotes(char **ret);
+char *str_delete(char *str, int curr, bool flag);
+void delete_slash(char **ret, int i, bool flag, char *free_tmp);
+
+
+
 
 /*
 ** *****************************************

@@ -24,6 +24,7 @@ SRCS =  src/DataStructure/linkedlist1.c src/DataStructure/linkedlist2.c \
 	src/Utilities/utils1.c src/Utilities/utils2.c \
 	src/Utilities/utils3.c src/Utilities/utils4.c \
 	src/Utilities/utils5.c src/Utilities/utils6.c \
+	src/Utilities/utils7.c src/Utilities/utils8.c\
 	src/minishell.c src/builtIn.c \
 	src/Prompt/readline.c src/Prompt/readline_utils.c \
 	src/Redirect/redirect.c src/Redirect/ft_pipe.c src/Redirect/ft_command.c \
