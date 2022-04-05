@@ -48,23 +48,68 @@ static void cut_str(char *line, char **ret)
 	}
 }
 
+char **heredoc_processing(char **str)
+{
+	int i;
+	int heredoc_cnt;
+	char **heredoc_str;
+	char **ret;
+	int cnt;
+
+	i = -1;
+	heredoc_cnt = 0;
+	while (str[++i])
+		if (str[i][0] == '<' && str[i][1] == '<')
+			heredoc_cnt += 2;
+	if (heredoc_cnt == 0)
+		return (NULL);
+	cnt = strcnt_double_ptr(str);
+	heredoc_str = (char **)malloc(sizeof(char *) * (heredoc_cnt + 1));
+	ret= (char **)malloc(sizeof(char *) * (cnt + 1));
+	heredoc_str[heredoc_cnt--] = NULL;
+	ret[cnt] = NULL;
+	i = -1;
+	cnt = 0;
+	while (str[++i])
+	{
+		if (str[i][0] == '<' && str[i][1] == '<')
+		{
+			heredoc_str[heredoc_cnt--] =  str[i + 1];
+			heredoc_str[heredoc_cnt--] = str[i++];
+		}
+		else
+			ret[cnt++] = ft_strdup(str[i]);
+	}
+	i = -1;
+	while (heredoc_str[++i])
+		ret[cnt++] = ft_strdup(heredoc_str[i]);
+	return (ret);
+}
+
 static char **repositioning(char **str)
 {
-	char **ret = NULL;
+	char **ret;
+	char **tmp;
 	int i;
 
 	i = -1;
+	tmp = NULL;
 	while (str[++i])
 	{
 		if (is_delimiter(str[i][0], str[i][1]))
 		{
 			if (i == 0 || is_delimiter(str[i - 1][0], str[i -1][1]))
 			{
-				ret = plus_space(str, i);
-				divide_str(ret, i);
+				tmp = plus_space(str, i);
+				divide_str(tmp, i);
 			}
 		}
 	}
+	if (tmp == NULL)
+		tmp = str;
+	ret = heredoc_processing(tmp);
+	if (ret == NULL)
+		return (tmp);
 	return (ret);
 }
 
