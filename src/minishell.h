@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gshim <gshim@student.42seoul.kr>           +#+  +:+       +#+        */
+/*   By: gshim <gshim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/16 17:21:43 by gshim             #+#    #+#             */
-/*   Updated: 2022/04/04 22:02:04 by gshim            ###   ########.fr       */
+/*   Updated: 2022/04/05 16:36:31 by gshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ typedef struct s_list
 
 enum e_node_flag
 {
-	DELIMITER = 0, // 구분문자(> , < , | , >> , <<)
+	DELIMITER = 0, // 구분문자(> , < , | , >> , <<
 	COMMON_BUILTIN, // echo, cd, pwd, export, unset, env, exit
 	FILE_NAME, // 리디렉션 대상
 };
@@ -53,10 +53,8 @@ enum e_node_flag
 enum e_delimiter_flag
 {
 	SINGLE_REDIR_INPUT = 0,
-	DOUBLE_REDIR_INPUT,
-	SINGLE_REDIR_OUPUT,
-	DOUBLE_REDIR_OUTPUT,
-	PIPE,
+
+	PIPE=4,
 };
 
 typedef struct s_tree_node
@@ -209,13 +207,13 @@ void divide_str(char **ret, int i);
 ** related to tokenize.c
 */
 int is_there_space(char *line);
-char **find_cmd(char *line,int flag);
+char **find_cmd(char *line);
 int token_cnt(char **token);
-int is_there_delimiter(char **token, int i);
+int is_there_delimiter(char **token);
 int get_latest_token_loc(char **token);
 int token_cnt(char **token);
 
-char			**split_delete_quotes(char const *s, char c);
+char			**ft_cmd_split(char *s, char c);
 
 /*
 ** *****************************************
@@ -224,18 +222,17 @@ char			**split_delete_quotes(char const *s, char c);
 */
 
 // ft_export.c
-void	ft_export(char *argv[], t_list *env);
+int		ft_export(char *argv[], t_list *env);
 
 // ft_echo.c
-void ft_echo(char *argv[]);
+int		ft_echo(char *argv[]);
 
 int		execute(char **arg, t_list *env);
-void	ft_cd(char *argv[], t_list *env);
-void	ft_pwd();
-void	ft_export(char *argv[], t_list *env);
-void	ft_unset(char *argv[], t_list *env);
-void	ft_env(t_list *env);
-void	ft_exit(char *argv[], t_list *env);
+int		ft_cd(char *argv[], t_list *env);
+int		ft_pwd();
+int		ft_unset(char *argv[], t_list *env);
+int		ft_env(t_list *env);
+int		ft_exit(char *argv[], t_list *env);
 int		redir_out(t_tree_node *root, t_tree_node *left, bool flag);
 int		redir_in(t_tree_node *root, t_tree_node *right, bool flag);
 void	heredoc(t_tree_node *root, t_tree_node *right, int fd);
@@ -248,4 +245,8 @@ int ft_command(t_tree_node *root, t_list *env);
 t_list_node *search_node(t_list* list, char *var);
 void delete_node(t_list* list, char *var);
 void free_node(t_list_node *node);
+
+int		get_status(int status);
+void	set_status(t_list *env, int status);
+
 #endif

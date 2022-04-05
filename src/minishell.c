@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gshim <gshim@student.42seoul.kr>           +#+  +:+       +#+        */
+/*   By: gshim <gshim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 19:23:29 by gshim             #+#    #+#             */
-/*   Updated: 2022/04/04 22:52:54 by gshim            ###   ########.fr       */
+/*   Updated: 2022/04/05 20:13:13 by gshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,14 +59,11 @@ int main(int argc, char **argv, char **envv)
 	print_intro();
 	env_list = parse_envv(envv);
 
-    // 프로세스 종료변수넣기
-    env_list->top.var = ft_strdup("?");
-    env_list->top.data = ft_strdup("0");
-
 	gather(env_list);
 	sigHandler();
 	while (1)
 	{
+
 		read_line(env_list, &line);
 
 		// 빈 입력을 받았을때
@@ -84,14 +81,18 @@ int main(int argc, char **argv, char **envv)
 
 		pre_traverse(token_tree, env_list);
 		//-----------------------------------내 역할 끝??
+		// cat << A | echo ho | exit
 		//파싱한 자료구조(이진트리 예상)에서 빌트인 처리, 리디렉션 처리
 		//리스트로 할 수 있는데 이진트리가 탐색하기 쉬움 (정확히는 재귀하향트리)
         delete_tree(token_tree);
 		//free(line); [gshim] : pointer being freed was not allocated오류가 발생한다.
 	}
 
+	free(env_list->top.var);
+    free(env_list->top.data);
 
     delete_list(env_list);
+
     ft_error(1);
     return (0);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_export.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gshim <gshim@student.42seoul.kr>           +#+  +:+       +#+        */
+/*   By: gshim <gshim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/04 16:13:59 by gshim             #+#    #+#             */
-/*   Updated: 2022/04/04 16:42:20 by gshim            ###   ########.fr       */
+/*   Updated: 2022/04/05 15:12:58 by gshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,22 +32,23 @@ static void ft_export_no_arg(t_list *env)
 	}
 }
 
-static void ft_export_arg(char *argv[], t_list *env)
+static void ft_export_arg(char *arg, t_list *env)
 {
 	t_list_node *node;
-	int equal;
+	char *equal;
 	char *var;
 	char *data;
 
-	equal = (int)(ft_strchr(argv[1], '=') - argv[1]);
-	if (equal <= 0)	// '='가 없으면 추가 로직만 존재.
+	equal = ft_strchr(arg, '=');
+	if (!equal)	// '='가 없으면 추가 로직만 존재.
 	{
-		if(!search_node(env, argv[1])) // 이미 존재하는 환경변수라면 무시하고, 없으면 추가한다.
-			add_node(env, env->cnt, ft_strdup(argv[1]), NULL);
+		if(!search_node(env, arg)) // 이미 존재하는 환경변수라면 무시하고, 없으면 추가한다.
+			add_node(env, env->cnt, ft_strdup(arg), NULL);
 		return ;
 	}
-	var = ft_substr(argv[1], 0, equal);
-	data = ft_substr(argv[1], equal + 1, ft_strlen(argv[1]) - equal - 1);
+	*equal = '\0';	//abc=def => abc(NULL)def
+	var = ft_strdup(arg);
+	data = ft_strdup(equal + 1);
 	node = search_node(env, var);
 	// 이미 존재한다면 덮어쓰기
 	if (node)
@@ -61,10 +62,15 @@ static void ft_export_arg(char *argv[], t_list *env)
 		add_node(env, env->cnt, var, data);
 }
 
-void ft_export(char *argv[], t_list *env)
+int	ft_export(char *argv[], t_list *env)
 {
+	int i;
+
+	i = 0;
 	if (argv[1] == NULL)
 		ft_export_no_arg(env);
 	else
-		ft_export_arg(argv, env);
+		while(argv[++i])
+			ft_export_arg(argv[i], env);
+	return (0);
 }

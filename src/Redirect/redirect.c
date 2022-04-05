@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirect.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gshim <gshim@student.42seoul.kr>           +#+  +:+       +#+        */
+/*   By: gshim <gshim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/24 01:46:41 by gshim             #+#    #+#             */
-/*   Updated: 2022/04/04 21:32:20 by gshim            ###   ########.fr       */
+/*   Updated: 2022/04/05 19:25:10 by gshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,7 @@ int redir_in(t_tree_node *root, t_tree_node *right, bool flag)
 		// 왜 다른모드로 다시 열어야 동작하는거지?
 		close(fd);
 		fd = open(".heredoc", O_RDONLY, 0644);
+		close(fd);
 	}
 	else
 		return 0;
@@ -77,8 +78,8 @@ int redir_in(t_tree_node *root, t_tree_node *right, bool flag)
 		perror(right->command[0]);
 		return -1;
 	}
-	if(flag)
-		dup2(fd, 0);    // 표준출력의 방향은 1 -> fd
+	if(!ft_strcmp(root->command[0], "<<") || flag)
+		dup2(fd, 0);
 	close(fd);
 	return 0;
 }

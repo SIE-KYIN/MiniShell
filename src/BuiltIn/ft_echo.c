@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_echo.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gshim <gshim@student.42seoul.kr>           +#+  +:+       +#+        */
+/*   By: gshim <gshim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/04 16:35:26 by gshim             #+#    #+#             */
-/*   Updated: 2022/04/04 16:37:04 by gshim            ###   ########.fr       */
+/*   Updated: 2022/04/05 15:26:29 by gshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ static bool check_option(char *str, char *option)
 }
 
 // -n
-void ft_echo(char *argv[])
+int	ft_echo(char *argv[])
 {
 	int i;
 	int flag;
@@ -55,4 +55,5 @@ void ft_echo(char *argv[])
 	// OUTPUT
 	if (flag == 1)
 		printf("\n");
+	return (0);
 }

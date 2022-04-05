@@ -5,3 +5,16 @@
 - 불필요한 파일을 모두 지웠는지? (.vscode)
 
 -
+
+
+# 기능검사
+
+ls > a.txt > b.txt
+ls > a.txt >> b.txt
+ls >> a.txt > b.txt
+ls >> a.txt >> b.txt
+
+cat < a.txt < b.txt
+cat < a.txt << b.txt
+cat << a.txt < b.txt
+cat << a.txt << b.txt

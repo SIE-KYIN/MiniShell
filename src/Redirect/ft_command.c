@@ -6,11 +6,23 @@
 /*   By: gshim <gshim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/28 01:59:28 by gshim             #+#    #+#             */
-/*   Updated: 2022/04/02 18:13:24 by gshim            ###   ########.fr       */
+/*   Updated: 2022/04/05 16:51:34 by gshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+
+static void command_sig_int(int sig)
+{
+	(void)sig;
+	printf("\n");
+}
+
+static void command_sigHandler()
+{
+    signal(SIGINT, command_sig_int);
+    signal(SIGQUIT, SIG_IGN);
+}
 
 int ft_command(t_tree_node *root, t_list *env)
 {
@@ -18,6 +30,7 @@ int ft_command(t_tree_node *root, t_list *env)
 	int status;
 	int ret;
 
+	command_sigHandler();
 	//check_builtIn : 빌트인명령이라면 부모프로세스에서 수행됩니다.
 	if (execute_builtin(root->command, env) == 0)
 		return (0);
@@ -25,29 +38,18 @@ int ft_command(t_tree_node *root, t_list *env)
 	//자식프로세스 생성
 	if ((pid = fork()) == -1) printf("FORK ERROR\n");
 	else if (pid == 0)
-	{
-		// child's process
+	{	// child's process
 		ret = execute(root->command, env);
-		printf("errno: %d\n", errno);
-		env->top.data = ft_itoa(errno);
-		exit(ret);
+		strerror(errno);
+		exit(errno);
 	}
 	else
-	{
-		// parent's process
-		pid = wait(&status);	// status는 8진수 WIFEXITED(statloc), WTERMSIG(statloc)
-
-		// 종료상태를 출력한다.(나중에 함수화할 것)
-
-		if (WIFEXITED(status))
-		{ /* 정상 종료 */
-			printf("1|%d|\n", WEXITSTATUS(status));
-		}
-		else
-		{ /* 비정상 종료 */
-			printf("2|%d|\n", WTERMSIG(status));
-		}
-
+	{	// parent's process
+		pid = wait(&status);
+		set_status(env, status);
 	}
+
+	sigHandler();
 	return (0);
 }
+

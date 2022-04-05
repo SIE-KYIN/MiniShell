@@ -6,6 +6,8 @@
 		"string_view": "c",
 		"vector": "c",
 		"iterator": "c",
-		"__node_handle": "c"
+		"__node_handle": "c",
+		"algorithm": "c",
+		"complex": "c"
 	}
 }

@@ -48,12 +48,12 @@ void		_pre_traverse(t_tree_node *root, t_list *env, char parent)
 	backup_std[0] = dup(0);
 	backup_std[1] = dup(1);
 
-	// pipe
-	if (ft_strncmp(root->command[0], "|", 1) == 0)
+	// pipe(4)
+	if (ft_strcmp(root->command[0], "|") == 0)
 	{
 		ft_pipe(root, env);
 	}
-	// redirect
+	// redirect(0,1,2,3)
 	else if(root->flag == 0)
 	{
 		flag = false;
@@ -68,7 +68,7 @@ void		_pre_traverse(t_tree_node *root, t_list *env, char parent)
 		if (!ft_strcmp(root->command[0], "<<"))
 			unlink(".heredoc");
 	}
-	// command
+	// command(그외)
 	else if(root->flag == 1)
 	{
 		ft_command(root, env);

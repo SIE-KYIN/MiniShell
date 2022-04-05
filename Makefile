@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: gshim <gshim@student.42seoul.kr>           +#+  +:+       +#+         #
+#    By: gshim <gshim@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/02/22 17:48:50 by gshim             #+#    #+#              #
-#    Updated: 2022/04/04 16:43:51 by gshim            ###   ########.fr        #
+#    Updated: 2022/04/05 20:09:58 by gshim            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,8 +28,8 @@ SRCS =  src/DataStructure/linkedlist1.c src/DataStructure/linkedlist2.c \
 	src/Prompt/readline.c src/Prompt/readline_utils.c \
 	src/Redirect/redirect.c src/Redirect/ft_pipe.c src/Redirect/ft_command.c \
 	src/Redirect/heredoc.c \
-	src/BuiltIn/builtIn.c src/BuiltIn/ft_export.c src/BuiltIn/ft_echo.c
-
+	src/BuiltIn/builtIn.c src/BuiltIn/ft_export.c src/BuiltIn/ft_echo.c \
+	src/BuiltIn/status.c src/BuiltIn/ft_cd.c
 OBJS = $(SRCS:.c=.o)
 
 #======================= 외부라이브러리 모음 ==========================
@@ -57,7 +57,7 @@ idx		= 0
 $(NAME) : $(OBJS)
 	$(MAKE) -C $(LIB_DIR) all
 	$(CC) $(CFLAGS) -L$(LIB_DIR) -l$(LIB_NAME) \
-	-lreadline $(RL_MYMAC_L) $^ -o $@
+	-lreadline $(RL_CLUSTER_L) $^ -o $@
 #libft list 중복이라 bonus로 컴파일 안함
 #my mac #-L/opt/homebrew/opt/readline/lib -I/opt/homebrew/opt/readline/include
 #cluster#-lreadline -L/Users/gshim/.brew/opt/readline/lib -I/Users/gshim/.brew/opt/readline/include $^ -o $@
@@ -72,7 +72,7 @@ $(SRCS_DIR)/%.o : $(SRCS_DIR)/%.c
 		echo -n "☕️ ☕️ MINISHELL Loading ...\n";\
 	fi
 	@printf "\b$(chr)"
-	@$(CC) $(CFLAGS) -I$(LIB_DIR) $(RL_MYMAC_I) -c $< -o $@
+	@$(CC) $(CFLAGS) -I$(LIB_DIR) $(RL_CLUSTER_I) -c $< -o $@
 
 all : $(NAME)
 
