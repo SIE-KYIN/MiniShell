@@ -83,6 +83,7 @@ char **heredoc_processing(char **str)
 	i = -1;
 	while (heredoc_str[++i])
 		ret[cnt++] = ft_strdup(heredoc_str[i]);
+	free(heredoc_str);
 	return (ret);
 }
 
