@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gshim <gshim@student.42.fr>                +#+  +:+       +#+        */
+/*   By: gshim <gshim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/03 11:56:10 by gshim             #+#    #+#             */
-/*   Updated: 2022/03/26 21:36:58 by gshim            ###   ########.fr       */
+/*   Updated: 2022/04/04 21:28:11 by gshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ void				ft_putnbr_fd(int n, int fd);
 
 // gshim's private function
 char	*ft_strjoin_3(char const *s1, char const *s2, char const *s3);
-
+int		ft_strcmp(const char *s1, const char *s2);
 
 
 // typedef struct s_list

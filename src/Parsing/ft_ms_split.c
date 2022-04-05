@@ -1,5 +1,6 @@
 #include "../minishell.h"
 
+//
 static int cnt_word(char *line, int flag)
 {
 	int i;
@@ -109,10 +110,10 @@ char **ft_ms_split(char *line, t_list *env_list)
 	ret[cnt] = NULL;
 	key_to_value(env_list, &line, 0);
 	if (cnt == 1)
-		ret[0] = ft_strdup(line);
+		ret[0] = ft_strdup(line); // ">ls "를 입력하면..?
 	else
 		cut_str(line, ret);
-	tmp = repositioning(ret);
+	tmp = repositioning(ret);//????
 	free(line);
 	if (!tmp)
 		return (ret);

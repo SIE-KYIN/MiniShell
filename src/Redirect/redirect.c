@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirect.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gshim <gshim@student.42.fr>                +#+  +:+       +#+        */
+/*   By: gshim <gshim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/24 01:46:41 by gshim             #+#    #+#             */
-/*   Updated: 2022/04/02 18:39:18 by gshim            ###   ########.fr       */
+/*   Updated: 2022/04/04 21:32:20 by gshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,9 +24,9 @@ int redir_out(t_tree_node *root, t_tree_node *right, bool flag)
 	int fd;
 
 	// 리다이렉션 존재여부 판단
-	if(!strcmp(root->command[0], ">"))
+	if(!ft_strcmp(root->command[0], ">"))
 		fd = open(right->command[0], STDOUT_SIMPLE, 0644);
-	else if(!strcmp(root->command[0], ">>"))
+	else if(!ft_strcmp(root->command[0], ">>"))
 		fd = open(right->command[0], STDOUT_DOUBLE, 0644);
 	else
 		return 0;
@@ -49,9 +49,9 @@ int redir_in(t_tree_node *root, t_tree_node *right, bool flag)
 
 	fd = 0;
 	// 리다이렉션 존재여부 판단
-	if(!strcmp(root->command[0], "<"))
+	if(!ft_strcmp(root->command[0], "<"))
 		fd = open(right->command[0], STDIN_SIMPLE, 0644);
-	else if(!strcmp(root->command[0], "<<"))
+	else if(!ft_strcmp(root->command[0], "<<"))
 	{
 		//heredoc의 중첩처리
 		// if (!flag) // heredoc이 연속되었다면
@@ -86,11 +86,11 @@ int redir_in(t_tree_node *root, t_tree_node *right, bool flag)
 // 리다이렉션이나 파이프라면 0, 명령어 노드라면 1을 반환한다.
 int is_command(t_tree_node *root)
 {
-	if (!strcmp(root->command[0], "<") || !strcmp(root->command[0], "<<"))
+	if (!ft_strcmp(root->command[0], "<") || !ft_strcmp(root->command[0], "<<"))
 		return (0);
-	else if (!strcmp(root->command[0], ">") || !strcmp(root->command[0], ">>"))
+	else if (!ft_strcmp(root->command[0], ">") || !ft_strcmp(root->command[0], ">>"))
 		return (0);
-	else if (!strcmp(root->command[0], "|"))
+	else if (!ft_strcmp(root->command[0], "|"))
 		return (0);
 	else
 		return (1);

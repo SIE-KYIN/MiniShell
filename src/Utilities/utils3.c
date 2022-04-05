@@ -1,5 +1,13 @@
 #include "../minishell.h"
 
+/*
+> 1
+>> 2
+< 1
+<< 2
+| 1
+그외 0
+*/
 int is_delimiter(char c, char next)
 {
     if (c == '>')

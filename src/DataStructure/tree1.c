@@ -65,7 +65,7 @@ void		_pre_traverse(t_tree_node *root, t_list *env, char parent)
 			_pre_traverse(root->left, env, root->command[0][0]);
 
 		// heredoc사용했다면 리다이렉션후 삭제.
-		if (!strcmp(root->command[0], "<<"))
+		if (!ft_strcmp(root->command[0], "<<"))
 			unlink(".heredoc");
 	}
 	// command

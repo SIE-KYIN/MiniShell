@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gshim <gshim@student.42.fr>                +#+  +:+       +#+        */
+/*   By: gshim <gshim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/30 18:12:47 by gshim             #+#    #+#             */
-/*   Updated: 2022/04/01 13:09:58 by gshim            ###   ########.fr       */
+/*   Updated: 2022/04/04 21:32:31 by gshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	heredoc(t_tree_node *root, t_tree_node *right, int fd)
 		// readline으로 한줄씩 계속해서 입력받는다.
 		line = readline("heredoc> ");
 		// 한줄이 right->command[0]와 일치하면 루프를 빠져나온다. [break]
-		if (!strcmp(line, right->command[0]))
+		if (!ft_strcmp(line, right->command[0]))
 			break;
 		write(fd, line, ft_strlen(line));
 		write(fd, "\n", 1);

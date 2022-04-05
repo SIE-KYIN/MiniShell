@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gshim <gshim@student.42.fr>                +#+  +:+       +#+        */
+/*   By: gshim <gshim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/16 17:21:43 by gshim             #+#    #+#             */
-/*   Updated: 2022/04/02 20:37:01 by gshim            ###   ########.fr       */
+/*   Updated: 2022/04/04 22:02:04 by gshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -223,13 +223,19 @@ char			**split_delete_quotes(char const *s, char c);
 ** *****************************************
 */
 
+// ft_export.c
+void	ft_export(char *argv[], t_list *env);
+
+// ft_echo.c
+void ft_echo(char *argv[]);
+
 int		execute(char **arg, t_list *env);
-void	ft_echo(char *argv[], t_list *env);
 void	ft_cd(char *argv[], t_list *env);
 void	ft_pwd();
 void	ft_export(char *argv[], t_list *env);
 void	ft_unset(char *argv[], t_list *env);
 void	ft_env(t_list *env);
+void	ft_exit(char *argv[], t_list *env);
 int		redir_out(t_tree_node *root, t_tree_node *left, bool flag);
 int		redir_in(t_tree_node *root, t_tree_node *right, bool flag);
 void	heredoc(t_tree_node *root, t_tree_node *right, int fd);
@@ -238,7 +244,8 @@ int		execute_builtin(char **arg, t_list *env);
 char **gather(t_list *list);
 int ft_pipe(t_tree_node *root, t_list *env);
 int ft_command(t_tree_node *root, t_list *env);
+
 t_list_node *search_node(t_list* list, char *var);
 void delete_node(t_list* list, char *var);
-bool check_option(char *str, char *option);
+void free_node(t_list_node *node);
 #endif

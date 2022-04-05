@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gshim <gshim@student.42.fr>                +#+  +:+       +#+        */
+/*   By: gshim <gshim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 19:23:29 by gshim             #+#    #+#             */
-/*   Updated: 2022/03/29 21:56:28 by gshim            ###   ########.fr       */
+/*   Updated: 2022/04/04 22:52:54 by gshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,11 @@ int main(int argc, char **argv, char **envv)
 	// 디버그를 위해 부모프로세스에서 쉘을 동작시키는 코드
 	print_intro();
 	env_list = parse_envv(envv);
+
+    // 프로세스 종료변수넣기
+    env_list->top.var = ft_strdup("?");
+    env_list->top.data = ft_strdup("0");
+
 	gather(env_list);
 	sigHandler();
 	while (1)
@@ -73,7 +78,9 @@ int main(int argc, char **argv, char **envv)
 		if (!check_syntax(line))
             continue;
 		//line에 들어있는 문자열 파싱하는 함수
-		token_tree = tokenize(line, env_list);
+
+        //token_tree = tokenize(line, env_list);
+        token_tree = tokenize(line, env_list);
 
 		pre_traverse(token_tree, env_list);
 		//-----------------------------------내 역할 끝??
@@ -88,6 +95,7 @@ int main(int argc, char **argv, char **envv)
     ft_error(1);
     return (0);
 }
+
 
 
 // 컴파일 방법 : gcc Parsing/* DataStructure/* Prompt/* Utilities/* minishell.c -lreadline -L/Users/kyujlee/.brew/opt/readline/lib -I/Users/kyujlee/.brew/opt/readline/include
