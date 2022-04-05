@@ -6,16 +6,21 @@
 /*   By: gshim <gshim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/24 01:46:41 by gshim             #+#    #+#             */
-/*   Updated: 2022/04/05 19:25:10 by gshim            ###   ########.fr       */
+/*   Updated: 2022/04/05 21:04:47 by gshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-#define STDOUT_SIMPLE O_RDWR|O_CREAT|O_TRUNC
-#define STDOUT_DOUBLE O_RDWR|O_CREAT|O_APPEND
-#define STDIN_SIMPLE O_RDONLY
-#define HEREDOC O_RDWR|O_CREAT
+// 리다이렉션의 자손이 heredoc이면 표준입출력을 바꾸지 않는다.
+static bool heredoc_condition(t_tree_node *root)
+{
+	if (!ft_strcmp(root->command[0], "<<")
+		&& !ft_strcmp(root->left->command[0], "<<"))
+		return (false);
+	else
+		return (true);
+}
 
 // dup(a, b) -> a
 // flag가 true면 연속된 리다이렉션 동작을 의미함 => 파일을 열되, 리디렉션 ㄴㄴ
@@ -33,8 +38,8 @@ int redir_out(t_tree_node *root, t_tree_node *right, bool flag)
 
 	if (fd == -1)
 	{
-		perror(right->command[0]);
-		return -1;
+		strerror(errno);
+		return (-1);
 	}
 	if(flag)
 		dup2(fd, 1);    // 표준출력의 방향은 1 -> fd
@@ -53,22 +58,15 @@ int redir_in(t_tree_node *root, t_tree_node *right, bool flag)
 		fd = open(right->command[0], STDIN_SIMPLE, 0644);
 	else if(!ft_strcmp(root->command[0], "<<"))
 	{
-		//heredoc의 중첩처리
-		// if (!flag) // heredoc이 연속되었다면
-		// {
-		// 	unlink(".heredoc");
-		// }
-
 		fd = open(".heredoc", STDOUT_SIMPLE, 0644);
-		if (fd == -1){
-			printf("open fail\n");
+		if (fd == -1)
+		{
+			strerror(errno);
+			return (-1);
 		}
-		heredoc(root, right, fd);
-
-		// 왜 다른모드로 다시 열어야 동작하는거지?
+		heredoc(right, fd);
 		close(fd);
-		fd = open(".heredoc", O_RDONLY, 0644);
-		close(fd);
+		fd = open(".heredoc", O_RDONLY, 0644); // 왜 다시열어야 동작?
 	}
 	else
 		return 0;
@@ -78,7 +76,9 @@ int redir_in(t_tree_node *root, t_tree_node *right, bool flag)
 		perror(right->command[0]);
 		return -1;
 	}
-	if(!ft_strcmp(root->command[0], "<<") || flag)
+	if (ft_strcmp(root->command[0], "<<") && flag)
+		dup2(fd, 0);
+	if (!ft_strcmp(root->command[0], "<<") && heredoc_condition(root))
 		dup2(fd, 0);
 	close(fd);
 	return 0;

@@ -6,7 +6,7 @@
 /*   By: gshim <gshim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/16 17:21:43 by gshim             #+#    #+#             */
-/*   Updated: 2022/04/05 16:36:31 by gshim            ###   ########.fr       */
+/*   Updated: 2022/04/05 20:59:05 by gshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -221,6 +221,10 @@ char			**ft_cmd_split(char *s, char c);
 ** *****************************************
 */
 
+#define STDOUT_SIMPLE O_RDWR|O_CREAT|O_TRUNC
+#define STDOUT_DOUBLE O_RDWR|O_CREAT|O_APPEND
+#define STDIN_SIMPLE O_RDONLY
+
 // ft_export.c
 int		ft_export(char *argv[], t_list *env);
 
@@ -235,16 +239,16 @@ int		ft_env(t_list *env);
 int		ft_exit(char *argv[], t_list *env);
 int		redir_out(t_tree_node *root, t_tree_node *left, bool flag);
 int		redir_in(t_tree_node *root, t_tree_node *right, bool flag);
-void	heredoc(t_tree_node *root, t_tree_node *right, int fd);
+void	heredoc(t_tree_node *right, int fd);
 int		execute_builtin(char **arg, t_list *env);
 //void exit(char **env);
-char **gather(t_list *list);
-int ft_pipe(t_tree_node *root, t_list *env);
-int ft_command(t_tree_node *root, t_list *env);
+char	**gather(t_list *list);
+int		ft_pipe(t_tree_node *root, t_list *env);
+int		ft_command(t_tree_node *root, t_list *env);
 
-t_list_node *search_node(t_list* list, char *var);
-void delete_node(t_list* list, char *var);
-void free_node(t_list_node *node);
+t_list_node	*search_node(t_list* list, char *var);
+void		delete_node(t_list* list, char *var);
+void		free_node(t_list_node *node);
 
 int		get_status(int status);
 void	set_status(t_list *env, int status);

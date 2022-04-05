@@ -423,3 +423,10 @@ ctrl + c, d, \ : bash에서와 같이 작동
 # 테스트
 
 heredoc연속 -> ㄴㄴ ㄴ
+
+연속되는 히얼독 리다이렉션에서,
+자기가 히얼독, 자손도 히얼독이면 dup처리를 하지 않아야 한다.
+cat >> a >> b => a입력, b입력후 >>b만 dup
+cat >> a > b => a입력후 b만 dup
+cat > a >> b => b입력후 b만 dup
+cat > a > b => b만 dup

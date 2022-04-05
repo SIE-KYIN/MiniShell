@@ -6,7 +6,7 @@
 /*   By: gshim <gshim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/30 18:12:47 by gshim             #+#    #+#             */
-/*   Updated: 2022/04/05 19:06:18 by gshim            ###   ########.fr       */
+/*   Updated: 2022/04/05 20:56:40 by gshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,21 +32,14 @@ static void heredoc_sigHandler()
     signal(SIGQUIT, SIG_IGN);
 }
 
-void	heredoc(t_tree_node *root, t_tree_node *right, int fd)
+void	heredoc(t_tree_node *right, int fd)
 {
 	char *line;
 
-	(void)root;
-	// heredoc의 핸들러로 교체한다.
-	// if(1 == 0)
-	// 	heredoc_sigHandler();
 	heredoc_sigHandler();
-	// 무한반복
 	while(1)
 	{
-		// readline으로 한줄씩 계속해서 입력받는다.
 		line = readline("heredoc> ");
-		// 한줄이 right->command[0]와 일치하면 루프를 빠져나온다. [break]
 		if (line == NULL || !ft_strcmp(line, right->command[0]))
 			break;
 		write(fd, line, ft_strlen(line));
