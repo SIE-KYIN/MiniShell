@@ -215,7 +215,7 @@ int is_there_delimiter(char **token);
 int get_latest_token_loc(char **token);
 
 
-char			**split_delete_quotes(char const *s, char c);
+char			**ft_cmd_split(char *s, char c);
 
 /*
 ** *****************************************

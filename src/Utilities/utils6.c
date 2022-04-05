@@ -1,6 +1,6 @@
 #include "../minishell.h"
 
-static size_t	cnt_word(char const *s, char c)
+static size_t	cnt_word(char *s, char c)
 {
 	size_t	i;
 	size_t	cnt;
@@ -9,42 +9,52 @@ static size_t	cnt_word(char const *s, char c)
 	cnt = 0;
 	while (*(s + i))
 	{
-		if (*(s + i) == c || *(s + i) == '\'' || *(s + i) == '"')
+		if (*(s + i) == c)
 			i++;
 		else
 		{
-			cnt++;
-			while (*(s + i) != c && *(s + i))
-				i++;
+			if (*(s + i) == '"' || *(s + i) == '\'')
+			{
+				if (i == 0 || *(s + i - 1) == ' ')
+					cnt++;
+				i = str_in_quote2(s, i) + 1;
+				continue;
+			}
+			else
+			{
+				if (i == 0 || *(s + i - 1) == ' ')
+					cnt++;;
+				while (*(s + i) != c && *(s + i) && *(s + i) != '"' && *(s + i) != '\'')
+					i++;
+			}
 		}
 	}
 	return (cnt);
 }
 
-static int		cut_str(char const *s, char c, char **ret, size_t word)
+
+static int		cut_str(char *s, char c, char **ret, size_t word)
 {
 	size_t	idx1;
 	size_t	idx2;
-    int tmp;
 
 	idx1 = 0;
 	while (*(s + idx1))
 	{
-		if (*(s + idx1) == c || *(s + idx1) == '"' || *(s + idx1) == '\'')
+		if (*(s + idx1) == c)
 			idx1++;
 		else
 		{
 			idx2 = 0;
-            tmp = 0;
 			while (*(s + idx1 + idx2) != c && *(s + idx1 + idx2))
-            {
-                if (*(s + idx1 + idx2) == '"' || *(s + idx1 + idx2) == '\'')
-                    tmp++;
+			{
+				if (*(s + idx1 + idx2) == '"' || *(s + idx1 + idx2) == '\'')
+					idx2 = str_in_quote2(s, idx1 + idx2) - idx1;
 				idx2++;
-            }
-			*(ret + word) = (char *)malloc(idx2 - tmp + 1);
-			ft_memcpy(*(ret + word), s + idx1, idx2 - tmp);
-			*(*(ret + word) + idx2 - tmp) = 0;
+			}
+			*(ret + word) = (char *)malloc(idx2 + 1);
+			ft_memcpy(*(ret + word), s + idx1, idx2);
+			*(*(ret + word) + idx2) = 0;
 			idx1 += idx2;
 			word++;
 		}
@@ -52,7 +62,7 @@ static int		cut_str(char const *s, char c, char **ret, size_t word)
 	return (1);
 }
 
-char			**split_delete_quotes(char const *s, char c)
+char			**ft_cmd_split(char *s, char c)
 {
 	size_t	cnt;
 	char	**ret;

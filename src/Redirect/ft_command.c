@@ -39,14 +39,14 @@ int ft_command(t_tree_node *root, t_list *env)
 
 		// 종료상태를 출력한다.(나중에 함수화할 것)
 
-		if (WIFEXITED(status))
-		{ /* 정상 종료 */
-			printf("1|%d|\n", WEXITSTATUS(status));
-		}
-		else
-		{ /* 비정상 종료 */
-			printf("2|%d|\n", WTERMSIG(status));
-		}
+		// if (WIFEXITED(status))
+		// { /* 정상 종료 */
+		// 	printf("1|%d|\n", WEXITSTATUS(status));
+		// }
+		// else
+		// { /* 비정상 종료 */
+		// 	printf("2|%d|\n", WTERMSIG(status));
+		// }
 
 	}
 	return (0);
