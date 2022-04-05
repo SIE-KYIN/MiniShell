@@ -133,7 +133,7 @@ char **ft_ms_split(char *line, t_list *env_list);
 ** parse_envv.c
 ** +1
 */
-t_list *parse_envv(char **envv);
+t_list *parse_envv(char **envv,int tmp);
 
 
 /*
@@ -159,7 +159,7 @@ int read_line(t_list *env_list, char **line);
 ** readline_utils.c
 */
 void sig_int(int sig);
-void sigHandler();
+void sighandler();
 void	set_signal();
 void	disable_signal();
 char *ft_colorstr(char *str);
@@ -233,7 +233,7 @@ void set_value(char **dup_str, bool *flag, int *j);
 ** utils8.c
 ** related to tokenize.c
 */
-void delete_quotes(char **ret);
+void delete_quotes(char **ret, char	*free_tmp);
 char *str_delete(char *str, int curr, bool flag);
 void delete_slash(char **ret, int i, bool flag, char *free_tmp);
 

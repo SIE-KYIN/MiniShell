@@ -1,23 +1,35 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_ms_split.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kyujlee <kyujlee@student.42seoul.kr>       +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/04/05 22:30:46 by kyujlee           #+#    #+#             */
+/*   Updated: 2022/04/05 22:33:53 by kyujlee          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../minishell.h"
 
-static int cnt_word(char *line, int flag)
+static int	cnt_word(char *line, int flag)
 {
-	int i;
-	int cnt;
-	int tmp;
+	int	i;
+	int	cnt;
+	int	tmp;
 
 	cnt = 0;
 	i = -1;
 	while (line[++i])
 	{
-		tmp = is_delimiter(line[i],  line[i + 1]);
+		tmp = is_delimiter(line[i], line[i + 1]);
 		if (tmp)
 		{
 			cnt++;
 			if (tmp == 2)
 				i++;
 			flag = 0;
-			continue;
+			continue ;
 		}
 		else if (flag == 0 && tmp == 0)
 		{
@@ -28,19 +40,20 @@ static int cnt_word(char *line, int flag)
 	return (cnt);
 }
 
-static void cut_str(char *line, char **ret)
+static void	cut_str(char *line, char **ret)
 {
-	int i;
-	int word;
-	int tmp;
+	int	i;
+	int	word;
+	int	tmp;
 
 	word = 0;
 	i = 0;
 	while (line[i])
 	{
-		tmp = is_delimiter(line[i],  line[i + 1]);
+		tmp = is_delimiter(line[i], line[i + 1]);
 		if (!tmp)
-			while (line[i + tmp] && !is_delimiter(line[i + tmp],  line[i + tmp + 1]))
+			while (line[i + tmp] && !is_delimiter(line[i + tmp],
+					line[i + tmp + 1]))
 				tmp++;
 		ret[word] = ft_strndup(line, i, i + tmp - 1);
 		i += tmp;
@@ -48,10 +61,10 @@ static void cut_str(char *line, char **ret)
 	}
 }
 
-static char **repositioning(char **str, char **tmp, int flag, int i)
+static char	**repositioning(char **str, char **tmp, int flag, int i)
 {
-	char **ret;
-	
+	char	**ret;
+
 	while (str[++i])
 	{
 		if (is_delimiter(str[i][0], str[i][1]))
@@ -76,10 +89,10 @@ static char **repositioning(char **str, char **tmp, int flag, int i)
 	return (ret);
 }
 
-static void key_to_value(t_list *env_list, char **line, int flag)
+static void	key_to_value(t_list *env_list, char **line, int flag)
 {
-	int i;
-	int tmp;
+	int	i;
+	int	tmp;
 
 	i = 0;
 	while ((*line)[++i])
@@ -87,28 +100,29 @@ static void key_to_value(t_list *env_list, char **line, int flag)
 		if ((*line)[i] == '\'')
 		{
 			i = str_in_quote2((*line), i);
-			continue;
+			continue ;
 		}
 		if ((*line)[i] == '$')
 		{
 			tmp = i;
-			while((*line)[++i])
-				if ((*line)[i] == ' ' || (*line)[i] == '"' || (*line)[i] == '\\')
-					break;
+			while ((*line)[++i])
+				if ((*line)[i] == ' ' || (*line)[i] == '"'
+					|| (*line)[i] == '\\')
+					break ;
 			if (i == (int)ft_strlen(*line))
 				flag = 1;
 			change_str(env_list, line, tmp, i);
 		}
 		if (flag == 1)
-			break;
+			break ;
 	}
 }
 
-char **ft_ms_split(char *line, t_list *env_list)
+char	**ft_ms_split(char *line, t_list *env_list)
 {
-	char **ret;
-	int cnt;
-	char **tmp;
+	char	**ret;
+	int		cnt;
+	char	**tmp;
 
 	tmp = NULL;
 	cnt = cnt_word(line, 0);

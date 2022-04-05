@@ -57,9 +57,9 @@ int main(int argc, char **argv, char **envv)
 
 	// 디버그를 위해 부모프로세스에서 쉘을 동작시키는 코드
 	print_intro();
-	env_list = parse_envv(envv);
+	env_list = parse_envv(envv, 0);
 	gather(env_list);
-	sigHandler();
+	sighandler();
 	while (1)
 	{
 		read_line(env_list, &line);

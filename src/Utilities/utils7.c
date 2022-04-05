@@ -1,12 +1,19 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils7.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kyujlee <kyujlee@student.42seoul.kr>       +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/04/05 22:56:38 by kyujlee           #+#    #+#             */
+/*   Updated: 2022/04/05 23:01:27 by kyujlee          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../minishell.h"
 
-static size_t	cnt_word(char *s, char c)
+static size_t	cnt_word(char *s, char c, size_t i, size_t cnt)
 {
-	size_t	i;
-	size_t	cnt;
-
-	i = 0;
-	cnt = 0;
 	while (*(s + i))
 	{
 		if (*(s + i) == c)
@@ -18,13 +25,14 @@ static size_t	cnt_word(char *s, char c)
 				if (i == 0 || *(s + i - 1) == ' ')
 					cnt++;
 				i = str_in_quote2(s, i) + 1;
-				continue;
+				continue ;
 			}
 			else
 			{
 				if (i == 0 || *(s + i - 1) == ' ')
-					cnt++;;
-				while (*(s + i) != c && *(s + i) && *(s + i) != '"' && *(s + i) != '\'')
+					cnt++;
+				while (*(s + i) != c && *(s + i) && *(s + i) != '"'
+					&& *(s + i) != '\'')
 					i++;
 			}
 		}
@@ -32,8 +40,7 @@ static size_t	cnt_word(char *s, char c)
 	return (cnt);
 }
 
-
-static int		cut_str(char *s, char c, char **ret, size_t word)
+static int	cut_str(char *s, char c, char **ret, size_t word)
 {
 	size_t	idx1;
 	size_t	idx2;
@@ -62,14 +69,14 @@ static int		cut_str(char *s, char c, char **ret, size_t word)
 	return (1);
 }
 
-char			**ft_cmd_split(char *s, char c)
+char	**ft_cmd_split(char *s, char c)
 {
 	size_t	cnt;
 	char	**ret;
 
 	if (!s)
 		return ((void *)0);
-	cnt = cnt_word(s, c);
+	cnt = cnt_word(s, c, 0, 0);
 	ret = (char **)malloc(sizeof(char *) * (cnt + 1));
 	*(ret + cnt) = 0;
 	if (!cut_str(s, c, ret, 0))
@@ -77,23 +84,22 @@ char			**ft_cmd_split(char *s, char c)
 	return (ret);
 }
 
-
-int str_in_quote2(char *line, int i)
+int	str_in_quote2(char *line, int i)
 {
-    char curr_quote;
-    
-    curr_quote = line[i];
-    while(line[++i])
-    {
-        if (line[i - 1] != '\\' && curr_quote == line[i])
-            break;
-    }
-    return (i);
+	char	curr_quote;
+
+	curr_quote = line[i];
+	while (line[++i])
+	{
+		if (line[i - 1] != '\\' && curr_quote == line[i])
+			break ;
+	}
+	return (i);
 }
 
-void set_value(char **dup_str, bool *flag, int *j)
+void	set_value(char **dup_str, bool *flag, int *j)
 {
-    *dup_str = ft_emptystr();
-    *flag = false;
-    *j = -1;
+	*dup_str = ft_emptystr();
+	*flag = false;
+	*j = -1;
 }
