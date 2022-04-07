@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gshim <gshim@student.42.fr>                +#+  +:+       +#+        */
+/*   By: gshim <gshim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 19:23:29 by gshim             #+#    #+#             */
-/*   Updated: 2022/04/05 20:13:13 by gshim            ###   ########.fr       */
+/*   Updated: 2022/04/06 21:06:46 by gshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,9 @@ int main(int argc, char **argv, char **envv)
 
 	gather(env_list);
 	sigHandler();
+    g_stdin = dup(0);
+    g_stdout = dup(1);
+
 	while (1)
 	{
 

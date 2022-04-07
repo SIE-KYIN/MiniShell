@@ -81,6 +81,46 @@ char **heredoc_processing(char **str)
     free(heredoc_str);
     return (ret);
 }
+
+char **gshim_processing(char **str)
+{
+    int i;
+    int redir_cnt;
+    char **heredoc_str;
+    char **ret;
+    int cnt;
+
+    i = -1;
+    redir_cnt = 0;
+    while (str[++i])
+        if (!ft_strcmp(str[i], "<") || !ft_strcmp(str[i], "<<") || !ft_strcmp(str[i], ">") || !ft_strcmp(str[i], ">"))
+            redir_cnt += 2;
+    if (redir_cnt == 0)
+        return (NULL);
+    cnt = strcnt_double_ptr(str);
+    heredoc_str = (char **)malloc(sizeof(char *) * (redir_cnt + 1));
+    ret= (char **)malloc(sizeof(char *) * (cnt + 1));
+    heredoc_str[redir_cnt--] = NULL;
+    ret[cnt] = NULL;
+    i = -1;
+    cnt = 0;
+    while (str[++i])
+    {
+        if (!ft_strcmp(str[i], "<") || !ft_strcmp(str[i], "<<") || !ft_strcmp(str[i], ">") || !ft_strcmp(str[i], ">"))
+        {
+            heredoc_str[redir_cnt--] =  str[i + 1];
+            heredoc_str[redir_cnt--] = str[i++];
+        }
+        else
+            ret[cnt++] = ft_strdup(str[i]);
+    }
+    i = -1;
+    while (heredoc_str[++i])
+        ret[cnt++] = ft_strdup(heredoc_str[i]);
+    free(heredoc_str);
+    return (ret);
+}
+
 static char **repositioning(char **str)
 {
     char **ret;
@@ -106,7 +146,8 @@ static char **repositioning(char **str)
         flag = 1;
         tmp = str;
     }
-    ret = heredoc_processing(tmp);
+    //ret = heredoc_processing(tmp);
+    ret = gshim_processing(tmp);
     if (flag == 0 && ret == NULL)
         return (tmp);
     else if (flag == 1 && ret == NULL)
@@ -153,6 +194,7 @@ char **ft_ms_split(char *line, t_list *env_list)
         ret[0] = ft_strdup(line);
     else
         cut_str(line, ret);
+
     tmp = repositioning(ret);
     free(line);
     if (!tmp)
@@ -165,4 +207,5 @@ char **ft_ms_split(char *line, t_list *env_list)
         free(ret);
         return (tmp);
     }
+    return (ret);
 }

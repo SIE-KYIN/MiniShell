@@ -1,1 +1,13 @@
-/Users/gshim/Study/minishell
+Makefile
+README.md
+a
+b
+builtIn.md
+checklist.md
+include
+minishell
+mylog.md
+readline.md
+src
+study.c
+study.md

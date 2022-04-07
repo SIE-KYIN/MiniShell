@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gshim <gshim@student.42.fr>                +#+  +:+       +#+        */
+/*   By: gshim <gshim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/16 17:21:43 by gshim             #+#    #+#             */
-/*   Updated: 2022/04/05 20:59:05 by gshim            ###   ########.fr       */
+/*   Updated: 2022/04/06 21:40:26 by gshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -233,13 +233,13 @@ int		ft_echo(char *argv[]);
 
 int		execute(char **arg, t_list *env);
 int		ft_cd(char *argv[], t_list *env);
-int		ft_pwd();
+int		ft_pwd(void);
 int		ft_unset(char *argv[], t_list *env);
 int		ft_env(t_list *env);
 int		ft_exit(char *argv[], t_list *env);
 int		redir_out(t_tree_node *root, t_tree_node *left, bool flag);
 int		redir_in(t_tree_node *root, t_tree_node *right, bool flag);
-void	heredoc(t_tree_node *right, int fd);
+void	heredoc(t_tree_node *right, int fd, int flag);
 int		execute_builtin(char **arg, t_list *env);
 //void exit(char **env);
 char	**gather(t_list *list);
@@ -252,5 +252,12 @@ void		free_node(t_list_node *node);
 
 int		get_status(int status);
 void	set_status(t_list *env, int status);
+
+/*
+	global variable
+*/
+
+int g_stdin;
+int g_stdout;
 
 #endif

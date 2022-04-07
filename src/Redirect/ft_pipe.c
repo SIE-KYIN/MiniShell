@@ -3,25 +3,27 @@
 /*                                                        :::      ::::::::   */
 /*   ft_pipe.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gshim <gshim@student.42.fr>                +#+  +:+       +#+        */
+/*   By: gshim <gshim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/28 01:53:31 by gshim             #+#    #+#             */
-/*   Updated: 2022/04/05 14:40:34 by gshim            ###   ########.fr       */
+/*   Updated: 2022/04/06 18:34:42 by gshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-int ft_pipe(t_tree_node *root, t_list *env)
+int	ft_pipe(t_tree_node *root, t_list *env)
 {
-	int pid;
-	int pipe_fd[2];
-	int status;
+	int	pid;
+	int	pipe_fd[2];
+	int	status;
 
 	pid = pipe(pipe_fd);
-	if (pid == -1) printf("ERROR\n");
+	if (pid == -1)
+		printf("ERROR\n");
 	pid = fork();
-	if (pid == -1) printf("ERROR\n");
+	if (pid == -1)
+		printf("ERROR\n");
 	// child's process, pipeline Input
 	if (pid == 0)
 	{
@@ -36,7 +38,6 @@ int ft_pipe(t_tree_node *root, t_list *env)
 	{
 		wait(&status);
 		set_status(env, status);
-
 		dup2(pipe_fd[0], 0);	// 표쥰입력을 파이프라인출력으로 덮어쓰기
 		close(pipe_fd[0]);
 		close(pipe_fd[1]);

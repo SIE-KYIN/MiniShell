@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirect.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gshim <gshim@student.42.fr>                +#+  +:+       +#+        */
+/*   By: gshim <gshim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/24 01:46:41 by gshim             #+#    #+#             */
-/*   Updated: 2022/04/05 22:19:44 by gshim            ###   ########.fr       */
+/*   Updated: 2022/04/06 23:00:57 by gshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,35 +26,30 @@
 // }
 
 // 리다이렉션의 자손이 heredoc이면 표준입출력을 바꾸지 않는다.
-static bool nesting_condition(t_tree_node *root)
-{
-	if (is_command(root->left))
-	{
-		if (!ft_strcmp(root->command[0], "<<"))
-			return (true);
-		else if (!ft_strcmp(root->command[0], "<"))
-			return (true);
-		else
-			return (true);
-	}
-	else
-	{
-		if (!ft_strcmp(root->command[0], "<<"))
-			return (false);
-		else
-			return (true);
-	}
+// static bool nesting_condition(t_tree_node *root)
+// {
+// 	if (is_command(root->left))
+// 	{
+// 		if (!ft_strcmp(root->command[0], "<<"))
+// 			return (true);
+// 		else if (!ft_strcmp(root->command[0], "<"))
+// 			return (true);
+// 		else
+// 			return (true);
+// 	}
+// 	else
+// 	{
+// 		if (!ft_strcmp(root->command[0], "<<"))
+// 			return (false);
+// 		else
+// 			return (true);
+// 	}
+// }
 
-
-
-}
-
-// dup(a, b) -> a
-// flag가 true면 연속된 리다이렉션 동작을 의미함 => 파일을 열되, 리디렉션 ㄴㄴ
 int redir_out(t_tree_node *root, t_tree_node *right, bool flag)
 {
 	int fd;
-
+	(void)flag;
 	// 리다이렉션 존재여부 판단
 	if(!ft_strcmp(root->command[0], ">"))
 		fd = open(right->command[0], STDOUT_SIMPLE, 0644);
@@ -68,8 +63,9 @@ int redir_out(t_tree_node *root, t_tree_node *right, bool flag)
 		strerror(errno);
 		return (-1);
 	}
-	if(flag)
-		dup2(fd, 1);    // 표준출력의 방향은 1 -> fd
+	// if(flag)
+	// 	dup2(fd, 1);    // 표준출력의 방향은 1 -> fd
+	dup2(fd, 1);
 	close(fd);
 	return 0;
 }
@@ -78,9 +74,7 @@ int redir_out(t_tree_node *root, t_tree_node *right, bool flag)
 int redir_in(t_tree_node *root, t_tree_node *right, bool flag)
 {
 	int fd;
-
-	fd = 0;
-	// 리다이렉션 존재여부 판단
+	(void)flag;
 	if(!ft_strcmp(root->command[0], "<"))
 	{
 		fd = open(right->command[0], STDIN_SIMPLE, 0644);
@@ -91,38 +85,23 @@ int redir_in(t_tree_node *root, t_tree_node *right, bool flag)
 		}
 		// if (flag)
 		// 	dup2(fd, 0);
+		dup2(fd, 0);
+		close(fd);
+		return (0);
 	}
 	else if(!ft_strcmp(root->command[0], "<<"))
 	{
-		fd = open(".heredoc", STDOUT_SIMPLE, 0644);
-		if (fd == -1)
-		{
-			strerror(errno);
-			return (-1);
-		}
-		heredoc(right, fd);
-		close(fd);
+		int heredocflag = open(".heredoc", O_RDWR, 0644);
+		close(heredocflag);
+		heredoc(right, 0, heredocflag);
 		fd = open(".heredoc", O_RDONLY, 0644); // 왜 다시열어야 동작?
-		if (!ft_strcmp(root->left->command[0], "<"))
-			dup2(fd, 0);
-	}
-	else
-		return 0;
-
-	// 나와 자식중 heredoc이 있다면 nesting condition
-	if ((!ft_strcmp(root->command[0], "<<") || !ft_strcmp(root->left->command[0], "<<")) && nesting_condition(root))
-	{
+		// if (flag)
+		// 	dup2(fd, 0);
 		dup2(fd, 0);
+		return (0);
 	}
 	else
-	{
-		if (flag)
-			dup2(fd, 0);
-	}
-	// if (!ft_strcmp(root->command[0], "<<") && heredoc_condition(root))
-	// 	dup2(fd, 0);
-	close(fd);
-	return 0;
+		return (0);
 }
 
 
