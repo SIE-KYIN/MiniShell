@@ -1,32 +1,42 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parse_envv.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kyujlee <kyujlee@student.42seoul.kr>       +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/04/05 22:36:48 by kyujlee           #+#    #+#             */
+/*   Updated: 2022/04/05 22:37:11 by kyujlee          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../minishell.h"
 
-t_list *parse_envv(char **envv)
+t_list	*parse_envv(char **envv, int tmp)
 {
-    t_list *list;
-    char *var;
-    char *data;
-    int i;
-    int j;
-    int tmp;
+	t_list	*list;
+	char	*var;
+	char	*data;
+	int		i;
+	int		j;
 
-    i = -1;
-    list = create_list();
+	i = -1;
+	list = create_list();
 	list->top.data = ft_strdup("0");
 	list->top.var = ft_strdup("?");
-    while (envv[++i])
-    {
-        j = -1;
-        while (envv[i][++j])
-            if (envv[i][j + 1] == '=')
-                tmp = j;
-        var = ft_strndup(envv[i], 0, tmp);
-        data = ft_strndup(envv[i], tmp + 2, j - 1);
-        add_node(list, i, var, data);
-    }
-    return (list);
+	while (envv[++i])
+	{
+		j = -1;
+		while (envv[i][++j])
+			if (envv[i][j + 1] == '=')
+				tmp = j;
+		var = ft_strndup(envv[i], 0, tmp);
+		data = ft_strndup(envv[i], tmp + 2, j - 1);
+		add_node(list, i, var, data);
+	}
+	return (list);
 }
 
-// list -> char **
 char **gather(t_list *list)
 {
 	char **ret;

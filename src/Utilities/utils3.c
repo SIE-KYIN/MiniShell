@@ -1,33 +1,45 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils3.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kyujlee <kyujlee@student.42seoul.kr>       +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/04/05 22:49:11 by kyujlee           #+#    #+#             */
+/*   Updated: 2022/04/05 23:00:48 by kyujlee          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../minishell.h"
 
-int is_delimiter(char c, char next)
+int	is_delimiter(char c, char next)
 {
-    if (c == '>')
-    {
-        if (next == '>')
-            return (2);
-		return(1);
-    }
+	if (c == '>')
+	{
+		if (next == '>')
+			return (2);
+		return (1);
+	}
 	if (c == '<')
-    {
-        if (next == '<')
-            return (2);
-		return(1);
-    }
-    if (c == '|')
-        return (1);
+	{
+		if (next == '<')
+			return (2);
+		return (1);
+	}
+	if (c == '|')
+		return (1);
 	return (0);
 }
 
-int cnt_delimiter(char *line)
+int	cnt_delimiter(char *line)
 {
-	int ret;
-	int tmp;
+	int	ret;
+	int	tmp;
 
 	ret = 0;
 	while (*line)
 	{
-		tmp = is_delimiter(*line,  *(line + 1));
+		tmp = is_delimiter(*line, *(line + 1));
 		if (tmp)
 		{
 			line += tmp;
@@ -39,13 +51,13 @@ int cnt_delimiter(char *line)
 	return (ret);
 }
 
-void change_str(t_list *env_list, char **line, int fst, int sec)
+void	change_str(t_list *env_list, char **line, int fst, int sec)
 {
-	int tmp;
-	char *fst_str;
-	char *sec_str;
-	char *thd_str;
-	char *free_ptr;
+	int		tmp;
+	char	*fst_str;
+	char	*sec_str;
+	char	*thd_str;
+	char	*free_ptr;
 
 	fst_str = ft_strndup(*line, 0, fst - 1);
 	sec_str = ft_strndup(*line, fst + 1, sec - 1);
@@ -65,9 +77,9 @@ void change_str(t_list *env_list, char **line, int fst, int sec)
 	free(thd_str);
 }
 
-int strcnt_double_ptr(char **ret)
+int	strcnt_double_ptr(char **ret)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (ret[i])
@@ -75,15 +87,13 @@ int strcnt_double_ptr(char **ret)
 	return (i);
 }
 
-char *ft_emptystr()
+char	*ft_emptystr(void)
 {
-	char *ret;
+	char	*ret;
 
 	ret = (char *)malloc(sizeof(char) + 1);
 	if (ret == NULL)
-		return NULL;
-
+		return (NULL);
 	ret[0] = '\0';
-
-	return ret;
+	return (ret);
 }

@@ -456,3 +456,24 @@ heredoc이 가장먼저 처리가 되지 않게된다.
 ls > a > b | cat < c < d가
 
 ls < d < c | cat > b > a 가 되버릴 수도 있다.
+
+명령어 수행후 컨트롤c하면 개행제대로 안됨.
+=======
+
+
+
+
+
+cat lol.c | cat > lol.c 동작방식?
+
+$?를 export 등록시
+bash: export: `0=100': not a valid identifier 하기
+
+minishell's minishell 시그널처리
+
+bash: syntax error near unexpected token `|'
+bash-3.2$ echo hello |
+> echo hi
+
+
+파이프라인은 맨 뒤에 못오게 자체적으로 정함.!

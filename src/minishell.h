@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gshim <gshim@student.42seoul.kr>           +#+  +:+       +#+        */
+/*   By: gshim <gshim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/16 17:21:43 by gshim             #+#    #+#             */
-/*   Updated: 2022/04/06 21:40:26 by gshim            ###   ########.fr       */
+/*   Updated: 2022/04/07 17:20:53 by gshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ typedef struct s_list
 
 enum e_node_flag
 {
-	DELIMITER = 0, // 구분문자(> , < , | , >> , <<
+	DELIMITER = 0, // 구분문자(> , < , | , >> , <<)
 	COMMON_BUILTIN, // echo, cd, pwd, export, unset, env, exit
 	FILE_NAME, // 리디렉션 대상
 };
@@ -53,8 +53,10 @@ enum e_node_flag
 enum e_delimiter_flag
 {
 	SINGLE_REDIR_INPUT = 0,
-
-	PIPE=4,
+	DOUBLE_REDIR_INPUT,
+	SINGLE_REDIR_OUPUT,
+	DOUBLE_REDIR_OUTPUT,
+	PIPE,
 };
 
 typedef struct s_tree_node
@@ -76,7 +78,6 @@ typedef struct s_tree
 ** *************DATASTRUCTURE***************
 ** *****************************************
 */
-int str_in_quote2(char *line, int i);
 /*
 ** LinkedList1
 */
@@ -132,7 +133,7 @@ char **ft_ms_split(char *line, t_list *env_list);
 ** parse_envv.c
 ** +1
 */
-t_list *parse_envv(char **envv);
+t_list *parse_envv(char **envv,int tmp);
 
 
 /*
@@ -158,8 +159,7 @@ int read_line(t_list *env_list, char **line);
 ** readline_utils.c
 */
 void sig_int(int sig);
-void sigHandler();
-void	set_signal();
+void sighandler();
 void	disable_signal();
 char *ft_colorstr(char *str);
 
@@ -204,6 +204,14 @@ void divide_str(char **ret, int i);
 
 /*
 ** utils5.c
+** related to ft_ms_split.c
+*/
+void divide_d_ptr(char **str, char **heredoc_str, char **ret, int heredoc_cnt);
+char **heredoc_processing(char **str);
+
+
+/*
+** utils6.c
 ** related to tokenize.c
 */
 int is_there_space(char *line);
@@ -211,9 +219,22 @@ char **find_cmd(char *line);
 int token_cnt(char **token);
 int is_there_delimiter(char **token);
 int get_latest_token_loc(char **token);
-int token_cnt(char **token);
 
+/*
+** utils7.c
+** related to tokenize.c
+*/
 char			**ft_cmd_split(char *s, char c);
+int str_in_quote2(char *line, int i);
+void set_value(char **dup_str, bool *flag, int *j);
+
+/*
+** utils8.c
+** related to tokenize.c
+*/
+void delete_quotes(char **ret, char	*free_tmp);
+char *str_delete(char *str, int curr, bool flag);
+void delete_slash(char **ret, int i, bool flag, char *free_tmp);
 
 /*
 ** *****************************************

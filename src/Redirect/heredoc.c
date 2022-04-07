@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gshim <gshim@student.42seoul.kr>           +#+  +:+       +#+        */
+/*   By: gshim <gshim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/30 18:12:47 by gshim             #+#    #+#             */
-/*   Updated: 2022/04/06 21:45:16 by gshim            ###   ########.fr       */
+/*   Updated: 2022/04/07 17:19:40 by gshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ static void heredoc_sig_int(int sig)
 	}
 }
 
-static void heredoc_sigHandler()
+static void heredoc_sighandler()
 {
     signal(SIGINT, heredoc_sig_int);
     signal(SIGQUIT, SIG_IGN);
@@ -52,7 +52,7 @@ void	heredoc(t_tree_node *right, int fd2, int flag)
 		return ;
 	}
 
-	heredoc_sigHandler();
+	heredoc_sighandler();
 	while(1)
 	{
 		line = readline("heredoc> ");
@@ -63,7 +63,7 @@ void	heredoc(t_tree_node *right, int fd2, int flag)
 		free(line);
 	}
 	// 원래의 핸들러의 되돌린다.
-	sigHandler();
+	sighandler();
 	free(line);
 
 	close(fd);

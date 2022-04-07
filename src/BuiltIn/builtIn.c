@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtIn.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gshim <gshim@student.42seoul.kr>           +#+  +:+       +#+        */
+/*   By: gshim <gshim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/04 16:14:38 by gshim             #+#    #+#             */
-/*   Updated: 2022/04/06 18:29:35 by gshim            ###   ########.fr       */
+/*   Updated: 2022/04/07 15:53:00 by gshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,10 +91,6 @@ void	free_node(t_list_node *node)
 		free(node->data);
 	if (node->var)
 		free(node->var);
-	if (node->next)
-		free(node->next);
-	if (node->prev)
-		free(node->prev);
 	free(node);
 }
 
@@ -104,15 +100,13 @@ void	delete_node(t_list *list, char *var)
 
 	node = search_node(list, var);
 	if (!node->next)
-	{
 		node->prev->next = NULL;
-		free_node(node);
-	}
 	else
 	{
 		node->prev->next = node->next;
 		node->next->prev = node->prev;
 	}
+	free_node(node);
 	list->cnt -= 1;
 }
 

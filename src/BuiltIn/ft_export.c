@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_export.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gshim <gshim@student.42seoul.kr>           +#+  +:+       +#+        */
+/*   By: gshim <gshim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/04 16:13:59 by gshim             #+#    #+#             */
-/*   Updated: 2022/04/06 18:22:57 by gshim            ###   ########.fr       */
+/*   Updated: 2022/04/07 17:32:18 by gshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,19 +32,30 @@ static void	ft_export_no_arg(t_list *env)
 	}
 }
 
-static void	ft_export_arg(char *arg, t_list *env)
+static int	ft_export_arg(char *arg, t_list *env)
 {
 	t_list_node	*node;
 	char		*equal;
 	char		*var;
 	char		*data;
 
+	if (arg[0] == '?')
+	{
+		if (arg[1] != '\0')
+		{
+			printf("bash: export: '%s': not a valid identifier\n", arg);
+			return (-1);
+		}
+		else
+			return (0);
+	}
+
 	equal = ft_strchr(arg, '=');
 	if (!equal)
 	{
 		if (!search_node(env, arg))
 			add_node(env, env->cnt, ft_strdup(arg), NULL);
-		return ;
+		return (0);
 	}
 	*equal = '\0';
 	var = ft_strdup(arg);
@@ -58,17 +69,20 @@ static void	ft_export_arg(char *arg, t_list *env)
 	}
 	else
 		add_node(env, env->cnt, var, data);
+	return (0);
 }
 
 int	ft_export(char *argv[], t_list *env)
 {
 	int	i;
+	int	ret;
 
 	i = 0;
+	ret = 0;
 	if (argv[1] == NULL)
 		ft_export_no_arg(env);
 	else
 		while (argv[++i])
-			ft_export_arg(argv[i], env);
-	return (0);
+			ret += ft_export_arg(argv[i], env);
+	return (ret < 0);
 }

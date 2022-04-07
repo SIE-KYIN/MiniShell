@@ -1,78 +1,74 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils6.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kyujlee <kyujlee@student.42seoul.kr>       +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/04/05 22:53:46 by kyujlee           #+#    #+#             */
+/*   Updated: 2022/04/05 22:53:47 by kyujlee          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../minishell.h"
 
-static size_t	cnt_word(char *s, char c)
+int	is_there_space(char *line)
 {
-	size_t	i;
-	size_t	cnt;
+	int	i;
 
 	i = 0;
-	cnt = 0;
-	while (*(s + i))
+	while (line[i])
 	{
-		if (*(s + i) == c)
-			i++;
-		else
-		{
-			if (*(s + i) == '"' || *(s + i) == '\'')
-			{
-				if (i == 0 || *(s + i - 1) == ' ')
-					cnt++;
-				i = str_in_quote2(s, i) + 1;
-				continue;
-			}
-			else
-			{
-				if (i == 0 || *(s + i - 1) == ' ')
-					cnt++;;
-				while (*(s + i) != c && *(s + i) && *(s + i) != '"' && *(s + i) != '\'')
-					i++;
-			}
-		}
+		if (line[i] == ' ')
+			return (1);
+		i++;
 	}
-	return (cnt);
+	return (0);
 }
 
-
-static int		cut_str(char *s, char c, char **ret, size_t word)
+char	**find_cmd(char *line)
 {
-	size_t	idx1;
-	size_t	idx2;
-
-	idx1 = 0;
-	while (*(s + idx1))
-	{
-		if (*(s + idx1) == c)
-			idx1++;
-		else
-		{
-			idx2 = 0;
-			while (*(s + idx1 + idx2) != c && *(s + idx1 + idx2))
-			{
-				if (*(s + idx1 + idx2) == '"' || *(s + idx1 + idx2) == '\'')
-					idx2 = str_in_quote2(s, idx1 + idx2) - idx1;
-				idx2++;
-			}
-			*(ret + word) = (char *)malloc(idx2 + 1);
-			ft_memcpy(*(ret + word), s + idx1, idx2);
-			*(*(ret + word) + idx2) = 0;
-			idx1 += idx2;
-			word++;
-		}
-	}
-	return (1);
-}
-
-char			**ft_cmd_split(char *s, char c)
-{
-	size_t	cnt;
 	char	**ret;
 
-	if (!s)
-		return ((void *)0);
-	cnt = cnt_word(s, c);
-	ret = (char **)malloc(sizeof(char *) * (cnt + 1));
-	*(ret + cnt) = 0;
-	if (!cut_str(s, c, ret, 0))
-		return (0);
+	ret = ft_cmd_split(line, ' ');
+	delete_slash(ret, -1, false, NULL);
+	delete_quotes(ret, NULL);
+	free(line);
 	return (ret);
+}
+
+int	token_cnt(char **token)
+{
+	int	ret;
+	int	i;
+
+	i = 0;
+	ret = 0;
+	while (token[i])
+	{
+		ret++;
+		i++;
+	}
+	return (ret);
+}
+
+int	is_there_delimiter(char **token)
+{
+	int	cnt;
+
+	cnt = token_cnt(token);
+	while (cnt--)
+		if (is_delimiter(token[cnt][0], token[cnt][1]))
+			return (cnt);
+	return (0);
+}
+
+int	get_latest_token_loc(char **token)
+{
+	int	i;
+
+	i = 0;
+	while (token[i + 1])
+		i++;
+	return (i);
 }
