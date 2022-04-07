@@ -6,7 +6,7 @@
 /*   By: gshim <gshim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/16 17:21:43 by gshim             #+#    #+#             */
-/*   Updated: 2022/04/07 18:00:12 by gshim            ###   ########.fr       */
+/*   Updated: 2022/04/07 18:39:26 by gshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -208,8 +208,8 @@ void divide_str(char **ret, int i);
 ** utils5.c
 ** related to ft_ms_split.c
 */
-void divide_d_ptr(char **str, char **heredoc_str, char **ret, int heredoc_cnt);
-char **heredoc_processing(char **str);
+int		divide_d_ptr(char **str, char **heredoc_str, char **ret, int heredoc_cnt);
+char	**heredoc_processing(char **str);
 
 
 /*

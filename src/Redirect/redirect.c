@@ -67,7 +67,8 @@ int redir_in(t_tree_node *root, t_tree_node *right, bool flag)
 		return (0);
 }
 
-
+// cat < a << b
+// cat << b < a
 
 // int pipe_gshim(char **cmd)
 // {
