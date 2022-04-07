@@ -6,7 +6,7 @@
 /*   By: gshim <gshim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/16 17:21:43 by gshim             #+#    #+#             */
-/*   Updated: 2022/04/07 17:20:53 by gshim            ###   ########.fr       */
+/*   Updated: 2022/04/07 18:00:12 by gshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -158,9 +158,11 @@ int read_line(t_list *env_list, char **line);
 /*
 ** readline_utils.c
 */
-void sig_int(int sig);
-void sighandler();
+void	sig_int(int sig);
+void	sighandler();
 void	disable_signal();
+void	sig_in_child(int sig);
+void	set_signal();
 char *ft_colorstr(char *str);
 
 

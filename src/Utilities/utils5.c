@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils5.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kyujlee <kyujlee@student.42seoul.kr>       +#+  +:+       +#+        */
+/*   By: gshim <gshim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/05 23:01:00 by kyujlee           #+#    #+#             */
-/*   Updated: 2022/04/05 23:01:02 by kyujlee          ###   ########.fr       */
+/*   Updated: 2022/04/07 17:55:14 by gshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,20 +31,21 @@ void	divide_d_ptr(char **str, char **hd_str, char **ret, int heredoc_cnt)
 	}
 }
 
-char	**heredoc_processing(char **str)
+char    **heredoc_processing(char **str)
 {
-	int		i;
-	int		heredoc_cnt;
-	char	**heredoc_str;
-	char	**ret;
-	int		cnt;
+	int     i;
+	int     heredoc_cnt;
+	char    **heredoc_str;
+	char    **ret;
+	int     cnt;
 
 	i = -1;
 	heredoc_cnt = 0;
 	while (str[++i])
 		if (str[i][0] == '<' && str[i][1] == '<')
 			heredoc_cnt += 2;
-	if (heredoc_cnt == 0)
+	if (heredoc_cnt == 0 || heredoc_cnt == 2
+		|| (heredoc_cnt == 4 && !(str[1][0] == '<' && str[3][0] == '<')))
 		return (NULL);
 	cnt = strcnt_double_ptr(str);
 	heredoc_str = (char **)malloc(sizeof(char *) * (heredoc_cnt + 1));

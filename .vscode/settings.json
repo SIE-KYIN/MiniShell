@@ -8,6 +8,7 @@
 		"iterator": "c",
 		"__node_handle": "c",
 		"algorithm": "c",
-		"complex": "c"
+		"complex": "c",
+		"bitset": "c"
 	}
 }

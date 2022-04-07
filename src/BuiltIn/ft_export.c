@@ -6,7 +6,7 @@
 /*   By: gshim <gshim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/04 16:13:59 by gshim             #+#    #+#             */
-/*   Updated: 2022/04/07 17:32:18 by gshim            ###   ########.fr       */
+/*   Updated: 2022/04/07 17:51:10 by gshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,17 @@ static void	ft_export_no_arg(t_list *env)
 	}
 }
 
+static int	ft_export_error(char *arg)
+{
+	if (arg[1] != '\0')
+	{
+		printf("bash: export: '%s': not a valid identifier\n", arg);
+		return (-1);
+	}
+	else
+		return (0);
+}
+
 static int	ft_export_arg(char *arg, t_list *env)
 {
 	t_list_node	*node;
@@ -40,16 +51,7 @@ static int	ft_export_arg(char *arg, t_list *env)
 	char		*data;
 
 	if (arg[0] == '?')
-	{
-		if (arg[1] != '\0')
-		{
-			printf("bash: export: '%s': not a valid identifier\n", arg);
-			return (-1);
-		}
-		else
-			return (0);
-	}
-
+		ft_export_error(arg);
 	equal = ft_strchr(arg, '=');
 	if (!equal)
 	{

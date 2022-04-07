@@ -6,7 +6,7 @@
 /*   By: gshim <gshim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/28 01:59:28 by gshim             #+#    #+#             */
-/*   Updated: 2022/04/07 17:11:59 by gshim            ###   ########.fr       */
+/*   Updated: 2022/04/07 18:30:28 by gshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,8 @@ int	ft_command(t_tree_node *root, t_list *env)
 
 	if (execute_builtin(root->command, env) == 0)
 		return (0);
-
+	//disable_signal();
+	//set_signal();
 	if ((pid = fork()) == -1)
 		printf("FORK ERROR\n");
 	else if (pid == 0)
@@ -32,7 +33,7 @@ int	ft_command(t_tree_node *root, t_list *env)
 	}
 	else
 	{	// parent's process
-		disable_signal();
+		set_signal();
 		pid = wait(&status);
 		set_status(env, status);
 	}
