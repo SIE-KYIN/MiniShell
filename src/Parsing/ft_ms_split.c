@@ -12,16 +12,17 @@
 
 #include "../minishell.h"
 
-static int	cnt_word(char *line, int flag)
+static int	cnt_word(char *line, int flag, int i, int cnt)
 {
-	int	i;
-	int	cnt;
 	int	tmp;
 
-	cnt = 0;
-	i = -1;
 	while (line[++i])
 	{
+		if (line[i] == '\'' || line[i] == '"')
+		{
+			i = str_in_quote2(line, i);
+			continue ;
+		}
 		tmp = is_delimiter(line[i], line[i + 1]);
 		if (tmp)
 		{
@@ -52,9 +53,15 @@ static void	cut_str(char *line, char **ret)
 	{
 		tmp = is_delimiter(line[i], line[i + 1]);
 		if (!tmp)
+		{
 			while (line[i + tmp] && !is_delimiter(line[i + tmp],
 					line[i + tmp + 1]))
+			{
+				if (line[i] == '\'' || line[i] == '"')
+					tmp = str_in_quote2(line, i) - i;
 				tmp++;
+			}
+		}
 		ret[word] = ft_strndup(line, i, i + tmp - 1);
 		i += tmp;
 		word++;
@@ -94,7 +101,7 @@ static void	key_to_value(t_list *env_list, char **line, int flag)
 	int	i;
 	int	tmp;
 
-	i = 0;
+	i = -1;
 	while ((*line)[++i])
 	{
 		if ((*line)[i] == '\'')
@@ -125,7 +132,7 @@ char	**ft_ms_split(char *line, t_list *env_list)
 	char	**tmp;
 
 	tmp = NULL;
-	cnt = cnt_word(line, 0);
+	cnt = cnt_word(line, 0, -1, 0);
 	ret = (char **)malloc(sizeof(char *) * (cnt + 1));
 	ret[cnt] = NULL;
 	key_to_value(env_list, &line, 0);

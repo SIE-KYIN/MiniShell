@@ -79,22 +79,15 @@ int	is_valid_location(char *line)
 	int	i;
 
 	i = -1;
-	while (line[++i])
-	{
-		if (line[i] == ' ')
-			continue ;
-		else if (line[i] == '|' || line[i] == '$')
-			return (0);
-		else
-			break ;
-	}
+	if (line[0] == '|')
+		return (0);
 	i = ft_strlen(line);
 	while (line[--i])
 	{
 		if (line[i] == ' ')
 			continue ;
 		else if (line[i] == '>' || line[i] == '<'
-			|| line[i] == '|' || line[i] == '$')
+			|| line[i] == '|')
 			return (0);
 		else
 			break ;
