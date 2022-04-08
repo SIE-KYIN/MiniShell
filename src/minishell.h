@@ -6,7 +6,7 @@
 /*   By: gshim <gshim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/16 17:21:43 by gshim             #+#    #+#             */
-/*   Updated: 2022/04/08 10:18:21 by gshim            ###   ########.fr       */
+/*   Updated: 2022/04/08 11:45:05 by gshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@
 # include <string.h>
 # include <fcntl.h> // 파일모드를위해추가
 # include <errno.h>
+# include <sys/ioctl.h> // ioctl함수
 
 // kyujlee
 typedef struct s_list_node

@@ -468,3 +468,6 @@ bash-3.2$ echo hello |
 파이프라인은 맨 뒤에 못오게 자체적으로 정함.!
 
 "c.lol > tac | c.lol tac
+
+
+cat << A > a 가 타이핑이 안됨....왜?

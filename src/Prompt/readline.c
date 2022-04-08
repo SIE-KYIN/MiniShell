@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   readline.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gshim <gshim@student.42seoul.kr>           +#+  +:+       +#+        */
+/*   By: gshim <gshim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/05 21:58:45 by kyujlee           #+#    #+#             */
-/*   Updated: 2022/04/08 01:28:29 by gshim            ###   ########.fr       */
+/*   Updated: 2022/04/08 11:36:04 by gshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ int	read_line(t_list *env_list, char **line)
 		pwd = ft_strjoin(" ❌ ", search_node(env_list, "PWD")->data);
 	info = ft_colorstr(pwd);
 	*line = readline(info);
+	free(pwd);
 	free(info);
 	if (*line == NULL)
 	{

@@ -6,7 +6,7 @@
 /*   By: gshim <gshim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 19:23:29 by gshim             #+#    #+#             */
-/*   Updated: 2022/04/08 10:13:32 by gshim            ###   ########.fr       */
+/*   Updated: 2022/04/08 11:43:09 by gshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,6 @@ int	main(int argc, char **argv, char **envv)
 		pre_traverse(token_tree, env_list);
 		delete_tree(token_tree);
 	}
-	free(env_list->top.var);
-	free(env_list->top.data);
 	delete_list(env_list);
 	ft_error(1);
 	return (0);

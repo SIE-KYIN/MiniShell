@@ -6,7 +6,7 @@
 /*   By: gshim <gshim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/30 18:12:47 by gshim             #+#    #+#             */
-/*   Updated: 2022/04/08 10:19:01 by gshim            ###   ########.fr       */
+/*   Updated: 2022/04/08 11:57:44 by gshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,8 @@ static void	heredoc_sig_int(int sig)
 {
 	if (sig == SIGINT)
 	{
-		rl_on_new_line();
-		rl_redisplay();
-		printf("%c[K\n", 27);
-		rl_on_new_line();
-		rl_replace_line("", 0);
-		rl_redisplay();
+		ioctl(STDIN_FILENO, TIOCSTI, "*");
+		ioctl(STDIN_FILENO, TIOCSTI, "\n");
 	}
 }
 
@@ -35,18 +31,17 @@ int	heredoc(t_tree_node *right)
 {
 	char	*line;
 	int		fd;
-	int		backup;
 
-	backup = dup(0);
-	fd = open(".heredoc", O_RDWR| O_CREAT| O_TRUNC, 0644);
+	fd = open(".heredoc", O_RDWR | O_CREAT | O_TRUNC, 0644);
 	if (fd == -1)
 		return (fd);
 	heredoc_sighandler();
-	while(1)
+	while (1)
 	{
 		line = readline("heredoc> ");
-		if (line == NULL || !ft_strcmp(line, right->command[0]))
-			break;
+		if (line == NULL || !ft_strcmp(line, right->command[0])
+			|| !ft_strcmp(line, "*"))
+			break ;
 		write(fd, line, ft_strlen(line));
 		write(fd, "\n", 1);
 		free(line);
@@ -54,8 +49,6 @@ int	heredoc(t_tree_node *right)
 	free(line);
 	close(fd);
 	fd = open(".heredoc", O_RDONLY, 0644);
-	close(fd);
 	sighandler();
 	return (fd);
 }
-

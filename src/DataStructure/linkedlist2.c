@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   linkedlist2.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kyujlee <kyujlee@student.42seoul.kr>       +#+  +:+       +#+        */
+/*   By: gshim <gshim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/05 21:54:18 by kyujlee           #+#    #+#             */
-/*   Updated: 2022/04/05 21:55:08 by kyujlee          ###   ########.fr       */
+/*   Updated: 2022/04/08 11:40:41 by gshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,8 @@ t_list	*create_list(void)
 
 void	delete_list(t_list *list)
 {
+	free(list->top.var);
+	free(list->top.data);
 	if (list)
 	{
 		while (list->cnt > 0)
