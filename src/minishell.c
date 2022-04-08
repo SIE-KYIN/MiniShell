@@ -6,7 +6,7 @@
 /*   By: gshim <gshim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 19:23:29 by gshim             #+#    #+#             */
-/*   Updated: 2022/04/08 11:43:09 by gshim            ###   ########.fr       */
+/*   Updated: 2022/04/08 14:54:30 by gshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,8 @@ int	main(int argc, char **argv, char **envv)
 	t_list	*env_list;
 	t_tree	*token_tree;
 	t_info	info;
-	
-	//info.stdin_flag = ;
+
+	info.stdin_flag = dup(0);
 	(void)argv;
 	env_list = NULL;
 	if (argc != 1)

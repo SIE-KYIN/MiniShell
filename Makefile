@@ -6,7 +6,7 @@
 #    By: gshim <gshim@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/02/22 17:48:50 by gshim             #+#    #+#              #
-#    Updated: 2022/04/08 10:25:09 by gshim            ###   ########.fr        #
+#    Updated: 2022/04/08 14:56:37 by gshim            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,7 +17,7 @@ CFLAGS = -Wall -Wextra -Werror -g
 NAME = minishell
 
 SRCS_DIR = ./src
-SRCS =  src/DataStructure/linkedlist1.c src/DataStructure/linkedlist2.c src/DataStructure/linkedlist3.c \
+SRCS = src/DataStructure/linkedlist1.c src/DataStructure/linkedlist2.c src/DataStructure/linkedlist3.c \
 	src/DataStructure/tree1.c src/DataStructure/tree2.c  src/DataStructure/tree3.c\
 	src/Parsing/parse_envv.c src/Parsing/check_syntax.c \
 	src/Parsing/tokenize.c src/Parsing/ft_ms_split.c \
@@ -38,8 +38,8 @@ LIB_NAME = ft
 LIB_DIR = ./include/libft
 LIB = $(addprefix $(LIB_DIR)/, libft.a)
 
-#USER = gshim
-USER = kyujlee
+USER = gshim
+#USER = kyujlee
 
 RL_CLUSTER_L = -L/Users/${USER}/.brew/opt/readline/lib
 RL_CLUSTER_I = -I/Users/${USER}/.brew/opt/readline/include

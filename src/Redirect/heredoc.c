@@ -6,7 +6,7 @@
 /*   By: gshim <gshim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/30 18:12:47 by gshim             #+#    #+#             */
-/*   Updated: 2022/04/08 11:57:44 by gshim            ###   ########.fr       */
+/*   Updated: 2022/04/08 15:05:25 by gshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,14 +27,8 @@ static void	heredoc_sighandler(void)
 	signal(SIGQUIT, SIG_IGN);
 }
 
-int	heredoc(t_tree_node *right)
+static void	heredoc_readline(t_tree_node *right, char *line, int fd)
 {
-	char	*line;
-	int		fd;
-
-	fd = open(".heredoc", O_RDWR | O_CREAT | O_TRUNC, 0644);
-	if (fd == -1)
-		return (fd);
 	heredoc_sighandler();
 	while (1)
 	{
@@ -46,9 +40,25 @@ int	heredoc(t_tree_node *right)
 		write(fd, "\n", 1);
 		free(line);
 	}
+	sighandler();
+}
+
+int	heredoc(t_tree_node *right, t_info *info)
+{
+	char	*line;
+	int		fd;
+	int		backup_fd;
+
+	backup_fd = dup(0);
+	dup2(info->stdin_flag, 0);
+	fd = open(".heredoc", O_RDWR | O_CREAT | O_TRUNC, 0644);
+	if (fd == -1)
+		return (fd);
+	line = NULL;
+	heredoc_readline(right, line, fd);
 	free(line);
 	close(fd);
 	fd = open(".heredoc", O_RDONLY, 0644);
-	sighandler();
+	dup2(backup_fd, 0);
 	return (fd);
 }

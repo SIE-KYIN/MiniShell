@@ -6,7 +6,7 @@
 /*   By: gshim <gshim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/24 01:46:41 by gshim             #+#    #+#             */
-/*   Updated: 2022/04/08 10:49:06 by gshim            ###   ########.fr       */
+/*   Updated: 2022/04/08 15:06:32 by gshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ int	redir_out(t_tree_node *root, t_tree_node *right, bool flag)
 int	redir_in(t_tree_node *root, t_tree_node *right, bool flag, t_info *info)
 {
 	int	fd;
-	(void)info;
+
 	fd = 0;
 	if (!ft_strcmp(root->command[0], "<"))
 	{
@@ -46,13 +46,15 @@ int	redir_in(t_tree_node *root, t_tree_node *right, bool flag, t_info *info)
 	}
 	else if (!ft_strcmp(root->command[0], "<<"))
 	{
-		fd = heredoc(right);
+		fd = heredoc(right, info);
 		if (fd == -1)
 			return (-1);
 	}
 	else
 		return (0);
-	if (flag)
+	if (!info->heredoc_flag && flag)
+		dup2(fd, 0);
+	if (info->heredoc_flag)
 		dup2(fd, 0);
 	close(fd);
 	return (0);
