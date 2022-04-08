@@ -1,46 +1,79 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils2.c                                           :+:      :+:    :+:   */
+/*   utils5.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kyujlee <kyujlee@student.42seoul.kr>       +#+  +:+       +#+        */
+/*   By: gshim <gshim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/04/05 22:45:00 by kyujlee           #+#    #+#             */
-/*   Updated: 2022/04/05 22:45:02 by kyujlee          ###   ########.fr       */
+/*   Created: 2022/04/05 23:01:00 by kyujlee           #+#    #+#             */
+/*   Updated: 2022/04/08 01:27:18 by gshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-int	str_in_quote(char *line, int i, int single_flag, int double_flag)
+int	divide_d_ptr(char **str, char **hd_str, char **ret, int heredoc_cnt)
 {
-	int	tmp1;
-	int	tmp2;
+	int	i;
+	int	cnt;
 
-	tmp1 = 2;
-	tmp2 = 2;
-	while (tmp1 != single_flag && tmp2 != double_flag && line[++i])
+	cnt = 0;
+	i = -1;
+	while (str[++i])
 	{
-		if (single_flag == tmp1 - 2 && line[i] == '"')
+		if (str[i][0] == '<' && str[i][1] == '<')
 		{
-			if (line[i - 1] == '\\')
-				continue ;
-			(double_flag)++;
+			hd_str[heredoc_cnt--] = str[i + 1];
+			hd_str[heredoc_cnt--] = str[i++];
 		}
-		else if (double_flag == tmp2 - 2 && line[i] == '\'')
-		{
-			if (line[i - 1] == '\\')
-				continue ;
-			(single_flag)++;
-		}
+		else
+			ret[cnt++] = ft_strdup(str[i]);
 	}
-	return (i);
+	return (cnt);
 }
 
-int	is_valid_s_c(char c)
+int	is_valid_heredoc(char **str, int heredoc_cnt)
 {
-	(void)c;
-	if (c == ';')
+	int	tmp;
+	int	i;
+
+	tmp = 0;
+	i = -1;
+	if (heredoc_cnt == 0 || heredoc_cnt == 2)
 		return (0);
-	return (1);
+	while (str[++i])
+		if (is_delimiter(str[i][0], str[i][1]))
+			tmp++;
+	if (tmp == heredoc_cnt / 2)
+		return (1);
+	else
+		return (0);
+}
+
+char	**heredoc_processing(char **str)
+{
+	int		i;
+	int		heredoc_cnt;
+	char	**heredoc_str;
+	char	**ret;
+	int		cnt;
+
+	i = -1;
+	heredoc_cnt = 0;
+	while (str[++i])
+		if (str[i][0] == '<' && str[i][1] == '<')
+			heredoc_cnt += 2;
+	if (!is_valid_heredoc(str, heredoc_cnt))
+		return (NULL);
+	cnt = strcnt_double_ptr(str);
+	heredoc_str = (char **)malloc(sizeof(char *) * (heredoc_cnt + 1));
+	ret = (char **)malloc(sizeof(char *) * (cnt + 1));
+	heredoc_str[heredoc_cnt--] = NULL;
+	ret[cnt] = NULL;
+	cnt = divide_d_ptr(str, heredoc_str, ret, heredoc_cnt);
+	i = -1;
+	while (heredoc_str[++i])
+		ret[cnt++] = ft_strdup(heredoc_str[i]);
+	free(heredoc_str);
+	return (ret);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_ms_split.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kyujlee <kyujlee@student.42seoul.kr>       +#+  +:+       +#+        */
+/*   By: gshim <gshim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/05 22:30:46 by kyujlee           #+#    #+#             */
-/*   Updated: 2022/04/05 22:33:53 by kyujlee          ###   ########.fr       */
+/*   Updated: 2022/04/08 08:56:02 by gshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ static char	**repositioning(char **str, char **tmp, int flag, int i)
 	{
 		if (is_delimiter(str[i][0], str[i][1]))
 		{
-			if (i == 0 || is_delimiter(str[i - 1][0], str[i -1][1]))
+			if (i == 0 || is_delimiter(str[i - 1][0], str[i - 1][1]))
 			{
 				tmp = plus_space(str, i);
 				divide_str(tmp, i);

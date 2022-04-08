@@ -12,6 +12,14 @@
 
 #include "../minishell.h"
 
+int	is_valid_s_c(char c)
+{
+	(void)c;
+	if (c == ';')
+		return (0);
+	return (1);
+}
+
 int	is_empty_str(char *line)
 {
 	int	i;
@@ -24,34 +32,6 @@ int	is_empty_str(char *line)
 		i++;
 	}
 	return (0);
-}
-
-int	is_valid_special_character(char *line)
-{
-	int	i;
-
-	i = 0;
-	while (line[i])
-	{
-		if (!is_valid_s_c(line[i]))
-			return (0);
-		if (line[i] == '?' && line[i - 1] != '$')
-			return (0);
-		if (is_valid_s_c(line[i]) && (line[i] != '\'' && line[i] != '"'))
-		{
-			if (line[i] == '<' || line[i] == '>' || line[i] == '.')
-				if (line[i + 2] == line[i])
-					return (0);
-			if (line[i] == '$' || line[i] == '|' || line[i] == '$')
-				if (line[i + 1] == line[i])
-					return (0);
-		}
-		if (line[i + 1] == '"' || line[i + 1] == '\'')
-			i = str_in_quote(line, i, 0, 0);
-		else
-			i++;
-	}
-	return (1);
 }
 
 int	is_opened_quotes(char *line)
@@ -99,12 +79,6 @@ int	check_syntax(char *line)
 {
 	if (!is_empty_str(line))
 	{
-		free(line);
-		return (0);
-	}
-	if (!is_valid_special_character(line))
-	{
-		ft_error(2);
 		free(line);
 		return (0);
 	}

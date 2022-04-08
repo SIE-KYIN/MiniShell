@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_envv.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kyujlee <kyujlee@student.42seoul.kr>       +#+  +:+       +#+        */
+/*   By: gshim <gshim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/05 22:36:48 by kyujlee           #+#    #+#             */
-/*   Updated: 2022/04/05 22:37:11 by kyujlee          ###   ########.fr       */
+/*   Updated: 2022/04/08 10:11:52 by gshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,20 +37,21 @@ t_list	*parse_envv(char **envv, int tmp)
 	return (list);
 }
 
-char **gather(t_list *list)
+char	**gather(t_list *list)
 {
-	char **ret;
-	int i;
-	t_list_node *node;
+	char		*var;
+	char		*data;
+	char		**ret;
+	int			i;
+	t_list_node	*node;
 
 	ret = malloc(sizeof(char *) * (list->cnt + 1));
 	i = 0;
 	node = list->top.next;
-	// 모든 리스트노드에 접근
-	while(i < list->cnt)
+	while (i < list->cnt)
 	{
-		char *var = ft_strdup(node->var);
-		char *data = ft_strdup(node->data);
+		var = ft_strdup(node->var);
+		data = ft_strdup(node->data);
 		ret[i] = ft_strjoin_3(var, "=", data);
 		free(var);
 		free(data);
@@ -58,12 +59,5 @@ char **gather(t_list *list)
 		i++;
 	}
 	ret[i] = NULL;
-
-	// [DEBUG] 왜 파란색으로 나오지...?
-	// for(int i=0;i<list->cnt;i++)
-	// {
-	// 	printf("%s\n", ret[i]);
-	// }
-
-	return ret;
+	return (ret);
 }
