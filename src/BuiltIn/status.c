@@ -6,7 +6,7 @@
 /*   By: gshim <gshim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/05 13:37:34 by gshim             #+#    #+#             */
-/*   Updated: 2022/04/06 18:32:31 by gshim            ###   ########.fr       */
+/*   Updated: 2022/04/08 02:12:14 by gshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,5 +43,5 @@ int	get_status(int status)
 void	set_status(t_list *env, int status)
 {
 	free(env->top.data);
-	env->top.data = ft_itoa(get_status(status));
+	env->top.data = ft_itoa(status);
 }

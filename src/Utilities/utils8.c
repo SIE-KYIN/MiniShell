@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils8.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kyujlee <kyujlee@student.42seoul.kr>       +#+  +:+       +#+        */
+/*   By: gshim <gshim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/05 23:00:00 by kyujlee           #+#    #+#             */
-/*   Updated: 2022/04/05 23:00:01 by kyujlee          ###   ########.fr       */
+/*   Updated: 2022/04/08 01:25:48 by gshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ char	*str_delete(char *str, int curr, bool flag)
 	else
 		i = (cnt + 1) / 2;
 	while (--i >= 0)
-			curr++;
+		curr++;
 	tmp = ft_strndup(str, curr, ft_strlen(str));
 	ret = ft_strjoin(free_tmp, tmp);
 	free(free_tmp);

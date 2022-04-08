@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_syntax.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gshim <gshim@student.42.fr>                +#+  +:+       +#+        */
+/*   By: gshim <gshim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/05 22:24:45 by kyujlee           #+#    #+#             */
-/*   Updated: 2022/04/07 17:23:36 by gshim            ###   ########.fr       */
+/*   Updated: 2022/04/08 08:53:44 by gshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,6 @@ int	is_valid_special_character(char *line)
 	{
 		if (!is_valid_s_c(line[i]))
 			return (0);
-		// if (line[i] == '?' && line[i - 1] != '$')
-		// 	return (0);
 		if (is_valid_s_c(line[i]) && (line[i] != '\'' && line[i] != '"'))
 		{
 			if (line[i] == '<' || line[i] == '>' || line[i] == '.')

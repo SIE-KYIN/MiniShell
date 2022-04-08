@@ -3,18 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gshim <gshim@student.42.fr>                +#+  +:+       +#+        */
+/*   By: gshim <gshim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/30 18:12:47 by gshim             #+#    #+#             */
-/*   Updated: 2022/04/07 17:19:40 by gshim            ###   ########.fr       */
+/*   Updated: 2022/04/08 09:32:20 by gshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-static void heredoc_sig_int(int sig)
+static void	heredoc_sig_int(int sig)
 {
-    if (sig == SIGINT)
+	if (sig == SIGINT)
 	{
 		rl_on_new_line();
 		rl_redisplay();
@@ -22,29 +22,23 @@ static void heredoc_sig_int(int sig)
 		rl_on_new_line();
 		rl_replace_line("", 0);
 		rl_redisplay();
-		//ioctl(STDIN_FILENO, TIOCSTI, "\n");
 	}
 }
 
-static void heredoc_sighandler()
+static void	heredoc_sighandler(void)
 {
-    signal(SIGINT, heredoc_sig_int);
-    signal(SIGQUIT, SIG_IGN);
+	signal(SIGINT, heredoc_sig_int);
+	signal(SIGQUIT, SIG_IGN);
 }
 
-void	heredoc(t_tree_node *right, int fd2, int flag)
+void	heredoc(t_tree_node *right, int flag)
 {
 	char	*line;
 	int		fd;
 	int		backup;
 
-	(void)fd2;
 	backup = dup(0);
-	// 이미 heredoc으로 인한 .heredoc파일이 존재하는지 확인합니다.
-	if (flag != -1)
-		dup2(g_stdin, 0);
-
-	fd = open(".heredoc", STDOUT_SIMPLE, 0644);
+	fd = open(".heredoc", O_RDWR| O_CREAT| O_TRUNC, 0644);
 	if (fd == -1)
 	{
 		strerror(errno);
@@ -62,19 +56,9 @@ void	heredoc(t_tree_node *right, int fd2, int flag)
 		write(fd, "\n", 1);
 		free(line);
 	}
-	// 원래의 핸들러의 되돌린다.
 	sighandler();
 	free(line);
-
 	close(fd);
-	fd = open(".heredoc", O_RDONLY, 0644); // 왜 다시열어야 동작?
-
-	if (flag < 0)
-		dup2(backup, 0);
+	fd = open(".heredoc", O_RDONLY, 0644);
 }
 
-/*
-시그널처리...?
-널 입력이 들어오면?
-
-*/

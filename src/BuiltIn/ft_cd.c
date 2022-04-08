@@ -6,7 +6,7 @@
 /*   By: gshim <gshim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/05 15:16:22 by gshim             #+#    #+#             */
-/*   Updated: 2022/04/06 18:20:12 by gshim            ###   ########.fr       */
+/*   Updated: 2022/04/08 01:40:29 by gshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,13 @@ static void	set_env(t_list *env, char *newdir)
 
 	pwd = search_node(env, "PWD");
 	old_pwd = search_node(env, "OLDPWD");
-	free(old_pwd->data);
-	old_pwd->data = pwd->data;
+	if (!old_pwd)
+		add_node(env, env->cnt, "OLDPWD", pwd->data);
+	else
+	{
+		free(old_pwd->data);
+		old_pwd->data = pwd->data;
+	}
 	pwd->data = ft_strdup(newdir);
 }
 
@@ -58,6 +63,7 @@ int	ft_cd(char *argv[], t_list *env)
 		strerror(errno);
 		return (errno);
 	}
-	set_env(env, getcwd(dir, sizeof(dir)));
+	getcwd(dir, sizeof(dir));
+	set_env(env, dir);
 	return (0);
 }

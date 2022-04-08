@@ -1,15 +1,29 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   tree2.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kyujlee <kyujlee@student.42seoul.kr>       +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/04/05 21:57:27 by kyujlee           #+#    #+#             */
+/*   Updated: 2022/04/05 21:57:59 by kyujlee          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../minishell.h"
 
-t_tree*		create_tree()
+t_tree	*create_tree(void)
 {
-	t_tree *ret = malloc(sizeof(t_tree));
+	t_tree	*ret;
+
+	ret = malloc(sizeof(t_tree));
 	ret->root_node = NULL;
 	return (ret);
 }
 
-static void		_delete_tree(t_tree_node *root)
+static void	_delete_tree(t_tree_node *root)
 {
-	int i;
+	int	i;
 
 	if (!root)
 		return ;
@@ -20,10 +34,9 @@ static void		_delete_tree(t_tree_node *root)
 		free(root->command[i]);
 	free(root->command);
 	free(root);
-
 }
 
-void			delete_tree(t_tree* tree)
+void	delete_tree(t_tree	*tree)
 {
 	if (!tree)
 		return ;
