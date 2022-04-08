@@ -6,7 +6,7 @@
 #    By: gshim <gshim@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/02/22 17:48:50 by gshim             #+#    #+#              #
-#    Updated: 2022/04/07 17:17:10 by gshim            ###   ########.fr        #
+#    Updated: 2022/04/08 10:25:09 by gshim            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,8 +17,8 @@ CFLAGS = -Wall -Wextra -Werror -g
 NAME = minishell
 
 SRCS_DIR = ./src
-SRCS =  src/DataStructure/linkedlist1.c src/DataStructure/linkedlist2.c \
-	src/DataStructure/tree1.c src/DataStructure/tree2.c \
+SRCS =  src/DataStructure/linkedlist1.c src/DataStructure/linkedlist2.c src/DataStructure/linkedlist3.c \
+	src/DataStructure/tree1.c src/DataStructure/tree2.c  src/DataStructure/tree3.c\
 	src/Parsing/parse_envv.c src/Parsing/check_syntax.c \
 	src/Parsing/tokenize.c src/Parsing/ft_ms_split.c \
 	src/Utilities/utils1.c src/Utilities/utils2.c \
@@ -26,11 +26,11 @@ SRCS =  src/DataStructure/linkedlist1.c src/DataStructure/linkedlist2.c \
 	src/Utilities/utils5.c src/Utilities/utils6.c \
 	src/Utilities/utils7.c src/Utilities/utils8.c \
 	src/minishell.c \
-	src/Prompt/readline.c src/Prompt/readline_utils.c \
-	src/Redirect/redirect.c src/Redirect/ft_pipe.c src/Redirect/ft_command.c \
+	src/Prompt/readline.c src/Prompt/readline_utils.c  src/Prompt/readline_utils2.c\
+	src/Redirect/redirect.c src/Redirect/ft_pipe.c \
 	src/Redirect/heredoc.c \
 	src/BuiltIn/builtIn.c src/BuiltIn/ft_export.c src/BuiltIn/ft_echo.c \
-	src/BuiltIn/status.c src/BuiltIn/ft_cd.c
+	src/BuiltIn/status.c src/BuiltIn/ft_cd.c src/BuiltIn/ft_exit.c src/BuiltIn/ft_execute.c
 OBJS = $(SRCS:.c=.o)
 
 #======================= 외부라이브러리 모음 ==========================

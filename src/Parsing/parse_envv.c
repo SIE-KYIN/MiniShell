@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_envv.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gshim <gshim@student.42seoul.kr>           +#+  +:+       +#+        */
+/*   By: gshim <gshim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/05 22:36:48 by kyujlee           #+#    #+#             */
-/*   Updated: 2022/04/08 08:55:13 by gshim            ###   ########.fr       */
+/*   Updated: 2022/04/08 10:11:52 by gshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,8 +50,8 @@ char	**gather(t_list *list)
 	node = list->top.next;
 	while (i < list->cnt)
 	{
-		ft_strdup(node->var);
-		ft_strdup(node->data);
+		var = ft_strdup(node->var);
+		data = ft_strdup(node->data);
 		ret[i] = ft_strjoin_3(var, "=", data);
 		free(var);
 		free(data);

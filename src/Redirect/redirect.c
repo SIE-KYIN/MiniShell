@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirect.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gshim <gshim@student.42seoul.kr>           +#+  +:+       +#+        */
+/*   By: gshim <gshim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/24 01:46:41 by gshim             #+#    #+#             */
-/*   Updated: 2022/04/08 09:31:46 by gshim            ###   ########.fr       */
+/*   Updated: 2022/04/08 10:18:28 by gshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,9 @@ int	redir_out(t_tree_node *root, t_tree_node *right, bool flag)
 int	redir_in(t_tree_node *root, t_tree_node *right, bool flag)
 {
 	int	fd;
+	int	ret;
 
+	fd = 0;
 	if (!ft_strcmp(root->command[0], "<"))
 	{
 		fd = open(right->command[0], O_RDONLY, 0644);
@@ -46,17 +48,13 @@ int	redir_in(t_tree_node *root, t_tree_node *right, bool flag)
 	}
 	else if (!ft_strcmp(root->command[0], "<<"))
 	{
-		fd = open(".heredoc", O_RDWR, 0644);
-		if (fd == -1)
-			return (-1);
-		close(fd);
-		heredoc(right, fd);
-		fd = open(".heredoc", O_RDONLY, 0644);
-		if (fd == -1)
+		ret = heredoc(right);
+		if (ret == -1)
 			return (-1);
 	}
 	else
 		return (0);
 	if (flag)
 		dup2(fd, 0);
+	return (0);
 }

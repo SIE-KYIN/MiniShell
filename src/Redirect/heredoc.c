@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gshim <gshim@student.42seoul.kr>           +#+  +:+       +#+        */
+/*   By: gshim <gshim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/30 18:12:47 by gshim             #+#    #+#             */
-/*   Updated: 2022/04/08 09:32:20 by gshim            ###   ########.fr       */
+/*   Updated: 2022/04/08 10:19:01 by gshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ static void	heredoc_sighandler(void)
 	signal(SIGQUIT, SIG_IGN);
 }
 
-void	heredoc(t_tree_node *right, int flag)
+int	heredoc(t_tree_node *right)
 {
 	char	*line;
 	int		fd;
@@ -40,12 +40,7 @@ void	heredoc(t_tree_node *right, int flag)
 	backup = dup(0);
 	fd = open(".heredoc", O_RDWR| O_CREAT| O_TRUNC, 0644);
 	if (fd == -1)
-	{
-		strerror(errno);
-		//return (-1);
-		return ;
-	}
-
+		return (fd);
 	heredoc_sighandler();
 	while(1)
 	{
@@ -56,9 +51,11 @@ void	heredoc(t_tree_node *right, int flag)
 		write(fd, "\n", 1);
 		free(line);
 	}
-	sighandler();
 	free(line);
 	close(fd);
 	fd = open(".heredoc", O_RDONLY, 0644);
+	close(fd);
+	sighandler();
+	return (fd);
 }
 

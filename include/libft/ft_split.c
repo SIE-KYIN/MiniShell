@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gshim <gshim@student.42seoul.kr>           +#+  +:+       +#+        */
+/*   By: gshim <gshim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/03 16:59:54 by gshim             #+#    #+#             */
-/*   Updated: 2021/08/02 14:40:24 by gshim            ###   ########.fr       */
+/*   Updated: 2022/04/08 10:26:11 by gshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,12 +41,12 @@ static int	len(char const *str, char c)
 	return (len);
 }
 
-static char	**freedom(char **str, int num)
+char	**ft_split_free(char **str)
 {
 	int	i;
 
 	i = -1;
-	while (++i < num)
+	while (str[++i])
 		free(str[i]);
 	free(str);
 	return (NULL);
@@ -80,7 +80,7 @@ char	**ft_split(char const *str, char c)
 		{
 			split[i] = (char *)ft_calloc(len(str, c) + 1, sizeof(char));
 			if (!split[i])
-				return ((char **)freedom(split, i));
+				return ((char **)ft_split_free(split));
 			copy_word(str, split[i++], c);
 			str += len(str, c);
 		}

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gshim <gshim@student.42seoul.kr>           +#+  +:+       +#+        */
+/*   By: gshim <gshim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/16 17:21:43 by gshim             #+#    #+#             */
-/*   Updated: 2022/04/08 09:32:08 by gshim            ###   ########.fr       */
+/*   Updated: 2022/04/08 10:18:21 by gshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,13 @@ typedef struct s_list_node
 	struct s_list_node	*prev;
 	struct s_list_node	*next;
 }	t_list_node;
+
+enum e_node_flag
+{
+	DELIMITER = 0,
+	COMMON_BUILTIN,
+	FILE_NAME,
+};
 
 typedef struct s_list
 {
@@ -230,7 +237,7 @@ int				ft_env(t_list *env);
 int				ft_exit(char *argv[], t_list *env);
 int				redir_out(t_tree_node *root, t_tree_node *left, bool flag);
 int				redir_in(t_tree_node *root, t_tree_node *right, bool flag);
-void			heredoc(t_tree_node *right, int flag);
+int				heredoc(t_tree_node *right);
 int				execute_builtin(char **arg, t_list *env);
 char			**gather(t_list *list);
 int				ft_pipe(t_tree_node *root, t_list *env);
