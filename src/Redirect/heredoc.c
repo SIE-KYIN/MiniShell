@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gshim <gshim@student.42.fr>                +#+  +:+       +#+        */
+/*   By: gshim <gshim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/30 18:12:47 by gshim             #+#    #+#             */
-/*   Updated: 2022/04/08 15:05:25 by gshim            ###   ########.fr       */
+/*   Updated: 2022/04/09 21:17:49 by gshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ static void	heredoc_readline(t_tree_node *right, char *line, int fd)
 		write(fd, "\n", 1);
 		free(line);
 	}
+	free(line);
 	sighandler();
 }
 
@@ -56,7 +57,6 @@ int	heredoc(t_tree_node *right, t_info *info)
 		return (fd);
 	line = NULL;
 	heredoc_readline(right, line, fd);
-	free(line);
 	close(fd);
 	fd = open(".heredoc", O_RDONLY, 0644);
 	dup2(backup_fd, 0);

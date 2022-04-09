@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: gshim <gshim@student.42.fr>                +#+  +:+       +#+         #
+#    By: gshim <gshim@student.42seoul.kr>           +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/02/22 17:48:50 by gshim             #+#    #+#              #
-#    Updated: 2022/04/08 14:56:37 by gshim            ###   ########.fr        #
+#    Updated: 2022/04/09 21:13:39 by gshim            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -58,7 +58,7 @@ idx		= 0
 $(NAME) : $(OBJS)
 	$(MAKE) -C $(LIB_DIR) all
 	$(CC) $(CFLAGS) -L$(LIB_DIR) -l$(LIB_NAME) \
-	-lreadline $(RL_CLUSTER_L) $^ -o $@
+	-lreadline $(RL_MYMAC_L) $^ -o $@
 
 $(SRCS_DIR)/%.o : $(SRCS_DIR)/%.c
 	$(eval idx = $(shell expr $(idx) + 1))
@@ -68,7 +68,7 @@ $(SRCS_DIR)/%.o : $(SRCS_DIR)/%.c
 		echo -n "☕️ ☕️ MINISHELL Loading ...\n";\
 	fi
 	@printf "\b$(chr)"
-	@$(CC) $(CFLAGS) -I$(LIB_DIR) $(RL_CLUSTER_I) -c $< -o $@
+	@$(CC) $(CFLAGS) -I$(LIB_DIR) $(RL_MYMAC_I) -c $< -o $@
 
 all : $(NAME)
 
