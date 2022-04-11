@@ -12,14 +12,6 @@
 
 #include "../minishell.h"
 
-int	is_valid_s_c(char c)
-{
-	(void)c;
-	if (c == ';')
-		return (0);
-	return (1);
-}
-
 int	is_empty_str(char *line)
 {
 	int	i;

@@ -24,12 +24,10 @@
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <unistd.h>
-# include <string.h>
-# include <fcntl.h> // 파일모드를위해추가
+# include <fcntl.h>
 # include <errno.h>
-# include <sys/ioctl.h> // ioctl함수
+# include <sys/ioctl.h> 
 
-// kyujlee
 typedef struct s_list_node
 {
 	char				*var;
@@ -122,7 +120,8 @@ int				check_syntax(char *line);
 ** ft_ms_split.c
 ** +4
 */
-char			**ft_ms_split(char *line, t_list *env_list, t_info *info);
+char			**ft_ms_split(char *line, t_list *env_list,
+					t_info *info, char **tmp);
 
 /*
 ** parse_envv.c

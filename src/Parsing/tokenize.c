@@ -68,7 +68,7 @@ t_tree	*tokenize(char *line, t_list *env_list, t_info *info)
 	char	**token;
 
 	token_tree = create_tree();
-	token = ft_ms_split(line, env_list, info);
+	token = ft_ms_split(line, env_list, info, NULL);
 	token_to_tree(token_tree, token);
 	free(token);
 	return (token_tree);

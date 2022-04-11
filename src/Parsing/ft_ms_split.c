@@ -30,7 +30,6 @@ static int	cnt_word(char *line, int flag, int i, int cnt)
 			if (tmp == 2)
 				i++;
 			flag = 0;
-			continue ;
 		}
 		else if (flag == 0 && tmp == 0)
 		{
@@ -57,8 +56,8 @@ static void	cut_str(char *line, char **ret)
 			while (line[i + tmp] && !is_delimiter(line[i + tmp],
 					line[i + tmp + 1]))
 			{
-				if (line[i] == '\'' || line[i] == '"')
-					tmp = str_in_quote2(line, i) - i;
+				if (line[i + tmp] == '\'' || line[i + tmp] == '"')
+					tmp = str_in_quote2(line, i + tmp) - i;
 				tmp++;
 			}
 		}
@@ -114,7 +113,7 @@ static void	key_to_value(t_list *env_list, char **line, int flag)
 				if ((*line)[i] == ' ' || (*line)[i] == '"'
 					|| (*line)[i] == '\\')
 					break ;
-			if (i == (int)ft_strlen(*line))
+			if (i == (int)ft_strlen(*line) - 1 || i == (int)ft_strlen(*line))
 				flag = 1;
 			change_str(env_list, line, tmp, i);
 		}
@@ -123,15 +122,15 @@ static void	key_to_value(t_list *env_list, char **line, int flag)
 	}
 }
 
-char	**ft_ms_split(char *line, t_list *env_list, t_info *info)
+char	**ft_ms_split(char *line, t_list *env_list, t_info *info, char **tmp)
 {
 	char	**ret;
 	int		cnt;
-	char	**tmp;
 
 	info->heredoc_flag = 0;
-	tmp = NULL;
 	cnt = cnt_word(line, 0, -1, 0);
+	if (cnt == 0)
+		cnt++;
 	ret = (char **)malloc(sizeof(char *) * (cnt + 1));
 	ret[cnt] = NULL;
 	key_to_value(env_list, &line, 0);
